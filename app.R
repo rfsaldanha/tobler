@@ -20,6 +20,7 @@ source("header.R")
 source("footer.R")
 
 # UI elements
+source("modules/home_ui.R")
 source("modules/data_ui.R")
 source("modules/map_ui.R")
 source("modules/weights_ui.R")
@@ -34,6 +35,7 @@ shiny::shinyApp(
     header = argonHeader,
     body = argonDashBody(
       argonTabItems(
+        home_tab,
         data_tab,
         map_tab,
         weights_tab

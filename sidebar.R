@@ -11,6 +11,11 @@ argonSidebar <- argonDashSidebar(
   #argonSidebarHeader(title = "Main Menu"),
   argonSidebarMenu(
     argonSidebarItem(
+      tabName = "home",
+      icon = argonIcon(name = "world", color = "info"),
+      "Home"
+    ),
+    argonSidebarItem(
       tabName = "data",
       icon = argonIcon(name = "folder-17", color = "info"),
       "Data"
