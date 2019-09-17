@@ -48,6 +48,7 @@ weights_tab <- argonTabItem(
         argonTab(
           tabName = "Baumont (2004) procedure",
           active = FALSE,
+          p("This procedure will regress a model by OLS and test the residuals for spatial autocorrelation (Moran's Test) using several K-Nearest neighbors matrixes, varing k from 1 to the selected maximum k. The matrix with the higher Moran's I will be selected."),
           uiOutput("weights_baumont_dependent_variable_UI"),
           uiOutput("weights_baumont_idependent_variable_UI"),
           numericInput(inputId = "weights_baumont_max_k", label = "Max k", min = 5, value = 20),
@@ -57,9 +58,15 @@ weights_tab <- argonTabItem(
           actionButton(inputId = "weights_baumont_create", label = "Create matrix")
         ),
         argonTab(
-          tabName = "Stakhovych-Bijmolt(2009) adapted procedure",
+          tabName = "Stakhovych-Bijmolt (2009) adapted procedure",
+          p("This adapted procedure will create several spatial weights matrixes (Queen, Rook, Inverse Distance and K-Nearest Neighbors with k = 1, 5, 10, 15 and 20) and estimate several spatial models (SAR, SEM, SAC, SLX, SDM, SDEM) with those matrixes. The final matrix will be selected observing the maximum AIC obtained in all models."),
+          uiOutput("weights_stakhovych_dependent_variable_UI"),
+          uiOutput("weights_stakhovych_idependent_variable_UI"),
+          radioButtons(inputId = "weights_stakhovych_style", 
+                       label = "Coding scheme style",
+                       choices = list("Row standardised" = "W", "Globally standardised" = "C")),
           active = FALSE,
-          "bla4"
+          actionButton(inputId = "weights_stakhovych_create", label = "Create matrix")
         )
       )
     )
@@ -67,8 +74,9 @@ weights_tab <- argonTabItem(
   argonRow(
     argonColumn(
       width = 12,
-      uiOutput("matrix_info_UI", ),
-      uiOutput("matrix_info2_UI"),
+      uiOutput("matrix_info1_UI", ),
+      uiOutput("matrix_info2_UI", ),
+      uiOutput("matrix_info3_UI"),
       uiOutput("matrix_plot_UI")
     )
   )

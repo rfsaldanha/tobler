@@ -12,6 +12,8 @@ library(leaflet)
 library(tmap)
 library(htmltools)
 library(spdep)
+library(spatialreg)
+library(reshape2)
 options(shiny.maxRequestSize=30*1024^2) 
 
 # Template
