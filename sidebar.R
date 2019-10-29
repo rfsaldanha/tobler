@@ -29,8 +29,18 @@ argonSidebar <- argonDashSidebar(
     ),
     argonSidebarItem(
       tabName = "weights",
-      icon = argonIcon(name = "ui-04", color = "info"),
+      icon = argonIcon(name = "world-2", color = "info"),
       "Spatial Weights Matrix"
+    ),
+    argonSidebarItem(
+      tabName = "autocor",
+      icon = argonIcon(name = "compass-04", color = "info"),
+      "Spatial Autocorrelation"
+    ),
+    argonSidebarItem(
+      tabName = "model",
+      icon = argonIcon(name = "single-copy-04", color = "info"),
+      "Spatial Models"
     )
   )
 )

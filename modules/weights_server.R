@@ -6,6 +6,7 @@ observeEvent(input$weights_contiguity_create, {
       w_nb <- poly2nb(pl = geodata(), queen = FALSE)
       w_matrix$nb <- w_nb
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Rook matrix")
       showNotification(ui = "Rook matrix created!", type = "message")
     } else {
@@ -13,6 +14,7 @@ observeEvent(input$weights_contiguity_create, {
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix$nb <- w_nblag
       w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Rook matrix")
       showNotification(ui = "Rook matrix created!", type = "message")
     }
@@ -21,6 +23,7 @@ observeEvent(input$weights_contiguity_create, {
       w_nb <- poly2nb(pl = geodata(), queen = TRUE)
       w_matrix$nb <- w_nb
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Queen matrix")
       showNotification(ui = "Queen matrix created!", type = "message")
     } else {
@@ -28,6 +31,7 @@ observeEvent(input$weights_contiguity_create, {
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix$nb <- w_nblag
       w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Queen matrix")
       showNotification(ui = "Queen matrix created!", type = "message")
     }
@@ -45,6 +49,7 @@ observeEvent(input$weights_inverse_distance_create, {
   dlist <- lapply(dlist, function(x) 1/x^power)
   w_matrix$nb <- w_nb
   w_matrix$listw <- nb2listw(w_nb, glist=dlist, style = input$weights_inverse_distance_style)
+  w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
   w_matrix$name <- paste0("Inverse distance matrix")
   showNotification(ui = "Inverse distance matrix created!", type = "message")
   
@@ -60,6 +65,7 @@ observeEvent(input$weights_k_nearest_create, {
   w_nb <-knn2nb(w_knear, row.names=IDs)
   w_matrix$nb <- w_nb
   w_matrix$listw <- nb2listw(w_nb, style = input$weights_k_nearest_style)
+  w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
   w_matrix$name <- paste0("K-Nearest Neighbors")
   showNotification(ui = "K-Nearest Neighbors matrix created!", type = "message")
   
@@ -117,6 +123,7 @@ observeEvent(input$weights_baumont_create, {
     w_nb <-knn2nb(w_knear, row.names=IDs)
     w_matrix$nb <- w_nb
     w_matrix$listw <- nb2listw(w_nb, style = input$weights_baumont_style)
+    w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
     w_matrix$name <- paste0("Baumont (2004) procedure, k=", maxi, " selected")
     showNotification(ui = "Baumont procedure executed!", type = "message")
   })
@@ -270,12 +277,14 @@ observeEvent(input$weights_stakhovych_create, {
       
       w_matrix$nb <- poly2nb(shape, queen = TRUE)
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "Queen matrix"
       
     } else if(df_top$Matriz == "W_Rook"){
       
       w_matrix$nb <- poly2nb(shape, queen = FALSE)
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "Queen matrix"
       
     } else if(df_top$Matriz == "W_dist_inv"){
@@ -285,35 +294,41 @@ observeEvent(input$weights_stakhovych_create, {
       dlist <- nbdists(nb, coords)
       dlist <- lapply(dlist, function(x) 1/x)
       w_matrix$listw <- nb2listw(w_matrix$nb, glist=dlist)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "Inverse distance matrix"
       
     } else if(df_top$Matriz == "W_k1"){
       w_matrix$nb <- knn2nb(knearneigh(coords, k=1))
       w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=1"
       
     } else if(df_top$Matriz == "W_k5"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=5))
       w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=5"
       
     } else if(df_top$Matriz == "W_k10"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=10))
       w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=10"
       
     } else if(df_top$Matriz == "W_k15"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=15))
       w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=15"
       
     } else if(df_top$Matriz == "W_k20"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=20))
       w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=20"
       
     } 

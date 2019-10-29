@@ -14,6 +14,7 @@ library(htmltools)
 library(spdep)
 library(spatialreg)
 library(reshape2)
+library(statquotes)
 options(shiny.maxRequestSize=30*1024^2) 
 
 # Template
@@ -26,6 +27,8 @@ source("modules/home_ui.R")
 source("modules/data_ui.R")
 source("modules/map_ui.R")
 source("modules/weights_ui.R")
+source("modules/autocor_ui.R")
+source("modules/model_ui.R")
 
 # App
 shiny::shinyApp(
@@ -40,16 +43,21 @@ shiny::shinyApp(
         home_tab,
         data_tab,
         map_tab,
-        weights_tab
+        weights_tab,
+        autocor_tab,
+        model_tab
       )
     ),
     footer = argonFooter
   ),
   server = function(input, output) {
     
+    # Server elements
     source("modules/data_server.R", local = TRUE)
     source("modules/map_server.R", local = TRUE)
     source("modules/weights_server.R", local = TRUE)
+    source("modules/autocor_server.R", local = TRUE)
+    source("modules/model_server.R", local = TRUE)
     
   }
 )

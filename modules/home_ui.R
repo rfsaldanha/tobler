@@ -6,8 +6,8 @@ home_tab <- argonTabItem(
       width = 6,
       argonImage(
         src = "tobleR.png",
-        floating = T,
-        card_mode = F, 
+        floating = TRUE,
+        card_mode = FALSE 
       )
     )
   )
