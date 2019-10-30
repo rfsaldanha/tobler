@@ -33,6 +33,15 @@ source("modules/model_ui.R")
 # App
 shiny::shinyApp(
   ui = argonDashPage(
+    tags$head(
+      tags$style(HTML("
+      .navbar-vertical.navbar-expand-md .navbar-brand-img
+      {
+        max-height: 6rem
+      }
+
+    "))
+    ),
     title = "tobler",
     author = "Raphael Saldanha",
     description = "Spatial Econometrics with R",

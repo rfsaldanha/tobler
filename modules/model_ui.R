@@ -89,6 +89,69 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sem_mq2e_summary"),
           h4("Residual map"),
           leafletOutput("model_sem_mq2e_map", height = 600)
+        ),
+        argonTab(
+          tabName = "SAC (ML)",
+          active = FALSE,
+          h3("SAC (ML)"),
+          p("SAC model with ML estimator."),
+          actionButton("model_estimate_sac_ml", "Estimate", icon = icon("math"), status = "primary"),
+          h4("Estimation"),
+          verbatimTextOutput("model_sac_mv_summary"),
+          h4("Impacts"),
+          verbatimTextOutput("model_sac_mv_impacts"),
+          h4("Residual map"),
+          leafletOutput("model_sac_mv_map", height = 600)
+        ),
+        argonTab(
+          tabName = "SAC (STSLS)",
+          active = FALSE,
+          h3("SAC (STSLS)"),
+          p("SAC model with STSLS estimator."),
+          actionButton("model_estimate_sac_stsls", "Estimate", icon = icon("math"), status = "primary"),
+          h4("Estimation"),
+          verbatimTextOutput("model_sac_mq2e_summary"),
+          h4("Impacts"),
+          verbatimTextOutput("model_sac_mq2e_impacts"),
+          h4("Residual map"),
+          leafletOutput("model_sac_mq2e_map", height = 600)
+        ),
+        argonTab(
+          tabName = "SLX (ML)",
+          active = FALSE,
+          h3("SLX (ML)"),
+          p("SLX model with ML estimator."),
+          actionButton("model_estimate_slx_ml", "Estimate", icon = icon("math"), status = "primary"),
+          h4("Estimation"),
+          verbatimTextOutput("model_slx_mv_summary"),
+          h4("Impacts"),
+          verbatimTextOutput("model_slx_mv_impacts"),
+          h4("Residual map"),
+          leafletOutput("model_slx_mv_map", height = 600)
+        ),
+        argonTab(
+          tabName = "SDM (ML)",
+          active = FALSE,
+          h3("SDM (ML)"),
+          p("SDM model with ML estimator."),
+          actionButton("model_estimate_sdm_ml", "Estimate", icon = icon("math"), status = "primary"),
+          h4("Estimation"),
+          verbatimTextOutput("model_sdm_mv_summary"),
+          h4("Impacts"),
+          verbatimTextOutput("model_sdm_mv_impacts"),
+          h4("Residual map"),
+          leafletOutput("model_sdm_mv_map", height = 600)
+        ),
+        argonTab(
+          tabName = "SDEM (ML)",
+          active = FALSE,
+          h3("SDEM (ML)"),
+          p("SDEM model with ML estimator."),
+          actionButton("model_estimate_sdem_ml", "Estimate", icon = icon("math"), status = "primary"),
+          h4("Estimation"),
+          verbatimTextOutput("model_sdem_mv_summary"),
+          h4("Residual map"),
+          leafletOutput("model_sdem_mv_map", height = 600)
         )
       )
     )

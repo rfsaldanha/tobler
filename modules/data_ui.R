@@ -19,13 +19,8 @@ data_tab <- argonTabItem(
         argonRow(
           checkboxInput("data_validate", "Validate geometry", value = TRUE)
         )
-      ) 
-    ),
-    argonColumn(
-      width = 12,
-      argonRow(
-        uiOutput("data_table_UI")
-      )
+      ),
+      uiOutput("data_table_UI")
     )
   )
 )

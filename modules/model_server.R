@@ -13,6 +13,9 @@ esp <- reactive({
   paste0(as.character(input$model_dependent_variable), " ~ ", paste0(input$model_independent_variable, collapse = " + "))
 })
 
+# Modal time
+modal_time <- 1
+
 # OLS Model
 model_ols <- eventReactive(input$model_estimate_ols, {
   
@@ -27,7 +30,7 @@ model_ols <- eventReactive(input$model_estimate_ols, {
               footer = NULL
             )
   )
-  Sys.sleep(5)
+  Sys.sleep(modal_time)
   
   lm(formula = formula(esp()), data = geodata()@data)
 })
@@ -75,7 +78,7 @@ model_sar_mv <- eventReactive(input$model_estimate_sar_ml, {
               footer = NULL
             )
   )
-  Sys.sleep(5)
+  Sys.sleep(modal_time)
   
   lagsarlm(formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -117,7 +120,7 @@ model_sar_mq2e <- eventReactive(input$model_estimate_sar_stsls, {
               footer = NULL
             )
   )
-  Sys.sleep(5)
+  Sys.sleep(modal_time)
   
   stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -159,7 +162,7 @@ model_sem_mv <- eventReactive(input$model_estimate_sem_ml, {
               footer = NULL
             )
   )
-  Sys.sleep(5)
+  Sys.sleep(modal_time)
   
   errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -219,7 +222,7 @@ model_sem_mq2e <- eventReactive(input$model_estimate_sem_stsls, {
               footer = NULL
             )
   )
-  Sys.sleep(5)
+  Sys.sleep(modal_time)
   
   GMerrorsar(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -245,11 +248,214 @@ output$model_sem_mq2e_map <- renderLeaflet({
 observeEvent(model_sem_mq2e(), removeModal())
 
 
+# SAC ML
+model_sac_mv <- eventReactive(input$model_estimate_sac_ml, {
+  fortune <- statquote()
+  showModal(session = getDefaultReactiveDomain(),
+            modalDialog(
+              title = "Please wait",
+              "Your model is being estimated...",
+              br(),br(),
+              em(fortune$text),br(),
+              em(paste("---", fortune$source)),
+              footer = NULL
+            )
+  )
+  Sys.sleep(modal_time)
+  
+  sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw) 
+})
+
+output$model_sac_mv_summary <- renderPrint({
+  summary(model_sac_mv())
+})
+
+output$model_sac_mv_impacts <- renderPrint({
+  summary(impacts(model_sac_mv(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+})
+
+output$model_sac_mv_map <- renderLeaflet({
+  geodata_res <- geodata()
+  geodata_res@data$residuals <- resid(model_sac_mv())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
+
+observeEvent(model_sac_mv(), removeModal())
+
+# SAC STSLS
+model_sac_mq2e <- eventReactive(input$model_estimate_sac_stsls, {
+  fortune <- statquote()
+  showModal(session = getDefaultReactiveDomain(),
+            modalDialog(
+              title = "Please wait",
+              "Your model is being estimated...",
+              br(),br(),
+              em(fortune$text),br(),
+              em(paste("---", fortune$source)),
+              footer = NULL
+            )
+  )
+  Sys.sleep(modal_time)
+  
+  gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+})
+
+output$model_sac_mq2e_summary <- renderPrint({
+  summary(model_sac_mq2e())
+})
+
+output$model_sac_mq2e_impacts <- renderPrint({
+  summary(impacts(model_sac_mq2e(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+})
+
+output$model_sac_mq2e_map <- renderLeaflet({
+  geodata_res <- geodata()
+  geodata_res@data$residuals <- resid(model_sac_mq2e())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
+
+observeEvent(model_sac_mq2e(), removeModal())
+
+
+# SLX (ML)
+model_slx_mv <- eventReactive(input$model_estimate_slx_ml, {
+  fortune <- statquote()
+  showModal(session = getDefaultReactiveDomain(),
+            modalDialog(
+              title = "Please wait",
+              "Your model is being estimated...",
+              br(),br(),
+              em(fortune$text),br(),
+              em(paste("---", fortune$source)),
+              footer = NULL
+            )
+  )
+  Sys.sleep(modal_time)
+  
+  lmSLX(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+})
+
+output$model_slx_mv_summary <- renderPrint({
+  summary(model_slx_mv())
+})
+
+output$model_slx_mv_impacts <- renderPrint({
+  summary(impacts(model_slx_mv(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+})
+
+output$model_slx_mv_map <- renderLeaflet({
+  geodata_res <- geodata()
+  geodata_res@data$residuals <- resid(model_slx_mv())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
+
+observeEvent(model_slx_mv(), removeModal())
+
+
+# SDM (ML)
+model_sdm_mv <- eventReactive(input$model_estimate_sdm_ml, {
+  fortune <- statquote()
+  showModal(session = getDefaultReactiveDomain(),
+            modalDialog(
+              title = "Please wait",
+              "Your model is being estimated...",
+              br(),br(),
+              em(fortune$text),br(),
+              em(paste("---", fortune$source)),
+              footer = NULL
+            )
+  )
+  Sys.sleep(modal_time)
+  
+  lagsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, type = "mixed")
+})
+
+output$model_sdm_mv_summary <- renderPrint({
+  summary(model_sdm_mv())
+})
+
+output$model_sdm_mv_impacts <- renderPrint({
+  summary(impacts(model_sdm_mv(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+})
+
+output$model_sdm_mv_map <- renderLeaflet({
+  geodata_res <- geodata()
+  geodata_res@data$residuals <- resid(model_sdm_mv())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
+
+observeEvent(model_sdm_mv(), removeModal())
 
 
 
+# SDEM (ML)
+model_sdem_mv <- eventReactive(input$model_estimate_sdem_ml, {
+  fortune <- statquote()
+  showModal(session = getDefaultReactiveDomain(),
+            modalDialog(
+              title = "Please wait",
+              "Your model is being estimated...",
+              br(),br(),
+              em(fortune$text),br(),
+              em(paste("---", fortune$source)),
+              footer = NULL
+            )
+  )
+  Sys.sleep(modal_time)
+  
+  errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, etype = "emixed")
+})
 
+output$model_sdem_mv_summary <- renderPrint({
+  summary(model_sdem_mv())
+})
 
+output$model_sdem_mv_map <- renderLeaflet({
+  geodata_res <- geodata()
+  geodata_res@data$residuals <- resid(model_sdem_mv())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
 
+observeEvent(model_sdem_mv(), removeModal())
 
 
