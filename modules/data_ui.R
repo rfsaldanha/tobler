@@ -17,7 +17,7 @@ data_tab <- argonTabItem(
           fileInput("data_file", label = "", multiple = FALSE)
         ),
         argonRow(
-          checkboxInput("data_validate", "Validate geometry", value = TRUE)
+          checkboxInput("data_validate", "Validate and clean geometry (recommended)", value = TRUE)
         )
       ),
       uiOutput("data_table_UI")

@@ -25,6 +25,9 @@ map_tab <- argonTabItem(
       #title = "Controls",
       argonRow(
         uiOutput("map_variable_UI")
+      ),
+      argonRow(
+        selectInput("map_style", label = "Style", choices = c("Jenks (Natural breaks)" = "jenks", "Quantile" = "quantile", "Standard Deviation" = "sd", "Equal intervals" = "equal", "Pretty" = "pretty"))
       )
     )
   )

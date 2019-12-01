@@ -14,6 +14,9 @@ autocor_tab <- argonTabItem(
         title = "Spatial autocorrelation",
         argonRow(
           uiOutput("autocor_variable_UI")
+        ),
+        argonRow(
+          uiOutput("autocor_name_variable_UI")
         )
       ),
       argonCard(
@@ -25,7 +28,7 @@ autocor_tab <- argonTabItem(
         border_level = 2,
         hover_shadow = TRUE,
         title = "Moran's I scatter plot",
-        plotOutput("autocor_scatter")
+        highchartOutput("autocor_scatter")
       ),
       argonTabSet(
         id = "autocor-measures-tab",

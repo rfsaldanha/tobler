@@ -5,7 +5,7 @@ observeEvent(input$weights_contiguity_create, {
     if(input$weights_contiguity_order == 1){
       w_nb <- poly2nb(pl = geodata(), queen = FALSE)
       w_matrix$nb <- w_nb
-      w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style)
+      w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Rook matrix")
       showNotification(ui = "Rook matrix created!", type = "message")
@@ -13,7 +13,7 @@ observeEvent(input$weights_contiguity_create, {
       w_nb <- poly2nb(pl = geodata(), queen = FALSE)
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix$nb <- w_nblag
-      w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style)
+      w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Rook matrix")
       showNotification(ui = "Rook matrix created!", type = "message")
@@ -22,7 +22,7 @@ observeEvent(input$weights_contiguity_create, {
     if(input$weights_contiguity_order == 1){
       w_nb <- poly2nb(pl = geodata(), queen = TRUE)
       w_matrix$nb <- w_nb
-      w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style)
+      w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Queen matrix")
       showNotification(ui = "Queen matrix created!", type = "message")
@@ -30,7 +30,7 @@ observeEvent(input$weights_contiguity_create, {
       w_nb <- poly2nb(pl = geodata(), queen = TRUE)
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix$nb <- w_nblag
-      w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style)
+      w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Queen matrix")
       showNotification(ui = "Queen matrix created!", type = "message")
@@ -48,7 +48,7 @@ observeEvent(input$weights_inverse_distance_create, {
   dlist <- nbdists(w_nb, coords)
   dlist <- lapply(dlist, function(x) 1/x^power)
   w_matrix$nb <- w_nb
-  w_matrix$listw <- nb2listw(w_nb, glist=dlist, style = input$weights_inverse_distance_style)
+  w_matrix$listw <- nb2listw(w_nb, glist=dlist, style = input$weights_inverse_distance_style, zero.policy = TRUE)
   w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
   w_matrix$name <- paste0("Inverse distance matrix")
   showNotification(ui = "Inverse distance matrix created!", type = "message")
@@ -64,7 +64,7 @@ observeEvent(input$weights_k_nearest_create, {
   w_knear <- knearneigh(coords, k = input$weights_k_nearest_k)
   w_nb <-knn2nb(w_knear, row.names=IDs)
   w_matrix$nb <- w_nb
-  w_matrix$listw <- nb2listw(w_nb, style = input$weights_k_nearest_style)
+  w_matrix$listw <- nb2listw(w_nb, style = input$weights_k_nearest_style, zero.policy = TRUE)
   w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
   w_matrix$name <- paste0("K-Nearest Neighbors")
   showNotification(ui = "K-Nearest Neighbors matrix created!", type = "message")
@@ -105,7 +105,7 @@ observeEvent(input$weights_baumont_create, {
       # Calculando o I e significância para o k atual
       w_knear <- knearneigh(coords, k = k)
       w_nb <-knn2nb(w_knear, row.names=IDs)
-      matrix <- nb2listw(w_nb, style = input$weights_baumont_style)
+      matrix <- nb2listw(w_nb, style = input$weights_baumont_style, zero.policy = TRUE)
       residual_test <- lm.morantest(ols_model, matrix)
       
       # Armazenando o valor I para o k atual
@@ -122,7 +122,7 @@ observeEvent(input$weights_baumont_create, {
     w_knear <- knearneigh(coords, k = maxi)
     w_nb <-knn2nb(w_knear, row.names=IDs)
     w_matrix$nb <- w_nb
-    w_matrix$listw <- nb2listw(w_nb, style = input$weights_baumont_style)
+    w_matrix$listw <- nb2listw(w_nb, style = input$weights_baumont_style, zero.policy = TRUE)
     w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
     w_matrix$name <- paste0("Baumont (2004) procedure, k=", maxi, " selected")
     showNotification(ui = "Baumont procedure executed!", type = "message")
@@ -157,11 +157,11 @@ observeEvent(input$weights_stakhovych_create, {
     
     # Matriz queen
     incProgress(amount = const_passos, detail = "Creating queen matrix")
-    w1 <- nb2listw(poly2nb(shape, queen = TRUE))
+    w1 <- nb2listw(poly2nb(shape, queen = TRUE), zero.policy = TRUE)
     
     # Matriz rook
     incProgress(amount = const_passos, detail = "Creating rook matrix")
-    w2 <- nb2listw(poly2nb(shape, queen = FALSE))
+    w2 <- nb2listw(poly2nb(shape, queen = FALSE), zero.policy = TRUE)
     
     # Distância inversa
     incProgress(amount = const_passos, detail = "Creating inverse distance matrix")
@@ -169,19 +169,19 @@ observeEvent(input$weights_stakhovych_create, {
     nb <- dnearneigh(coords, 0, 1000, longlat = TRUE)
     dlist <- nbdists(nb, coords)
     dlist <- lapply(dlist, function(x) 1/x)
-    w3 <- nb2listw(nb, glist=dlist)
+    w3 <- nb2listw(nb, glist=dlist, zero.policy = TRUE)
     
     # K5 10 15 20
     incProgress(amount = const_passos, detail = "Creating k=1 matrix")
-    w4 <- nb2listw(knn2nb(knearneigh(coords, k=1)))
+    w4 <- nb2listw(knn2nb(knearneigh(coords, k=1)), zero.policy = TRUE)
     incProgress(amount = const_passos, detail = "Creating k=5 matrix")
-    w5 <- nb2listw(knn2nb(knearneigh(coords, k=5)))
+    w5 <- nb2listw(knn2nb(knearneigh(coords, k=5)), zero.policy = TRUE)
     incProgress(amount = const_passos, detail = "Creating k=10 matrix")
-    w6 <- nb2listw(knn2nb(knearneigh(coords, k=10)))
+    w6 <- nb2listw(knn2nb(knearneigh(coords, k=10)), zero.policy = TRUE)
     incProgress(amount = const_passos, detail = "Creating k=15 matrix")
-    w7 <- nb2listw(knn2nb(knearneigh(coords, k=15)))
+    w7 <- nb2listw(knn2nb(knearneigh(coords, k=15)), zero.policy = TRUE)
     incProgress(amount = const_passos, detail = "Creating k=20 matrix")
-    w8 <- nb2listw(knn2nb(knearneigh(coords, k=20)))
+    w8 <- nb2listw(knn2nb(knearneigh(coords, k=20)), zero.policy = TRUE)
     
     # SAR
     incProgress(amount = const_passos, detail = "Estimating SAR model with all matrixes")
@@ -267,23 +267,23 @@ observeEvent(input$weights_stakhovych_create, {
     row.names(df_melt) <- NULL
     
     df_top <- df_melt %>% 
-      arrange(-AIC) %>%
+      arrange(AIC) %>%
       top_n(1)
     
-    showNotification(ui = paste0("Maximum AIC value of ", round(df_top$AIC, 4)," obtained with ", df_top$Modelo, " model and ", df_top$Matriz), type = "message", duration = NULL)
+    showNotification(ui = paste0("Minimum AIC value of ", round(df_top$AIC, 4)," obtained with ", df_top$Modelo, " model and ", df_top$Matriz), type = "message", duration = NULL)
     
     incProgress(amount = const_passos, detail = "Computing final matrix")
     if(df_top$Matriz == "W_Queen"){
       
       w_matrix$nb <- poly2nb(shape, queen = TRUE)
-      w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style)
+      w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "Queen matrix"
       
     } else if(df_top$Matriz == "W_Rook"){
       
       w_matrix$nb <- poly2nb(shape, queen = FALSE)
-      w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style)
+      w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "Queen matrix"
       
@@ -293,41 +293,41 @@ observeEvent(input$weights_stakhovych_create, {
       w_matrix$nb <- dnearneigh(coords, 0, 1000, longlat = TRUE)
       dlist <- nbdists(nb, coords)
       dlist <- lapply(dlist, function(x) 1/x)
-      w_matrix$listw <- nb2listw(w_matrix$nb, glist=dlist)
+      w_matrix$listw <- nb2listw(w_matrix$nb, glist=dlist, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "Inverse distance matrix"
       
     } else if(df_top$Matriz == "W_k1"){
       w_matrix$nb <- knn2nb(knearneigh(coords, k=1))
-      w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=1"
       
     } else if(df_top$Matriz == "W_k5"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=5))
-      w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=5"
       
     } else if(df_top$Matriz == "W_k10"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=10))
-      w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=10"
       
     } else if(df_top$Matriz == "W_k15"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=15))
-      w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=15"
       
     } else if(df_top$Matriz == "W_k20"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=20))
-      w_matrix$listw <- nb2listw(w_matrix$nb)
+      w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- "K-Nearest Neighbors with k=20"
       
@@ -355,7 +355,7 @@ observeEvent(w_matrix, {
       hover_shadow = TRUE,
       title = paste(w_matrix$name, "info"),
       argonRow(
-        renderPrint(summary(w_matrix$listw))
+        renderPrint(summary(w_matrix$listw, zero.policy = TRUE))
       )
     )
   })

@@ -1,14 +1,15 @@
 library(shiny)
 library(argonR)
 #devtools::install_github("RinteRface/argonDash")
+#withr::with_libpaths(new = "/usr/local/lib/R/site-library", install_github("RinteRface/argonDash"))
 library(argonDash)
 library(shinycssloaders)
 library(tidyverse)
 library(DT)
 library(rgdal)
 library(cleangeo)
-library(ggplot2)
 library(leaflet)
+library(highcharter)
 library(tmap)
 library(htmltools)
 library(spdep)
@@ -39,7 +40,6 @@ shiny::shinyApp(
       {
         max-height: 6rem
       }
-
     "))
     ),
     title = "tobler",

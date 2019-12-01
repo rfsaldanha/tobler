@@ -13,7 +13,7 @@ output$map_leaflet <- renderLeaflet({
   map_var <- as.character(input$map_variable)
   map <- tm_shape(geodata()) +
     tm_fill(col = map_var,
-            style = "jenks",
+            style = as.character(input$map_style),
             alpha = 0.7,
             title = map_var) +
     tm_borders()
