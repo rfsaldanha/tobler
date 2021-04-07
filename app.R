@@ -16,7 +16,10 @@ library(spdep)
 library(spatialreg)
 library(reshape2)
 library(statquotes)
-options(shiny.maxRequestSize=30*1024^2) 
+options(
+  shiny.maxRequestSize=30*1024^2, 
+  shiny.sanitize.errors = FALSE
+) 
 
 # Template
 source("sidebar.R")
