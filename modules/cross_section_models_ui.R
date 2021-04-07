@@ -29,18 +29,17 @@ cross_section_models_tab <- argonTabItem(
             choices = list("Maximum Likelihood (ML) estimator" = "ml", "Spatial Two Stage Least Squares (STSLS) estimator" = "stsls"), 
             selected = "ml"
           ),
-          radioButtons(
-            "sar_consistent",
-            label = h4("Spatial heteroskedasticity and autocorrelation consistent (HAC)"),
-            choices = list("HAC applied" = "hac", "HAC not applied" = "not_hac"), 
-            selected = "not_hac"
-          ),
-          radioButtons(
-            "sar_variance",
-            label = h4("Variance"),
-            choices = list("Homoskedasticity" = "homo", "Heteroskedasticity (robust)" = "hete"), 
-            selected = "homo"
-          )
+          uiOutput("cross_section_model_sar_consistent_UI"),
+          uiOutput("cross_section_model_sar_variance_UI"),
+          h4("Model specification"),
+          uiOutput("cross_section_model_dependent_variable_UI"),
+          uiOutput("cross_section_model_independent_variable_UI"),
+          uiOutput("cross_section_model_endogenous_variable_UI"),
+          uiOutput("cross_section_model_instrument_variable_UI"),
+          actionButton("cross_section_model_estimate_sar", "Estimate", icon = icon("math"), status = "primary"),
+          br(),br(),
+          h4("Summary"),
+          verbatimTextOutput("model_sar_summary")
         ),
         argonTab(
           tabName = "Spatial Error Model (SEM) model",

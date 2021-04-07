@@ -14,6 +14,7 @@ library(tmap)
 library(htmltools)
 library(spdep)
 library(spatialreg)
+library(sphet)
 library(reshape2)
 library(statquotes)
 options(
@@ -67,11 +68,13 @@ shiny::shinyApp(
   server = function(input, output) {
     
     # Server elements
+    source("modules/modal.R", local = TRUE)
     source("modules/data_server.R", local = TRUE)
     source("modules/map_server.R", local = TRUE)
     source("modules/weights_server.R", local = TRUE)
     source("modules/autocor_server.R", local = TRUE)
     source("modules/model_server.R", local = TRUE)
+    source("modules/cross_section_models_server.R", local = TRUE)
     
   }
 )
