@@ -338,6 +338,8 @@ cross_section_model <- eventReactive(input$cross_section_model_estimate, {
       endog = endogenous,
       instruments = instruments
     )
+  } else if(model_type == "sdm" & model_estimator == "ml" & !have_instruments){
+    lagsarlm(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw, type = "mixed")
   }
   
   
