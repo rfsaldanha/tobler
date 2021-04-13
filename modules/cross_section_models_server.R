@@ -8,36 +8,10 @@ output$cross_section_model_independent_variable_UI <- renderUI({
   selectInput("cross_section_model_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
 })
 
-output$cross_section_model_sar_consistent_UI <- renderUI({
-  if(input$sar_estimator == "ml"){
-    NULL
-  } else {
-    radioButtons(
-      "sar_consistent",
-      label = h4("Spatial heteroskedasticity and autocorrelation consistent (HAC) estimator"),
-      choices = list("HAC applied" = "hac", "HAC not applied" = "not_hac"), 
-      selected = "not_hac"
-    )
-  }
-})
-
-output$cross_section_model_sar_variance_UI <- renderUI({
-  if(input$sar_estimator == "ml"){
-    NULL
-  } else {
-    radioButtons(
-      "sar_variance",
-      label = h4("Variance"),
-      choices = list("Homoskedasticity" = "homo", "Heteroskedasticity (robust)" = "hete"), 
-      selected = "homo"
-    )
-  }
-})
-
 output$cross_section_model_endogenous_variable_UI <- renderUI({
   variables <- names(geodata()@data)
-
-  if(input$sar_estimator == "ml"){
+  
+  if(input$cross_section_model_type == "ols_std"){
     NULL
   } else {
     selectInput("cross_section_model_endogenous_variable", label = "Endogenous variables (optional)", choices = variables, multiple = TRUE)
@@ -47,10 +21,144 @@ output$cross_section_model_endogenous_variable_UI <- renderUI({
 output$cross_section_model_instrument_variable_UI <- renderUI({
   variables <- names(geodata()@data)
   
-  if(input$sar_estimator == "ml"){
+  if(input$cross_section_model_type == "ols_std"){
     NULL
   } else {
     selectInput("cross_section_model_instrument_variable", label = "Instrument variables (optional)", choices = variables, multiple = TRUE)
+  }
+})
+
+output$cross_section_model_estimator_UI <- renderUI({
+  variables <- names(geodata()@data)
+  
+  if(input$cross_section_model_type == "ols_std"){
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Ordinary Least Squares" = "ols_std"
+      ), 
+      selected = "ols_std"
+    )
+  } else if(input$cross_section_model_type == "sar" & !length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Maximum Likelihood (ML)" = "ml",
+        "Spatial Two Stage Least Squares (STSLS)" = "stsls"
+      ), 
+      selected = "ml"
+    )
+  } else if(input$cross_section_model_type == "sar" & length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Spatial Two Stage Least Squares (STSLS)" = "stsls"
+      ), 
+      selected = "stsls"
+    )
+  } else if(input$cross_section_model_type == "sem" & !length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Maximum Likelihood (ML)" = "ml",
+        "GMM estimator" = "gmm"
+      ), 
+      selected = "ml"
+    )
+  } else if(input$cross_section_model_type == "sem" & length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "GMM estimator" = "gmm"
+      ), 
+      selected = "gmm"
+    )
+  } else if(input$cross_section_model_type == "sac" & !length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Maximum Likelihood (ML)" = "ml",
+        "General Spatial Two Stage Least Squares (GSTSLS)" = "gstsls"
+      ), 
+      selected = "ml"
+    )
+  } else if(input$cross_section_model_type == "sac" & length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "General Spatial Two Stage Least Squares (GSTSLS)" = "gstsls"
+      ), 
+      selected = "gstsls"
+    )
+  } else if(input$cross_section_model_type == "slx" & !length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Maximum Likelihood (ML)" = "ml",
+        "Ordinary Least Squares (OLS)" = "ols"
+      ), 
+      selected = "ml"
+    )
+  } else if(input$cross_section_model_type == "slx" & length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Ordinary Least Squares (OLS)" = "ols"
+      ), 
+      selected = "ols"
+    )
+  } else if(input$cross_section_model_type == "sdem" & !length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Maximum Likelihood (ML)" = "ml",
+        "GMM estimator" = "gmm"
+      ), 
+      selected = "ml"
+    )
+  } else if(input$cross_section_model_type == "sdem" & length(input$cross_section_model_instrument_variable) > 0) {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "GMM estimator" = "gmm"
+      ), 
+      selected = "gmm"
+    )
+  } else if(input$cross_section_model_type == "sdm") {
+    radioButtons(
+      "cross_section_model_estimator", 
+      label = "Estimator", 
+      choices = list(
+        "Maximum Likelihood (ML)" = "ml"
+      ), 
+      selected = "ml"
+    )
+  } 
+})
+
+output$cross_section_model_variance_UI <- renderUI({
+  req(input$cross_section_model_estimator)
+  
+  if(input$cross_section_model_estimator %in% c("ols_std", "ml")){
+    NULL
+  } else {
+    radioButtons(
+      "cross_section_model_variance",
+      label = h4("Variance"),
+      choices = list("Homoskedasticity" = "homo", "Heteroskedasticity (robust)" = "hete"), 
+      selected = "homo"
+    )
   }
 })
 
@@ -69,44 +177,174 @@ cross_section_model_instrument <- reactive({
   paste0(" ~ ", paste0(input$cross_section_model_instrument_variable, collapse = " + "))
 })
 
-# SAR Model
-model_sar <- eventReactive(input$cross_section_model_estimate_sar, {
-  show_modal()
+cross_section_model <- eventReactive(input$cross_section_model_estimate, {
+  req(input$cross_section_model_type)
+  req(input$cross_section_model_estimator)
   
-  if(input$sar_estimator == "ml"){
-    lagsarlm(formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw)
+  model_type <- input$cross_section_model_type
+  model_estimator <- input$cross_section_model_estimator
+  model_variance <- input$cross_section_model_variance
+  have_instruments <- if_else(length(input$cross_section_model_instrument_variable) > 0, TRUE, FALSE)
+  endogenous <- if(cross_section_model_endogenous() == " ~ "){
+    NULL
   } else {
-    endogenous <- if(cross_section_model_endogenous() == " ~ "){
-      NULL
-    } else {
-      cross_section_model_endogenous()
-    }
-    instrument <- if(cross_section_model_instrument() == " ~ "){
-      NULL
-    } else {
-      cross_section_model_instrument()
-    }
-    hac <- ifelse(input$sar_consistent == "hac", TRUE, FALSE)
-    het <- ifelse(input$sar_variance == "hete", TRUE, FALSE)
-    model <- ifelse(input$sar_consistent == "hac", "ivhac", "lag")
-    
+    cross_section_model_endogenous()
+  }
+  instruments <- if(cross_section_model_instrument() == " ~ "){
+    NULL
+  } else {
+    cross_section_model_instrument()
+  }
+  
+  if(model_type == "ols_std" & model_estimator == "ols_std"){
+    lm(formula = formula(cross_section_model_esp()), data = geodata()@data)
+  } else if(model_type == "sar" & model_estimator == "ml" & !have_instruments){
+    lagsarlm(formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw)
+  } else if(model_type == "sar" & model_estimator == "stsls" & !have_instruments & model_variance == "homo"){
     spreg(
       formula = formula(cross_section_model_esp()), 
       data = geodata()@data, 
       listw = w_matrix$listw, 
+      het = FALSE, model = "lag"
+    )
+  } else if(model_type == "sar" & model_estimator == "stsls" & !have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw,
+      het = TRUE, model = "lag"
+    )
+  } else if(model_type == "sar" & model_estimator == "stsls" & have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "lag",
       endog = endogenous,
-      instruments = instrument,
-      HAC = hac,
-      het = het,
-      model = model
+      instruments = instruments
+    )
+  } else if(model_type == "sar" & model_estimator == "stsls" & !have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "lag",
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sem" & model_estimator == "ml" & !have_instruments){
+    errorsarlm(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw)
+  } else if(model_type == "sem" & model_estimator == "gmm" & !have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "error", 
+      step1.c = TRUE
+    )
+  } else if(model_type == "sem" & model_estimator == "gmm" & !have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "error", 
+      step1.c = TRUE
+    )
+  } else if(model_type == "sem" & model_estimator == "gmm" & have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "error", 
+      step1.c = TRUE,
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sem" & model_estimator == "gmm" & have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "error", 
+      step1.c = TRUE,
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sac" & model_estimator == "ml" & !have_instruments){
+    sacsarlm(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw) 
+  } else if(model_type == "sac" & model_estimator == "gstsls" & !have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "ols"
+    )
+  } else if(model_type == "sac" & model_estimator == "gstsls" & !have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "ols"
+    )
+  } else if(model_type == "sac" & model_estimator == "gstsls" & have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "ols",
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sac" & model_estimator == "gstsls" & have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "ols",
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sdem" & model_estimator == "ml" & !have_instruments){
+    lagsarlm(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw, type = "emixed")
+  } else if(model_type == "sdem" & model_estimator == "gmm" & !have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "error"
+    )
+  } else if(model_type == "sdem" & model_estimator == "gmm" & !have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "error"
+    )
+  } else if(model_type == "sdem" & model_estimator == "gmm" & have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "error",
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sdem" & model_estimator == "gmm" & have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "error",
+      endog = endogenous,
+      instruments = instruments
     )
   }
+  
+  
 })
 
-observeEvent(model_sar(), removeModal())
 
-output$model_sar_summary <- renderPrint({
-  summary(model_sar())
+output$cross_section_model_summary <- renderPrint({
+  summary(cross_section_model())
 })
-
 
