@@ -177,9 +177,12 @@ cross_section_model_instrument <- reactive({
   paste0(" ~ ", paste0(input$cross_section_model_instrument_variable, collapse = " + "))
 })
 
+# Estimate model
 cross_section_model <- eventReactive(input$cross_section_model_estimate, {
   req(input$cross_section_model_type)
   req(input$cross_section_model_estimator)
+  
+  show_modal()
   
   model_type <- input$cross_section_model_type
   model_estimator <- input$cross_section_model_estimator
@@ -277,16 +280,50 @@ cross_section_model <- eventReactive(input$cross_section_model_estimate, {
       formula = formula(cross_section_model_esp()), 
       data = geodata()@data, 
       listw = w_matrix$listw, 
-      het = FALSE, model = "ols"
+      het = FALSE, model = "sarar"
     )
   } else if(model_type == "sac" & model_estimator == "gstsls" & !have_instruments & model_variance == "hete"){
     spreg(
       formula = formula(cross_section_model_esp()), 
       data = geodata()@data, 
       listw = w_matrix$listw, 
-      het = TRUE, model = "ols"
+      het = TRUE, model = "sarar"
     )
   } else if(model_type == "sac" & model_estimator == "gstsls" & have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "sarar",
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "sac" & model_estimator == "gstsls" & have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "sarar",
+      endog = endogenous,
+      instruments = instruments
+    )
+  } else if(model_type == "slx" & model_estimator == "ml" & !have_instruments){
+    lmSLX(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw)
+  } else if(model_type == "slx" & model_estimator == "ols" & !have_instruments & model_variance == "homo"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = FALSE, model = "ols"
+    )
+  } else if(model_type == "slx" & model_estimator == "ols" & !have_instruments & model_variance == "hete"){
+    spreg(
+      formula = formula(cross_section_model_esp()), 
+      data = geodata()@data, 
+      listw = w_matrix$listw, 
+      het = TRUE, model = "ols"
+    )
+  } else if(model_type == "slx" & model_estimator == "ols" & have_instruments & model_variance == "homo"){
     spreg(
       formula = formula(cross_section_model_esp()), 
       data = geodata()@data, 
@@ -295,7 +332,7 @@ cross_section_model <- eventReactive(input$cross_section_model_estimate, {
       endog = endogenous,
       instruments = instruments
     )
-  } else if(model_type == "sac" & model_estimator == "gstsls" & have_instruments & model_variance == "hete"){
+  } else if(model_type == "slx" & model_estimator == "ols" & have_instruments & model_variance == "hete"){
     spreg(
       formula = formula(cross_section_model_esp()), 
       data = geodata()@data, 
@@ -349,4 +386,176 @@ cross_section_model <- eventReactive(input$cross_section_model_estimate, {
 output$cross_section_model_summary <- renderPrint({
   summary(cross_section_model())
 })
+
+output$cross_section_model_analysis_UI <- renderUI({
+  req(input$cross_section_model_type)
+  req(input$cross_section_model_estimator)
+  
+  model_type <- input$cross_section_model_type
+  model_estimator <- input$cross_section_model_estimator
+  
+  if(model_type == "ols_std"){
+    tagList(
+      h3("Moran's I for error term"),
+      renderPrint({
+        lm.morantest(cross_section_model(), w_matrix$listw)
+      }),
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      }),
+      h3("Lagrange multiplier"),
+      renderPrint({
+        lm.LMtests(model = cross_section_model(), listw = w_matrix$listw,
+                   test = c("LMerr","RLMerr","LMlag","RLMlag"))
+      })
+    )
+  } else if(model_type == "sar" & model_estimator == "ml"){
+    tagList(
+      h3("Impacts"),
+      renderPrint({
+        summary(impacts(cross_section_model(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      }),
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "sar" & model_estimator == "stsls"){
+    tagList(
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "sem"){
+    tagList(
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "sac" & model_estimator == "ml"){
+    tagList(
+      h3("Impacts"),
+      renderPrint({
+        summary(impacts(cross_section_model(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      }),
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "sac" & model_estimator == "gstsls"){
+    tagList(
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "slx" & model_estimator == "ml"){
+    tagList(
+      h3("Impacts"),
+      renderPrint({
+        summary(impacts(cross_section_model(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      }),
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "slx" & model_estimator == "ols"){
+    tagList(
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  }
+  
+  
+  
+})
+
+observeEvent(cross_section_model(), removeModal())
 
