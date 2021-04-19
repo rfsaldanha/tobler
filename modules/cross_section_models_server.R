@@ -376,7 +376,7 @@ cross_section_model <- eventReactive(input$cross_section_model_estimate, {
       instruments = instruments
     )
   } else if(model_type == "sdm" & model_estimator == "ml" & !have_instruments){
-    lagsarlm(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw, type = "mixed")
+    lagsarlm(formula = formula(cross_section_model_esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
   }
   
   
@@ -536,6 +536,27 @@ output$cross_section_model_analysis_UI <- renderUI({
     )
   } else if(model_type == "slx" & model_estimator == "ols"){
     tagList(
+      h3("Residual map"),
+      renderLeaflet({
+        geodata_res <- geodata()
+        geodata_res@data$residuals <- resid(cross_section_model())
+        
+        map <- tm_shape(geodata_res) +
+          tm_fill(col = "residuals",
+                  palette = "-RdBu",
+                  alpha = 0.7,
+                  midpoint = 0,
+                  title = "Residuals") +
+          tm_borders()
+        tmap_leaflet(map)
+      })
+    )
+  } else if(model_type == "sdm" & model_estimator == "ml"){
+    tagList(
+      h3("Impacts"),
+      renderPrint({
+        summary(impacts(cross_section_model(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      }),
       h3("Residual map"),
       renderLeaflet({
         geodata_res <- geodata()
