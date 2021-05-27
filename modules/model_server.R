@@ -86,7 +86,10 @@ observeEvent(model_sar_ml(), removeModal())
 model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
   show_modal()
   
-  stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+  robust_option <- if_else("is_robust" %in% input$model_sar_stsls_options, TRUE, FALSE)
+  
+  stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+        robust = robust_option)
 })
 
 output$model_sar_stsls_summary <- renderPrint({
