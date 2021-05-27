@@ -53,13 +53,13 @@ model_tab <- argonTabItem(
           actionButton("model_estimate_sar_ml", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sar_mv_summary"),
+          verbatimTextOutput("model_sar_ml_summary"),
           br(),br(),
           h4("Impacts"),
-          verbatimTextOutput("model_sar_mv_impacts"),
+          verbatimTextOutput("model_sar_ml_impacts"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sar_mv_map", height = 600)
+          leafletOutput("model_sar_ml_map", height = 600)
         ),
         argonTab(
           tabName = "SAR (STSLS)",
