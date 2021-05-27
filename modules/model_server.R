@@ -290,23 +290,23 @@ observeEvent(model_slx_ml(), removeModal())
 
 
 # SDM (ML)
-model_sdm_mv <- eventReactive(input$model_estimate_sdm_ml, {
+model_sdm_ml <- eventReactive(input$model_estimate_sdm_ml, {
   show_modal()
   
   lagsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
 })
 
-output$model_sdm_mv_summary <- renderPrint({
-  summary(model_sdm_mv(), Nagelkerke = TRUE, Hausman = TRUE)
+output$model_sdm_ml_summary <- renderPrint({
+  summary(model_sdm_ml(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
-output$model_sdm_mv_impacts <- renderPrint({
-  summary(impacts(model_sdm_mv(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+output$model_sdm_ml_impacts <- renderPrint({
+  summary(impacts(model_sdm_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
-output$model_sdm_mv_map <- renderLeaflet({
+output$model_sdm_ml_map <- renderLeaflet({
   geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_sdm_mv())
+  geodata_res@data$residuals <- resid(model_sdm_ml())
   
   map <- tm_shape(geodata_res) +
     tm_fill(col = "residuals",
@@ -318,7 +318,7 @@ output$model_sdm_mv_map <- renderLeaflet({
   tmap_leaflet(map)
 })
 
-observeEvent(model_sdm_mv(), removeModal())
+observeEvent(model_sdm_ml(), removeModal())
 
 
 

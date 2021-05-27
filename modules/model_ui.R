@@ -159,13 +159,13 @@ model_tab <- argonTabItem(
           actionButton("model_estimate_sdm_ml", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sdm_mv_summary"),
+          verbatimTextOutput("model_sdm_ml_summary"),
           br(),br(),
           h4("Impacts"),
-          verbatimTextOutput("model_sdm_mv_impacts"),
+          verbatimTextOutput("model_sdm_ml_impacts"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sdm_mv_map", height = 600)
+          leafletOutput("model_sdm_ml_map", height = 600)
         ),
         argonTab(
           tabName = "SDEM (ML)",
