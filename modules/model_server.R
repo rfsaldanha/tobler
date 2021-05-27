@@ -142,7 +142,7 @@ observeEvent(model_sem_ml(), removeModal())
 
 # SEM (GMM)
 
-model_sem_gmm <- eventReactive(input$models_estimate, {
+model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
   GMerrorsar(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
 
