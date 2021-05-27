@@ -205,7 +205,10 @@ observeEvent(model_sac_ml(), removeModal())
 model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   show_modal()
   
-  gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+  robust_option <- if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
+  
+  gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+         robust = robust_option)
 })
 
 output$model_sac_gstsls_summary <- renderPrint({

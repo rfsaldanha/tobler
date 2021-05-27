@@ -125,6 +125,7 @@ model_tab <- argonTabItem(
           active = FALSE,
           h3("SAC (GSTSLS)"),
           p("Spatial Autocorrelation Model (SAC) model with Generalized Spatial Two Stage Least Squares (GSTSLS) estimator."),
+          checkboxGroupInput("model_sac_gstsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
           actionButton("model_estimate_sac_gstsls", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
