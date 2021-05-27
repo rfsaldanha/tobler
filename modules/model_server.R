@@ -206,7 +206,7 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
 })
 
 output$model_sac_gstsls_summary <- renderPrint({
-  summary(model_sac_mq2e())
+  summary(model_sac_gstsls())
 })
 
 output$model_sac_gstsls_impacts <- renderPrint({
