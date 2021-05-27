@@ -83,23 +83,23 @@ output$model_sar_ml_map <- renderLeaflet({
 observeEvent(model_sar_ml(), removeModal())
 
 # SAR STSLS
-model_sar_mq2e <- eventReactive(input$model_estimate_sar_stsls, {
+model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
   show_modal()
   
   stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
 
-output$model_sar_mq2e_summary <- renderPrint({
-  summary(model_sar_mq2e())
+output$model_sar_stsls_summary <- renderPrint({
+  summary(model_sar_stsls())
 })
 
-output$model_sar_mq2e_impacts <- renderPrint({
-  summary(impacts(model_sar_mq2e(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+output$model_sar_stsls_impacts <- renderPrint({
+  summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
-output$model_sar_mq2e_map <- renderLeaflet({
+output$model_sar_stsls_map <- renderLeaflet({
   geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_sar_mq2e())
+  geodata_res@data$residuals <- resid(model_sar_stsls())
   
   map <- tm_shape(geodata_res) +
     tm_fill(col = "residuals",
@@ -111,7 +111,7 @@ output$model_sar_mq2e_map <- renderLeaflet({
   tmap_leaflet(map)
 })
 
-observeEvent(model_sar_mq2e(), removeModal())
+observeEvent(model_sar_stsls(), removeModal())
 
 # SEM ML
 model_sem_mv <- eventReactive(input$model_estimate_sem_ml, {
