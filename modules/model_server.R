@@ -59,7 +59,7 @@ model_sar_mv <- eventReactive(input$model_estimate_sar_ml, {
 })
 
 output$model_sar_mv_summary <- renderPrint({
-  summary(model_sar_mv())
+  summary(model_sar_mv(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
 output$model_sar_mv_impacts <- renderPrint({
@@ -121,7 +121,7 @@ model_sem_mv <- eventReactive(input$model_estimate_sem_ml, {
 })
 
 output$model_sem_mv_summary <- renderPrint({
-  summary(model_sem_mv())
+  summary(model_sem_mv(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
 output$model_sem_mv_map <- renderLeaflet({
@@ -198,7 +198,7 @@ model_sac_mv <- eventReactive(input$model_estimate_sac_ml, {
 })
 
 output$model_sac_mv_summary <- renderPrint({
-  summary(model_sac_mv())
+  summary(model_sac_mv(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
 output$model_sac_mv_impacts <- renderPrint({
@@ -261,7 +261,7 @@ model_slx_mv <- eventReactive(input$model_estimate_slx_ml, {
 })
 
 output$model_slx_mv_summary <- renderPrint({
-  summary(model_slx_mv())
+  summary(model_slx_mv(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
 output$model_slx_mv_impacts <- renderPrint({
@@ -293,7 +293,7 @@ model_sdm_mv <- eventReactive(input$model_estimate_sdm_ml, {
 })
 
 output$model_sdm_mv_summary <- renderPrint({
-  summary(model_sdm_mv())
+  summary(model_sdm_mv(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
 output$model_sdm_mv_impacts <- renderPrint({
@@ -326,7 +326,7 @@ model_sdem_mv <- eventReactive(input$model_estimate_sdem_ml, {
 })
 
 output$model_sdem_mv_summary <- renderPrint({
-  summary(model_sdem_mv())
+  summary(model_sdem_mv(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
 output$model_sdem_mv_map <- renderLeaflet({
