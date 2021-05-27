@@ -258,23 +258,23 @@ observeEvent(model_sac_gstsls(), removeModal())
 
 
 # SLX (ML)
-model_slx_mv <- eventReactive(input$model_estimate_slx_ml, {
+model_slx_ml <- eventReactive(input$model_estimate_slx_ml, {
   show_modal()
   
   lmSLX(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
 
-output$model_slx_mv_summary <- renderPrint({
-  summary(model_slx_mv(), Nagelkerke = TRUE, Hausman = TRUE)
+output$model_slx_ml_summary <- renderPrint({
+  summary(model_slx_ml(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
-output$model_slx_mv_impacts <- renderPrint({
-  summary(impacts(model_slx_mv(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+output$model_slx_ml_impacts <- renderPrint({
+  summary(impacts(model_slx_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
-output$model_slx_mv_map <- renderLeaflet({
+output$model_slx_ml_map <- renderLeaflet({
   geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_slx_mv())
+  geodata_res@data$residuals <- resid(model_slx_ml())
   
   map <- tm_shape(geodata_res) +
     tm_fill(col = "residuals",
@@ -286,7 +286,7 @@ output$model_slx_mv_map <- renderLeaflet({
   tmap_leaflet(map)
 })
 
-observeEvent(model_slx_mv(), removeModal())
+observeEvent(model_slx_ml(), removeModal())
 
 
 # SDM (ML)
