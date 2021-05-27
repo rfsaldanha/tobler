@@ -34,7 +34,6 @@ source("modules/map_ui.R")
 source("modules/weights_ui.R")
 source("modules/autocor_ui.R")
 source("modules/model_ui.R")
-source("modules/cross_section_models_ui.R")
 
 # App
 shiny::shinyApp(
@@ -74,7 +73,6 @@ shiny::shinyApp(
     source("modules/weights_server.R", local = TRUE)
     source("modules/autocor_server.R", local = TRUE)
     source("modules/model_server.R", local = TRUE)
-    source("modules/cross_section_models_server.R", local = TRUE)
     
   }
 )
