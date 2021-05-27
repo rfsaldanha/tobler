@@ -166,33 +166,6 @@ output$model_sem_gmm_map <- renderLeaflet({
 
 observeEvent(model_sem_gmm(), removeModal())
 
-# SEM STSLS
-model_sem_mq2e <- eventReactive(input$model_estimate_sem_stsls, {
-  show_modal()
-  
-  GMerrorsar(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
-})
-
-output$model_sem_mq2e_summary <- renderPrint({
-  summary(model_sem_mq2e())
-})
-
-output$model_sem_mq2e_map <- renderLeaflet({
-  geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_sem_mq2e())
-  
-  map <- tm_shape(geodata_res) +
-    tm_fill(col = "residuals",
-            palette = "-RdBu",
-            alpha = 0.7,
-            midpoint = 0,
-            title = "Residuals") +
-    tm_borders()
-  tmap_leaflet(map)
-})
-
-observeEvent(model_sem_mq2e(), removeModal())
-
 
 # SAC ML
 model_sac_ml <- eventReactive(input$model_estimate_sac_ml, {
