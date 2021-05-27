@@ -85,10 +85,10 @@ model_tab <- argonTabItem(
           actionButton("model_estimate_sem_ml", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sem_mv_summary"),
+          verbatimTextOutput("model_sem_ml_summary"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sem_mv_map", height = 600)
+          leafletOutput("model_sem_ml_map", height = 600)
         ),
         argonTab(
           tabName = "SEM (GMM)",

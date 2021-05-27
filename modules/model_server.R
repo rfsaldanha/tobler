@@ -120,13 +120,13 @@ model_sem_mv <- eventReactive(input$model_estimate_sem_ml, {
   errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
 
-output$model_sem_mv_summary <- renderPrint({
-  summary(model_sem_mv(), Nagelkerke = TRUE, Hausman = TRUE)
+output$model_sem_ml_summary <- renderPrint({
+  summary(model_sem_ml(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
-output$model_sem_mv_map <- renderLeaflet({
+output$model_sem_ml_map <- renderLeaflet({
   geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_sem_mv())
+  geodata_res@data$residuals <- resid(model_sem_ml())
   
   map <- tm_shape(geodata_res) +
     tm_fill(col = "residuals",
@@ -137,6 +137,9 @@ output$model_sem_mv_map <- renderLeaflet({
     tm_borders()
   tmap_leaflet(map)
 })
+
+
+# SEM STSLS
 
 model_sem_mq2e <- eventReactive(input$models_estimate, {
   GMerrorsar(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
