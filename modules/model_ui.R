@@ -11,7 +11,7 @@ model_tab <- argonTabItem(
         shadow = TRUE,
         border_level = 2,
         hover_shadow = TRUE,
-        title = "Spatial models",
+        title = "Model specification",
         argonRow(
           uiOutput("model_dependent_variable_UI")
         ),
@@ -26,7 +26,6 @@ model_tab <- argonTabItem(
         circle = FALSE,
         size = "lg",
         width = 12,
-        #iconList = lapply(X = 1:3, FUN = argonIcon, name = "atom"),
         argonTab(
           tabName = "OLS",
           active = TRUE,
