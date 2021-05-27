@@ -111,13 +111,13 @@ model_tab <- argonTabItem(
           actionButton("model_estimate_sac_ml", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sac_mv_summary"),
+          verbatimTextOutput("model_sac_ml_summary"),
           br(),br(),
           h4("Impacts"),
-          verbatimTextOutput("model_sac_mv_impacts"),
+          verbatimTextOutput("model_sac_ml_impacts"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sac_mv_map", height = 600)
+          leafletOutput("model_sac_ml_map", height = 600)
         ),
         argonTab(
           tabName = "SAC (GSTSLS)",
