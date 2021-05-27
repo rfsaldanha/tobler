@@ -323,19 +323,19 @@ observeEvent(model_sdm_ml(), removeModal())
 
 
 # SDEM (ML)
-model_sdem_mv <- eventReactive(input$model_estimate_sdem_ml, {
+model_sdem_ml <- eventReactive(input$model_estimate_sdem_ml, {
   show_modal()
   
   errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
 })
 
-output$model_sdem_mv_summary <- renderPrint({
-  summary(model_sdem_mv(), Nagelkerke = TRUE, Hausman = TRUE)
+output$model_sdem_ml_summary <- renderPrint({
+  summary(model_sdem_ml(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
-output$model_sdem_mv_map <- renderLeaflet({
+output$model_sdem_ml_map <- renderLeaflet({
   geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_sdem_mv())
+  geodata_res@data$residuals <- resid(model_sdem_ml())
   
   map <- tm_shape(geodata_res) +
     tm_fill(col = "residuals",
@@ -347,6 +347,6 @@ output$model_sdem_mv_map <- renderLeaflet({
   tmap_leaflet(map)
 })
 
-observeEvent(model_sdem_mv(), removeModal())
+observeEvent(model_sdem_ml(), removeModal())
 
 

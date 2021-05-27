@@ -170,15 +170,15 @@ model_tab <- argonTabItem(
         argonTab(
           tabName = "SDEM (ML)",
           active = FALSE,
-          h3("Spatial Durbin Error Model (SDM) with maximum likelihood (ML) estimator"),
+          h3("Spatial Durbin Error Model (SDEM) with maximum likelihood (ML) estimator"),
           p("SDEM model with ML estimator."),
           actionButton("model_estimate_sdem_ml", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sdem_mv_summary"),
+          verbatimTextOutput("model_sdem_ml_summary"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sdem_mv_map", height = 600)
+          leafletOutput("model_sdem_ml_map", height = 600)
         )
       )
     )
