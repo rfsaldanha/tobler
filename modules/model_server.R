@@ -150,7 +150,7 @@ model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
 })
 
 output$model_sem_gmm_summary <- renderPrint({
-  summary(model_sem_gmm())
+  summary(model_sem_gmm(), Hausman = TRUE)
 })
 
 output$model_sem_gmm_map <- renderLeaflet({
