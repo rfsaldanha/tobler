@@ -95,13 +95,13 @@ model_tab <- argonTabItem(
           active = FALSE,
           h3("SEM (GMM)"),
           p("Spatial Error Model (SEM) model with Generalized Method of Moments (GMM) estimator."),
-          actionButton("model_estimate_sem_stsls", "Estimate", icon = icon("math"), status = "primary"),
+          actionButton("model_estimate_sem_gmm", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sem_mq2e_summary"),
+          verbatimTextOutput("model_sem_gmm_summary"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sem_mq2e_map", height = 600)
+          leafletOutput("model_sem_gmm_map", height = 600)
         ),
         argonTab(
           tabName = "SAC (ML)",
