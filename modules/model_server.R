@@ -13,24 +13,10 @@ esp <- reactive({
   paste0(as.character(input$model_dependent_variable), " ~ ", paste0(input$model_independent_variable, collapse = " + "))
 })
 
-# Modal time
-modal_time <- 1
-
 # OLS Model
 model_ols <- eventReactive(input$model_estimate_ols, {
   
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   lm(formula = formula(esp()), data = geodata()@data)
 })
@@ -67,18 +53,7 @@ observeEvent(model_ols(), removeModal())
 
 # SAR ML
 model_sar_mv <- eventReactive(input$model_estimate_sar_ml, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   lagsarlm(formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -109,18 +84,7 @@ observeEvent(model_sar_mv(), removeModal())
 
 # SAR STSLS
 model_sar_mq2e <- eventReactive(input$model_estimate_sar_stsls, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -151,18 +115,7 @@ observeEvent(model_sar_mq2e(), removeModal())
 
 # SEM ML
 model_sem_mv <- eventReactive(input$model_estimate_sem_ml, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -211,18 +164,7 @@ observeEvent(model_sem_mv(), removeModal())
 
 # SEM STSLS
 model_sem_mq2e <- eventReactive(input$model_estimate_sem_stsls, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   GMerrorsar(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -250,18 +192,7 @@ observeEvent(model_sem_mq2e(), removeModal())
 
 # SAC ML
 model_sac_mv <- eventReactive(input$model_estimate_sac_ml, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw) 
 })
@@ -292,18 +223,7 @@ observeEvent(model_sac_mv(), removeModal())
 
 # SAC STSLS
 model_sac_mq2e <- eventReactive(input$model_estimate_sac_stsls, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -335,18 +255,7 @@ observeEvent(model_sac_mq2e(), removeModal())
 
 # SLX (ML)
 model_slx_mv <- eventReactive(input$model_estimate_slx_ml, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
   lmSLX(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
@@ -378,20 +287,9 @@ observeEvent(model_slx_mv(), removeModal())
 
 # SDM (ML)
 model_sdm_mv <- eventReactive(input$model_estimate_sdm_ml, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
-  lagsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, type = "mixed")
+  lagsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
 })
 
 output$model_sdm_mv_summary <- renderPrint({
@@ -422,20 +320,9 @@ observeEvent(model_sdm_mv(), removeModal())
 
 # SDEM (ML)
 model_sdem_mv <- eventReactive(input$model_estimate_sdem_ml, {
-  fortune <- statquote()
-  showModal(session = getDefaultReactiveDomain(),
-            modalDialog(
-              title = "Please wait",
-              "Your model is being estimated...",
-              br(),br(),
-              em(fortune$text),br(),
-              em(paste("---", fortune$source)),
-              footer = NULL
-            )
-  )
-  Sys.sleep(modal_time)
+  show_modal()
   
-  errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, etype = "emixed")
+  errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
 })
 
 output$model_sdem_mv_summary <- renderPrint({
