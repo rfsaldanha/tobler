@@ -124,16 +124,16 @@ model_tab <- argonTabItem(
           active = FALSE,
           h3("SAC (GSTSLS)"),
           p("Spatial Autocorrelation Model (SAC) model with Generalized Spatial Two Stage Least Squares (GSTSLS) estimator."),
-          actionButton("model_estimate_sac_stsls", "Estimate", icon = icon("math"), status = "primary"),
+          actionButton("model_estimate_sac_gstsls", "Estimate", icon = icon("math"), status = "primary"),
           br(),br(),
           h4("Estimation"),
-          verbatimTextOutput("model_sac_mq2e_summary"),
+          verbatimTextOutput("model_sac_gstsls_summary"),
           br(),br(),
           h4("Impacts"),
-          verbatimTextOutput("model_sac_mq2e_impacts"),
+          verbatimTextOutput("model_sac_gstsls_impacts"),
           br(),br(),
           h4("Residual map"),
-          leafletOutput("model_sac_mq2e_map", height = 600)
+          leafletOutput("model_sac_gstsls_map", height = 600)
         ),
         argonTab(
           tabName = "SLX (ML)",

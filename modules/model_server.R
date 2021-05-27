@@ -225,24 +225,24 @@ output$model_sac_ml_map <- renderLeaflet({
 
 observeEvent(model_sac_ml(), removeModal())
 
-# SAC STSLS
-model_sac_mq2e <- eventReactive(input$model_estimate_sac_stsls, {
+# SAC GSTSLS
+model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   show_modal()
   
   gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
 })
 
-output$model_sac_mq2e_summary <- renderPrint({
+output$model_sac_gstsls_summary <- renderPrint({
   summary(model_sac_mq2e())
 })
 
-output$model_sac_mq2e_impacts <- renderPrint({
-  summary(impacts(model_sac_mq2e(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+output$model_sac_gstsls_impacts <- renderPrint({
+  summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
-output$model_sac_mq2e_map <- renderLeaflet({
+output$model_sac_gstsls_map <- renderLeaflet({
   geodata_res <- geodata()
-  geodata_res@data$residuals <- resid(model_sac_mq2e())
+  geodata_res@data$residuals <- resid(model_sac_gstsls())
   
   map <- tm_shape(geodata_res) +
     tm_fill(col = "residuals",
@@ -254,7 +254,7 @@ output$model_sac_mq2e_map <- renderLeaflet({
   tmap_leaflet(map)
 })
 
-observeEvent(model_sac_mq2e(), removeModal())
+observeEvent(model_sac_gstsls(), removeModal())
 
 
 # SLX (ML)
