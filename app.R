@@ -58,8 +58,7 @@ shiny::shinyApp(
         map_tab,
         weights_tab,
         autocor_tab,
-        model_tab,
-        cross_section_models_tab
+        model_tab
       )
     ),
     footer = argonFooter

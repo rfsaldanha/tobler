@@ -87,9 +87,10 @@ model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
   show_modal()
   
   robust_option <- if_else("is_robust" %in% input$model_sar_stsls_options, TRUE, FALSE)
+  not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
   
   stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
-        robust = robust_option)
+        robust = robust_option, W2X = not_w2x_option)
 })
 
 output$model_sar_stsls_summary <- renderPrint({
@@ -206,9 +207,10 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   show_modal()
   
   robust_option <- if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
+  not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
   
   gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
-         robust = robust_option)
+         robust = robust_option, W2X = not_w2x_option)
 })
 
 output$model_sac_gstsls_summary <- renderPrint({
