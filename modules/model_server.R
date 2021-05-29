@@ -175,7 +175,15 @@ observeEvent(model_sem_gmm(), removeModal())
 model_sac_ml <- eventReactive(input$model_estimate_sac_ml, {
   show_modal()
   
-  sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw) 
+  #if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
+  
+  if("use_secondary_w_matrix" %in% input$model_estimate_sac_ml_options){
+    sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
+  } else {
+    sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw) 
+  }
+  
+  
 })
 
 output$model_sac_ml_summary <- renderPrint({
@@ -209,8 +217,14 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   robust_option <- if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
   not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
   
-  gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
-         robust = robust_option, W2X = not_w2x_option)
+  if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
+    gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+           robust = robust_option, W2X = not_w2x_option, listw2 = w_matrix_secondary$listw)
+  } else {
+    gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+           robust = robust_option, W2X = not_w2x_option)
+  }
+  
 })
 
 output$model_sac_gstsls_summary <- renderPrint({
