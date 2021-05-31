@@ -14,7 +14,6 @@ library(tmap)
 library(htmltools)
 library(spdep)
 library(spatialreg)
-library(sphet)
 library(reshape2)
 library(statquotes)
 options(
