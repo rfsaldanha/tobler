@@ -180,6 +180,9 @@ model_tab <- argonTabItem(
           h4("Estimation"),
           verbatimTextOutput("model_sdem_ml_summary"),
           br(),br(),
+          h4("Impacts"),
+          verbatimTextOutput("model_sdem_ml_impacts"),
+          br(),br(),
           h4("Residual map"),
           leafletOutput("model_sdem_ml_map", height = 600)
         )

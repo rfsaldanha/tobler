@@ -328,6 +328,10 @@ output$model_sdem_ml_summary <- renderPrint({
   summary(model_sdem_ml(), Nagelkerke = TRUE, Hausman = TRUE)
 })
 
+output$model_sdem_ml_impacts <- renderPrint({
+  summary(impacts(model_sdem_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+})
+
 output$model_sdem_ml_map <- renderLeaflet({
   geodata_res <- geodata()
   geodata_res@data$residuals <- resid(model_sdem_ml())
