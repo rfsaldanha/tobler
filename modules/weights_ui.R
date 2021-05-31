@@ -3,6 +3,7 @@ weights_tab <- argonTabItem(
   argonRow(
     argonColumn(
       width = 12,
+      h3("Spatial matrix creation"),
       argonTabSet(
         id = "weights-tab",
         card_wrapper = TRUE,
@@ -96,7 +97,9 @@ weights_tab <- argonTabItem(
       )
     )
   ),
+  br(),br(),
   argonRow(
+    h3("Current spatial matrix configuration"),
     argonColumn(
       width = 12,
       argonTabSet(
