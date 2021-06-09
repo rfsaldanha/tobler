@@ -3,6 +3,7 @@ weights_tab <- argonTabItem(
   argonRow(
     argonColumn(
       width = 12,
+      h3("Spatial matrix creation"),
       argonTabSet(
         id = "weights-tab",
         card_wrapper = TRUE,
@@ -26,8 +27,8 @@ weights_tab <- argonTabItem(
                                       "Row standardised" = "W", 
                                       "Globally standardised" = "C")
                        ),
-          actionButton(inputId = "weights_contiguity_create", label = "Create matrix"),
-          uiOutput("teste")
+          actionButton(inputId = "weights_contiguity_create", label = "Create and use as primary matrix"),
+          actionButton(inputId = "weights_contiguity_create_secondary", label = "Create and use as secondary matrix"),
         ),
         argonTab(
           tabName = "Inverse Distance Matrix",
@@ -42,7 +43,8 @@ weights_tab <- argonTabItem(
                                       "Row standardised" = "W", 
                                       "Globally standardised" = "C")
           ),
-          actionButton(inputId = "weights_inverse_distance_create", label = "Create matrix")
+          actionButton(inputId = "weights_inverse_distance_create", label = "Create and use as primary matrix"),
+          actionButton(inputId = "weights_inverse_distance_create_secondary", label = "Create and use as secondary matrix")
         ),
         argonTab(
           tabName = "K-Nearest Neighbors Matrix",
@@ -55,7 +57,8 @@ weights_tab <- argonTabItem(
                                       "Row standardised" = "W", 
                                       "Globally standardised" = "C")
           ),
-          actionButton(inputId = "weights_k_nearest_create", label = "Create matrix")
+          actionButton(inputId = "weights_k_nearest_create", label = "Create and use as primary matrix"),
+          actionButton(inputId = "weights_k_nearest_create_secondary", label = "Create and use as secondary matrix")
         ),
         argonTab(
           tabName = "Baumont (2004) procedure",
@@ -72,7 +75,8 @@ weights_tab <- argonTabItem(
                                       "Row standardised" = "W", 
                                       "Globally standardised" = "C")
           ),
-          actionButton(inputId = "weights_baumont_create", label = "Create matrix")
+          actionButton(inputId = "weights_baumont_create", label = "Create and use as primary matrix"),
+          actionButton(inputId = "weights_baumont_create_secondary", label = "Create and use as secondary matrix")
         ),
         argonTab(
           tabName = "Stakhovych-Bijmolt (2009) adapted procedure",
@@ -87,18 +91,43 @@ weights_tab <- argonTabItem(
                                       "Globally standardised" = "C")
           ),
           active = FALSE,
-          actionButton(inputId = "weights_stakhovych_create", label = "Create matrix")
+          actionButton(inputId = "weights_stakhovych_create", label = "Create and use as primary matrix"),
+          actionButton(inputId = "weights_stakhovych_create_secondary", label = "Create and use as secondary matrix")
         )
       )
     )
   ),
+  br(),br(),
   argonRow(
+    h3("Current spatial matrix configuration"),
     argonColumn(
       width = 12,
-      uiOutput("matrix_info1_UI", ),
-      uiOutput("matrix_info2_UI", ),
-      uiOutput("matrix_info3_UI"),
-      uiOutput("matrix_plot_UI")
+      argonTabSet(
+        id = "weights-results-tab",
+        card_wrapper = TRUE,
+        horizontal = TRUE,
+        circle = FALSE,
+        size = "lg",
+        width = 12,
+        argonTab(
+          tabName = "Primary weights matrix",
+          active = TRUE,
+          h3("Primary weights matrix"),
+          uiOutput("matrix_info1_UI", ),
+          uiOutput("matrix_info2_UI", ),
+          uiOutput("matrix_info3_UI"),
+          uiOutput("matrix_plot_UI")
+        ),
+        argonTab(
+          tabName = "Secondary weights matrix",
+          active = TRUE,
+          h3("Secondary weights matrix"),
+          uiOutput("matrix_secondary_info1_UI", ),
+          uiOutput("matrix_secondary_info2_UI", ),
+          uiOutput("matrix_secondary_info3_UI"),
+          uiOutput("matrix_secondary_plot_UI")
+        )
+      )
     )
   )
 )

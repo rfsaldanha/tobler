@@ -16,7 +16,10 @@ library(spdep)
 library(spatialreg)
 library(reshape2)
 library(statquotes)
-options(shiny.maxRequestSize=30*1024^2) 
+options(
+  shiny.maxRequestSize=30*1024^2, 
+  shiny.sanitize.errors = FALSE
+) 
 
 # Template
 source("sidebar.R")
@@ -62,6 +65,7 @@ shiny::shinyApp(
   server = function(input, output) {
     
     # Server elements
+    source("modules/modal.R", local = TRUE)
     source("modules/data_server.R", local = TRUE)
     source("modules/map_server.R", local = TRUE)
     source("modules/weights_server.R", local = TRUE)

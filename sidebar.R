@@ -40,7 +40,7 @@ argonSidebar <- argonDashSidebar(
     argonSidebarItem(
       tabName = "model",
       icon = argonIcon(name = "single-copy-04", color = "info"),
-      "Spatial Models"
+      "Spatial Cross Section Models"
     )
   )
 )
