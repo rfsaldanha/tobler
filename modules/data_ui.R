@@ -10,7 +10,7 @@ data_tab <- argonTabItem(
       p("Load here your spatial data file including variables. Currently, we suggest the GML format."),
       fileInput("data_file", label = "", multiple = FALSE),
       checkboxInput("data_validate", "Validate and clean geometry (recommended).", value = TRUE),
-      selectInput("data_type", label = "Data type", choices = c("Cross-section", "Panel (stacked)", "Panel (not stacked)")),
+      selectInput("data_type", label = "Data type", choices = c("Cross-section", "Panel")),
       uiOutput("data_panel"),
       uiOutput("data_table_UI")
     )

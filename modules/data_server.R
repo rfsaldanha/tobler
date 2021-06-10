@@ -1,5 +1,5 @@
 output$data_panel <- renderUI({
-  if(input$data_type == "Panel (not stacked)"){
+  if(input$data_type == "Panel"){
     variables <- names(geodata_tmp()@data)
     tagList(
       selectInput("pdata_id_variable", label = "ID variable", choices = variables),
@@ -38,7 +38,7 @@ geodata_tmp <- reactive({
 
 geodata <- reactive({
   
-  if(input$data_type == "Panel (not stacked)"){
+  if(input$data_type == "Panel"){
     req(input$pdata_id_variable)
     req(input$pdata_variables)
     
