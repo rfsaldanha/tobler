@@ -19,6 +19,28 @@ pmodel_tab <- argonTabItem(
         argonRow(
           uiOutput("pmodel_independent_variable_UI")
         )
+      ),
+      argonTabSet(
+        id = "pmodel-tests-tab",
+        card_wrapper = TRUE,
+        horizontal = TRUE,
+        circle = FALSE,
+        size = "lg",
+        width = 12,
+        #iconList = lapply(X = 1:3, FUN = argonIcon, name = "atom"),
+        argonTab(
+          tabName = "Hausman Test", 
+          active = TRUE,
+          h3("Hausman test for panel models"), br(),br(),
+          actionButton("pmodel_hausman_test_execute", label = "Execute"), br(),br(),
+          verbatimTextOutput("pmodel_hausman_test_results")
+        ),
+        argonTab(
+          tabName = "Pesaran Test",
+          h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
+          actionButton("pmodel_pesaran_test_execute", label = "Execute"),
+          verbatimTextOutput("pmodel_pesaran_test_results")
+        )
       )
     )
   )
