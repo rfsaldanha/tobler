@@ -3,7 +3,8 @@ output$data_panel <- renderUI({
     variables <- names(geodata_original()@data)
     tagList(
       selectInput("pdata_id_variable", label = "ID variable", choices = variables),
-      selectInput("pdata_variables", label = "Measure/time variables", choices = variables, multiple = TRUE)
+      selectInput("pdata_variables", label = "Measure/time variables", choices = variables, multiple = TRUE),
+      p("* Try to use this variable name pattern: INCOME1990, CRIME2010, UNEMPL2010.")
     )
   }
 })
