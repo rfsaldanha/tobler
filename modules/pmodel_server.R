@@ -73,3 +73,29 @@ output$pmodel_sar_impacts <- renderPrint({
   res <- splm:::impacts.splm(pmodel_sar(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
   summary(res, zstats=TRUE, short=TRUE)
 })
+
+
+# SEM model
+
+pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = "within", effect = "individual", spatial.error = "b")
+})
+
+output$pmodel_sem_summary <- renderPrint({
+  summary(pmodel_sem())
+})
+
+# SAC model
+
+pmodel_sac <- eventReactive(input$pmodel_sac_estimate, {
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = "within", effect = "individual", spatial.error = "b")
+})
+
+output$pmodel_sac_summary <- renderPrint({
+  summary(pmodel_sac())
+})
+
+output$pmodel_sac_impacts <- renderPrint({
+  res <- splm:::impacts.splm(pmodel_sac(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+  summary(res, zstats=TRUE, short=TRUE)
+})

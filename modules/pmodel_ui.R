@@ -72,6 +72,25 @@ pmodel_tab <- argonTabItem(
           br(),br(),
           h4("Impacts"),
           verbatimTextOutput("pmodel_sar_impacts")
+        ),
+        argonTab(
+          tabName = "SEM",
+          h3("SEM"),
+          actionButton("pmodel_sem_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sem_summary")
+        ),
+        argonTab(
+          tabName = "SAC",
+          h3("SAC"),
+          actionButton("pmodel_sac_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sac_summary"),
+          br(),br(),
+          h4("Impacts"),
+          verbatimTextOutput("pmodel_sac_impacts")
         )
       )
     )
