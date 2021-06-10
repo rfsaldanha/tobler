@@ -54,7 +54,12 @@ geodata <- reactive({
         variable = as.character(gsub("[[:digit:]]", "", name)),
         time = as.character(gsub("[[:alpha:]]", "", name))
       ) %>%
-      select(1, variable, time, value)
+      select(1, variable, time, value) %>%
+      pivot_wider(
+        names_from = variable,
+        values_from = value
+      ) %>%
+      arrange(1, time)
     
     shape@data <- res
     
@@ -63,12 +68,6 @@ geodata <- reactive({
     geodata_original()
   }
 })
-
-
-
-
-
-
 
 observeEvent(geodata(), {
   output$data_table_UI <- renderUI({
