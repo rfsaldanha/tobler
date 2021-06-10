@@ -1,26 +1,26 @@
 output$autocor_variable_UI <- renderUI({
-  req(geodata())
-  sub <- geodata()@data %>%
+  req(geodata_original())
+  sub <- geodata_original()@data %>%
     select_if(is.numeric)
   varSelectInput("autocor_variable", label = "Interest variable", data = sub)
 })
 
 output$autocor_name_variable_UI <- renderUI({
-  req(geodata())
-  sub <- geodata()@data %>%
+  req(geodata_original())
+  sub <- geodata_original()@data %>%
     select_if(is.factor)
   varSelectInput("autocor_name_variable", label = "Name variable", data = sub)
 })
 
 output$autocor_scatter <- renderHighchart({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(input$autocor_name_variable)
   req(w_matrix$listw)
   
-  #sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  #sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   
-  sub <- geodata()@data %>%
+  sub <- geodata_original()@data %>%
     select(!!input$autocor_variable, !!input$autocor_name_variable)
   
   names(sub) <- c("var", "name")
@@ -59,55 +59,55 @@ output$autocor_scatter <- renderHighchart({
 })
 
 output$autocor_moran <- renderPrint({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(w_matrix$listw)
-  sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   names(sub) <- "var"
   moran.test(sub$var, listw = w_matrix$listw, zero.policy = TRUE)
 })
 
 output$autocor_moran_mc <- renderPrint({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(w_matrix$listw)
-  sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   names(sub) <- "var"
   moran.mc(sub$var, listw = w_matrix$listw, nsim = 999, zero.policy = TRUE)
 })
 
 output$autocor_geary <- renderPrint({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(w_matrix$listw)
-  sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   names(sub) <- "var"
   geary.test(sub$var, listw = w_matrix$listw, zero.policy = TRUE)
 })
 
 output$autocor_geary_mc <- renderPrint({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(w_matrix$listw)
-  sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   names(sub) <- "var"
   geary.mc(sub$var, listw = w_matrix$listw, nsim = 999, zero.policy = TRUE)
 })
 
 output$autocor_getis <- renderPrint({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(w_matrix$listw)
-  sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   names(sub) <- "var"
   globalG.test(as.vector(scale(sub$var, center = FALSE)), listw = w_matrix$listw, B1correct = TRUE, zero.policy = TRUE)
 })
 
 output$autocor_getis_star <- renderPrint({
-  req(geodata())
+  req(geodata_original())
   req(input$autocor_variable)
   req(w_matrix$listw)
-  sub <- subset(geodata()@data, select = as.character(input$autocor_variable))
+  sub <- subset(geodata_original()@data, select = as.character(input$autocor_variable))
   names(sub) <- "var"
   
   matrix <- include.self(w_matrix$nb)
