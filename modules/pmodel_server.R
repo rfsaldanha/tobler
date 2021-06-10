@@ -45,3 +45,31 @@ pmodel_pesaran_test <- eventReactive(input$pmodel_pesaran_test_execute, {
 output$pmodel_pesaran_test_results <- renderPrint({
   print(pmodel_pesaran_test())
 })
+
+
+
+
+# OLS model
+
+pmodel_ols <- eventReactive(input$pmodel_ols_estimate, {
+  plm(formula = formula(pesp()), data = geodata()@data)
+})
+
+output$pmodel_ols_summary <- renderPrint({
+  summary(pmodel_ols())
+})
+
+# SAR model
+
+pmodel_sar <- eventReactive(input$pmodel_sar_estimate, {
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = "within", effect = "individual", spatial.error = "none")
+})
+
+output$pmodel_sar_summary <- renderPrint({
+  summary(pmodel_sar())
+})
+
+output$pmodel_sar_impacts <- renderPrint({
+  res <- splm:::impacts.splm(pmodel_sar(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+  summary(res, zstats=TRUE, short=TRUE)
+})

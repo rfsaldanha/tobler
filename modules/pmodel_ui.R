@@ -20,6 +20,7 @@ pmodel_tab <- argonTabItem(
           uiOutput("pmodel_independent_variable_UI")
         )
       ),
+      argonH1(display = 4, "Tests"),
       argonTabSet(
         id = "pmodel-tests-tab",
         card_wrapper = TRUE,
@@ -31,7 +32,7 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "Hausman Test", 
           active = TRUE,
-          h3("Hausman test for panel models"), 
+          h3("Hausman Test for panel models"), 
           actionButton("pmodel_hausman_test_execute", label = "Execute"), 
           verbatimTextOutput("pmodel_hausman_test_results")
         ),
@@ -40,6 +41,37 @@ pmodel_tab <- argonTabItem(
           h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
           actionButton("pmodel_pesaran_test_execute", label = "Execute"),
           verbatimTextOutput("pmodel_pesaran_test_results")
+        )
+      ),
+      br(),
+      argonH1(display = 4, "Models"),
+      argonTabSet(
+        id = "pmodel-model-tab",
+        card_wrapper = TRUE,
+        horizontal = TRUE,
+        circle = FALSE,
+        size = "lg",
+        width = 12,
+        #iconList = lapply(X = 1:3, FUN = argonIcon, name = "atom"),
+        argonTab(
+          tabName = "OLS", 
+          active = TRUE,
+          h3("OLS"),
+          actionButton("pmodel_ols_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_ols_summary")
+        ),
+        argonTab(
+          tabName = "SAR",
+          h3("SAR"),
+          actionButton("pmodel_sar_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sar_summary"),
+          br(),br(),
+          h4("Impacts"),
+          verbatimTextOutput("pmodel_sar_impacts")
         )
       )
     )
