@@ -4,14 +4,14 @@ w_matrix_secondary <- reactiveValues(listw = NULL, nb = NULL, name = NULL)
 observeEvent(input$weights_contiguity_create, {
   if(input$weights_contiguity_radio == 1){
     if(input$weights_contiguity_order == 1){
-      w_nb <- poly2nb(pl = geodata(), queen = FALSE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = FALSE)
       w_matrix$nb <- w_nb
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Rook matrix")
       showNotification(ui = "Rook matrix created as primary.", type = "message")
     } else {
-      w_nb <- poly2nb(pl = geodata(), queen = FALSE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = FALSE)
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix$nb <- w_nblag
       w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
@@ -21,14 +21,14 @@ observeEvent(input$weights_contiguity_create, {
     }
   } else if(input$weights_contiguity_radio == 2){
     if(input$weights_contiguity_order == 1){
-      w_nb <- poly2nb(pl = geodata(), queen = TRUE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = TRUE)
       w_matrix$nb <- w_nb
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
       w_matrix$name <- paste0("Queen matrix")
       showNotification(ui = "Queen matrix created as primary.", type = "message")
     } else {
-      w_nb <- poly2nb(pl = geodata(), queen = TRUE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = TRUE)
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix$nb <- w_nblag
       w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
@@ -43,14 +43,14 @@ observeEvent(input$weights_contiguity_create, {
 observeEvent(input$weights_contiguity_create_secondary, {
   if(input$weights_contiguity_radio == 1){
     if(input$weights_contiguity_order == 1){
-      w_nb <- poly2nb(pl = geodata(), queen = FALSE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = FALSE)
       w_matrix_secondary$nb <- w_nb
       w_matrix_secondary$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
       w_matrix_secondary$name <- paste0("Rook matrix")
       showNotification(ui = "Rook matrix created as secondary.", type = "message")
     } else {
-      w_nb <- poly2nb(pl = geodata(), queen = FALSE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = FALSE)
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix_secondary$nb <- w_nblag
       w_matrix_secondary$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
@@ -60,14 +60,14 @@ observeEvent(input$weights_contiguity_create_secondary, {
     }
   } else if(input$weights_contiguity_radio == 2){
     if(input$weights_contiguity_order == 1){
-      w_nb <- poly2nb(pl = geodata(), queen = TRUE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = TRUE)
       w_matrix_secondary$nb <- w_nb
       w_matrix_secondary$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
       w_matrix_secondary$name <- paste0("Queen matrix")
       showNotification(ui = "Queen matrix created as secondary.", type = "message")
     } else {
-      w_nb <- poly2nb(pl = geodata(), queen = TRUE)
+      w_nb <- poly2nb(pl = geodata_original(), queen = TRUE)
       w_nblag <- nblag_cumul(nblag(w_nb, maxlag = input$weights_contiguity_order))
       w_matrix_secondary$nb <- w_nblag
       w_matrix_secondary$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
@@ -83,7 +83,7 @@ observeEvent(input$weights_contiguity_create_secondary, {
 observeEvent(input$weights_inverse_distance_create, {
   
   power <- input$weights_inverse_distance_power
-  coords <- coordinates(geodata())
+  coords <- coordinates(geodata_original())
   w_nb <- dnearneigh(coords, input$weights_inverse_distance_lower_bound, input$weights_inverse_distance_upper_bound, longlat = TRUE)
   dlist <- nbdists(w_nb, coords)
   dlist <- lapply(dlist, function(x) 1/x^power)
@@ -98,7 +98,7 @@ observeEvent(input$weights_inverse_distance_create, {
 observeEvent(input$weights_inverse_distance_create_secondary, {
   
   power <- input$weights_inverse_distance_power
-  coords <- coordinates(geodata())
+  coords <- coordinates(geodata_original())
   w_nb <- dnearneigh(coords, input$weights_inverse_distance_lower_bound, input$weights_inverse_distance_upper_bound, longlat = TRUE)
   dlist <- nbdists(w_nb, coords)
   dlist <- lapply(dlist, function(x) 1/x^power)
@@ -113,8 +113,8 @@ observeEvent(input$weights_inverse_distance_create_secondary, {
 
 observeEvent(input$weights_k_nearest_create, {
   
-  IDs <- row.names(geodata()@data)
-  coords <- coordinates(geodata())
+  IDs <- row.names(geodata_original()@data)
+  coords <- coordinates(geodata_original())
   
   w_knear <- knearneigh(coords, k = input$weights_k_nearest_k)
   w_nb <-knn2nb(w_knear, row.names=IDs)
@@ -129,8 +129,8 @@ observeEvent(input$weights_k_nearest_create, {
 
 observeEvent(input$weights_k_nearest_create_secondary, {
   
-  IDs <- row.names(geodata()@data)
-  coords <- coordinates(geodata())
+  IDs <- row.names(geodata_original()@data)
+  coords <- coordinates(geodata_original())
   
   w_knear <- knearneigh(coords, k = input$weights_k_nearest_k)
   w_nb <-knn2nb(w_knear, row.names=IDs)
@@ -144,12 +144,12 @@ observeEvent(input$weights_k_nearest_create_secondary, {
 
 
 output$weights_baumont_dependent_variable_UI <- renderUI({
-  variables <- names(geodata()@data)
+  variables <- names(geodata_original()@data)
   selectInput("weights_baumont_dependent_variable", label = "Dependent variable", choices = variables)
 })
 
 output$weights_baumont_idependent_variable_UI <- renderUI({
-  variables <- names(geodata()@data)
+  variables <- names(geodata_original()@data)
   selectInput("weights_baumont_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
 })
 
@@ -159,13 +159,13 @@ observeEvent(input$weights_baumont_create, {
   
   withProgress(message = "Processing", detail = "Baumont procedure", value = 0,{
     max_k <- input$weights_baumont_max_k
-    IDs <- row.names(geodata()@data)
-    coords <- coordinates(geodata())
+    IDs <- row.names(geodata_original()@data)
+    coords <- coordinates(geodata_original())
     res.pesos <- data.frame(k=numeric(),i=numeric(),valorp=numeric())
     
     esp <- paste0(as.character(input$weights_baumont_dependent_variable), " ~ ", paste0(input$weights_baumont_independent_variable, collapse = " + "))
     
-    ols_model <- lm(formula = formula(esp), data = geodata()@data)
+    ols_model <- lm(formula = formula(esp), data = geodata_original()@data)
     
     for(k in 1:max_k)
     {
@@ -206,13 +206,13 @@ observeEvent(input$weights_baumont_create_secondary, {
   
   withProgress(message = "Processing", detail = "Baumont procedure", value = 0,{
     max_k <- input$weights_baumont_max_k
-    IDs <- row.names(geodata()@data)
-    coords <- coordinates(geodata())
+    IDs <- row.names(geodata_original()@data)
+    coords <- coordinates(geodata_original())
     res.pesos <- data.frame(k=numeric(),i=numeric(),valorp=numeric())
     
     esp <- paste0(as.character(input$weights_baumont_dependent_variable), " ~ ", paste0(input$weights_baumont_independent_variable, collapse = " + "))
     
-    ols_model <- lm(formula = formula(esp), data = geodata()@data)
+    ols_model <- lm(formula = formula(esp), data = geodata_original()@data)
     
     for(k in 1:max_k)
     {
@@ -251,12 +251,12 @@ observeEvent(input$weights_baumont_create_secondary, {
 
 
 output$weights_stakhovych_dependent_variable_UI <- renderUI({
-  variables <- names(geodata()@data)
+  variables <- names(geodata_original()@data)
   selectInput("weights_stakhovych_dependent_variable", label = "Dependent variable", choices = variables)
 })
 
 output$weights_stakhovych_idependent_variable_UI <- renderUI({
-  variables <- names(geodata()@data)
+  variables <- names(geodata_original()@data)
   selectInput("weights_stakhovych_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
 })
 
@@ -271,7 +271,7 @@ observeEvent(input$weights_stakhovych_create, {
     
     const_passos <- 1/16
     
-    shape <- geodata()
+    shape <- geodata_original()
     esp <- paste0(as.character(input$weights_stakhovych_dependent_variable), " ~ ", paste0(input$weights_stakhovych_independent_variable, collapse = " + "))
     
     # Matriz queen
@@ -468,7 +468,7 @@ observeEvent(input$weights_stakhovych_create_secondary, {
     
     const_passos <- 1/16
     
-    shape <- geodata()
+    shape <- geodata_original()
     esp <- paste0(as.character(input$weights_stakhovych_dependent_variable), " ~ ", paste0(input$weights_stakhovych_independent_variable, collapse = " + "))
     
     # Matriz queen
@@ -688,7 +688,7 @@ observeEvent(w_matrix, {
       hover_shadow = TRUE,
       title = paste(w_matrix$name, "plot"),
       argonRow(
-        renderPlot(plot(w_matrix$nb, coordinates(geodata())))
+        renderPlot(plot(w_matrix$nb, coordinates(geodata_original())))
       )
     )
   })  
@@ -727,7 +727,7 @@ observeEvent(w_matrix_secondary, {
       hover_shadow = TRUE,
       title = paste(w_matrix_secondary$name, "plot"),
       argonRow(
-        renderPlot(plot(w_matrix_secondary$nb, coordinates(geodata())))
+        renderPlot(plot(w_matrix_secondary$nb, coordinates(geodata_original())))
       )
     )
   })  

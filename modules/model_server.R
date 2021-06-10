@@ -1,10 +1,10 @@
 output$model_dependent_variable_UI <- renderUI({
-  variables <- names(geodata()@data)
+  variables <- names(geodata_original()@data)
   selectInput("model_dependent_variable", label = "Dependent variable", choices = variables)
 })
 
 output$model_independent_variable_UI <- renderUI({
-  variables <- names(geodata()@data)
+  variables <- names(geodata_original()@data)
   selectInput("model_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
 })
 
@@ -18,7 +18,7 @@ model_ols <- eventReactive(input$model_estimate_ols, {
   
   show_modal()
   
-  lm(formula = formula(esp()), data = geodata()@data)
+  lm(formula = formula(esp()), data = geodata_original()@data)
 })
 
 output$model_ols_summary <- renderPrint({
@@ -30,7 +30,7 @@ output$model_ols_error <- renderPrint({
 })
 
 output$model_ols_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_ols())
   
   map <- tm_shape(geodata_res) +
@@ -55,7 +55,7 @@ observeEvent(model_ols(), removeModal())
 model_sar_ml <- eventReactive(input$model_estimate_sar_ml, {
   show_modal()
   
-  lagsarlm(formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+  lagsarlm(formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
 })
 
 output$model_sar_ml_summary <- renderPrint({
@@ -67,7 +67,7 @@ output$model_sar_ml_impacts <- renderPrint({
 })
 
 output$model_sar_ml_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sar_ml())
   
   map <- tm_shape(geodata_res) +
@@ -89,7 +89,7 @@ model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
   robust_option <- if_else("is_robust" %in% input$model_sar_stsls_options, TRUE, FALSE)
   not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
   
-  stsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+  stsls(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
         robust = robust_option, W2X = not_w2x_option)
 })
 
@@ -102,7 +102,7 @@ output$model_sar_stsls_impacts <- renderPrint({
 })
 
 output$model_sar_stsls_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sar_stsls())
   
   map <- tm_shape(geodata_res) +
@@ -121,7 +121,7 @@ observeEvent(model_sar_stsls(), removeModal())
 model_sem_ml <- eventReactive(input$model_estimate_sem_ml, {
   show_modal()
   
-  errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+  errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
 })
 
 output$model_sem_ml_summary <- renderPrint({
@@ -129,7 +129,7 @@ output$model_sem_ml_summary <- renderPrint({
 })
 
 output$model_sem_ml_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sem_ml())
   
   map <- tm_shape(geodata_res) +
@@ -147,7 +147,7 @@ observeEvent(model_sem_ml(), removeModal())
 # SEM (GMM)
 
 model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
-  GMerrorsar(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+  GMerrorsar(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
 })
 
 output$model_sem_gmm_summary <- renderPrint({
@@ -155,7 +155,7 @@ output$model_sem_gmm_summary <- renderPrint({
 })
 
 output$model_sem_gmm_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sem_gmm())
   
   map <- tm_shape(geodata_res) +
@@ -178,9 +178,9 @@ model_sac_ml <- eventReactive(input$model_estimate_sac_ml, {
   #if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
   
   if("use_secondary_w_matrix" %in% input$model_estimate_sac_ml_options){
-    sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
+    sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
   } else {
-    sacsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw) 
+    sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw) 
   }
   
   
@@ -195,7 +195,7 @@ output$model_sac_ml_impacts <- renderPrint({
 })
 
 output$model_sac_ml_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sac_ml())
   
   map <- tm_shape(geodata_res) +
@@ -218,10 +218,10 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
   
   if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
-    gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+    gstsls(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
            robust = robust_option, W2X = not_w2x_option, listw2 = w_matrix_secondary$listw)
   } else {
-    gstsls(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw,
+    gstsls(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
            robust = robust_option, W2X = not_w2x_option)
   }
   
@@ -236,7 +236,7 @@ output$model_sac_gstsls_impacts <- renderPrint({
 })
 
 output$model_sac_gstsls_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sac_gstsls())
   
   map <- tm_shape(geodata_res) +
@@ -256,7 +256,7 @@ observeEvent(model_sac_gstsls(), removeModal())
 model_slx_ml <- eventReactive(input$model_estimate_slx_ml, {
   show_modal()
   
-  lmSLX(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw)
+  lmSLX(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
 })
 
 output$model_slx_ml_summary <- renderPrint({
@@ -268,7 +268,7 @@ output$model_slx_ml_impacts <- renderPrint({
 })
 
 output$model_slx_ml_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_slx_ml())
   
   map <- tm_shape(geodata_res) +
@@ -288,7 +288,7 @@ observeEvent(model_slx_ml(), removeModal())
 model_sdm_ml <- eventReactive(input$model_estimate_sdm_ml, {
   show_modal()
   
-  lagsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
+  lagsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = TRUE)
 })
 
 output$model_sdm_ml_summary <- renderPrint({
@@ -300,7 +300,7 @@ output$model_sdm_ml_impacts <- renderPrint({
 })
 
 output$model_sdm_ml_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sdm_ml())
   
   map <- tm_shape(geodata_res) +
@@ -321,7 +321,7 @@ observeEvent(model_sdm_ml(), removeModal())
 model_sdem_ml <- eventReactive(input$model_estimate_sdem_ml, {
   show_modal()
   
-  errorsarlm(formula = formula(esp()), data = geodata()@data, listw = w_matrix$listw, Durbin = TRUE)
+  errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = TRUE)
 })
 
 output$model_sdem_ml_summary <- renderPrint({
@@ -333,7 +333,7 @@ output$model_sdem_ml_impacts <- renderPrint({
 })
 
 output$model_sdem_ml_map <- renderLeaflet({
-  geodata_res <- geodata()
+  geodata_res <- geodata_original()
   geodata_res@data$residuals <- resid(model_sdem_ml())
   
   map <- tm_shape(geodata_res) +

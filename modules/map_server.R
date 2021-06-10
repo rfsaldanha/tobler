@@ -1,17 +1,17 @@
 output$map_variable_UI <- renderUI({
   req(geodata())
-  sub <- geodata_tmp()@data %>%
+  sub <- geodata_original()@data %>%
     select_if(is.numeric)
   varSelectInput("map_variable", label = "Variable", data = sub)
 })
 
 
 output$map_leaflet <- renderLeaflet({
-  req(geodata_tmp())
+  req(geodata_original())
   req(input$map_variable)
   
   map_var <- as.character(input$map_variable)
-  map <- tm_shape(geodata_tmp()) +
+  map <- tm_shape(geodata_original()) +
     tm_fill(col = map_var,
             style = as.character(input$map_style),
             alpha = 0.7,

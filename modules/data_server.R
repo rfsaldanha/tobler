@@ -1,6 +1,6 @@
 output$data_panel <- renderUI({
   if(input$data_type == "Panel"){
-    variables <- names(geodata_tmp()@data)
+    variables <- names(geodata_original()@data)
     tagList(
       selectInput("pdata_id_variable", label = "ID variable", choices = variables),
       selectInput("pdata_variables", label = "Measure/time variables", choices = variables, multiple = TRUE)
@@ -8,7 +8,7 @@ output$data_panel <- renderUI({
   }
 })
 
-geodata_tmp <- reactive({
+geodata_original <- reactive({
   req(input$data_file$datapath)
   
   withProgress(message = "Processing", detail = "Loading data", value = 0,{
@@ -42,7 +42,7 @@ geodata <- reactive({
     req(input$pdata_id_variable)
     req(input$pdata_variables)
     
-    shape <- geodata_tmp()
+    shape <- geodata_original()
     
     res <- shape@data %>%
       select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
@@ -59,7 +59,7 @@ geodata <- reactive({
     
     shape
   } else {
-    geodata_tmp()
+    geodata_original()
   }
 })
 
