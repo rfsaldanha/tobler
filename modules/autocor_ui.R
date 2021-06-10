@@ -1,5 +1,6 @@
 autocor_tab <- argonTabItem(
   tabName = "autocor",
+  argonH1(display = 3, "Spatial Autocorrelation"),
   argonRow(
     argonColumn(
       width = 12,

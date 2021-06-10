@@ -3,6 +3,7 @@ pmodel_tab <- argonTabItem(
   argonRow(
     argonColumn(
       width = 12,
+      argonH1(display = 3, "Spatial Panel Models"),
       argonCard(
         width = 12,
         src = NULL,

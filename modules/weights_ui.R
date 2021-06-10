@@ -1,9 +1,9 @@
 weights_tab <- argonTabItem(
   tabName = "weights",
+  argonH1(display = 3, "Spatial Weights Matrix"),
   argonRow(
     argonColumn(
       width = 12,
-      h3("Spatial matrix creation"),
       argonTabSet(
         id = "weights-tab",
         card_wrapper = TRUE,

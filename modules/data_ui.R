@@ -1,6 +1,7 @@
 data_tab <- argonTabItem(
   tabName = "data",
     width = 12,
+    argonH1(display = 3, "Data"),
     argonCard(
       width = 12,
       src = NULL,

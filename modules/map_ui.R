@@ -1,5 +1,6 @@
 map_tab <- argonTabItem(
   tabName = "map",
+  argonH1(display = 3, "Map"),
   argonRow(
     argonCard(
       width = 12,

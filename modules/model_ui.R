@@ -1,5 +1,6 @@
 model_tab <- argonTabItem(
   tabName = "model",
+  argonH1(display = 3, "Spatial Cross Section Models"),
   argonRow(
     argonColumn(
       width = 12,
