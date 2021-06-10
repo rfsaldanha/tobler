@@ -31,8 +31,8 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "Hausman Test", 
           active = TRUE,
-          h3("Hausman test for panel models"), br(),br(),
-          actionButton("pmodel_hausman_test_execute", label = "Execute"), br(),br(),
+          h3("Hausman test for panel models"), 
+          actionButton("pmodel_hausman_test_execute", label = "Execute"), 
           verbatimTextOutput("pmodel_hausman_test_results")
         ),
         argonTab(
