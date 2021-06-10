@@ -13,6 +13,12 @@ pmodel_tab <- argonTabItem(
         border_level = 2,
         hover_shadow = TRUE,
         title = "Model specification",
+        argonRow(
+          uiOutput("pmodel_dependent_variable_UI")
+        ),
+        argonRow(
+          uiOutput("pmodel_independent_variable_UI")
+        )
       )
     )
   )
