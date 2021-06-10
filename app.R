@@ -14,8 +14,12 @@ library(tmap)
 library(htmltools)
 library(spdep)
 library(spatialreg)
+library(plm)
+library(splm)
 library(reshape2)
 library(statquotes)
+
+# Shiny options
 options(
   shiny.maxRequestSize=30*1024^2, 
   shiny.sanitize.errors = FALSE
