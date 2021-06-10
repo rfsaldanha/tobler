@@ -35,3 +35,13 @@ pmodel_hausman_test <- eventReactive(input$pmodel_hausman_test_execute, {
 output$pmodel_hausman_test_results <- renderPrint({
   print(pmodel_hausman_test())
 })
+
+# Pesaran test
+
+pmodel_pesaran_test <- eventReactive(input$pmodel_pesaran_test_execute, {
+  pcdtest(formula(pesp()), data = geodata()@data)
+})
+
+output$pmodel_pesaran_test_results <- renderPrint({
+  print(pmodel_pesaran_test())
+})
