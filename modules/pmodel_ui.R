@@ -56,15 +56,17 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "OLS", 
           active = TRUE,
-          h3("OLS"),
+          h3("OLS model"),
+          p("Ordinary Least Squares estimator for linear regression."),
           actionButton("pmodel_ols_estimate", label = "Estimate"),
           br(),br(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_ols_summary")
         ),
         argonTab(
-          tabName = "SAR",
-          h3("SAR"),
+          tabName = "SAR (ML)",
+          h3("SAR (ML)"),
+          p("Spatial Autoregressive (SAR) panel model with maximum likelihood (ML) estimator."),
           radioButtons(
             inputId = "pmodel_sar_effects", 
             label = h3("Effects"),
@@ -80,8 +82,9 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sar_impacts")
         ),
         argonTab(
-          tabName = "SEM",
-          h3("SEM"),
+          tabName = "SEM (ML)",
+          h3("SEM (ML)"),
+          p("Spatial Error panel Model (SEM) model with maximum likelihood (ML) estimator."),
           radioButtons(
             inputId = "pmodel_sem_effects", 
             label = h3("Effects"),
@@ -94,8 +97,9 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sem_summary")
         ),
         argonTab(
-          tabName = "SAC",
-          h3("SAC"),
+          tabName = "SAC (ML)",
+          h3("SAC (ML)"),
+          p("Spatial Autocorrelation panel Model (SAC) with maximum likelihood (ML) estimator."),
           radioButtons(
             inputId = "pmodel_sac_effects", 
             label = h3("Effects"),
@@ -111,8 +115,9 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sac_impacts")
         ),
         argonTab(
-          tabName = "SDM",
-          h3("SDM"),
+          tabName = "SDM (ML)",
+          h3("SDM (ML)"),
+          p("Spatial Durbin panel Model (SDM) with maximum likelihood (ML) estimator."),
           radioButtons(
             inputId = "pmodel_sdm_effects", 
             label = h3("Effects"),
@@ -128,8 +133,9 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sdm_impacts")
         ),
         argonTab(
-          tabName = "SDEM",
-          h3("SDEM"),
+          tabName = "SDEM (ML)",
+          h3("SDEM (ML)"),
+          p("Spatial Durbin Error panel Model (SDEM) with maximum likelihood (ML) estimator."),
           radioButtons(
             inputId = "pmodel_sdem_effects", 
             label = h3("Effects"),
