@@ -25,7 +25,8 @@ weights_tab <- argonTabItem(
                        label = "Coding scheme style",
                        choices = list("Binary coding" = "B",
                                       "Row standardised" = "W", 
-                                      "Globally standardised" = "C")
+                                      "Globally standardised" = "C"), 
+                       selected = "W"
                        ),
           actionButton(inputId = "weights_contiguity_create", label = "Create and use as primary matrix"),
           actionButton(inputId = "weights_contiguity_create_secondary", label = "Create and use as secondary matrix"),
@@ -41,7 +42,8 @@ weights_tab <- argonTabItem(
                        label = "Coding scheme style",
                        choices = list("Binary coding" = "B",
                                       "Row standardised" = "W", 
-                                      "Globally standardised" = "C")
+                                      "Globally standardised" = "C"),
+                       selected = "W"
           ),
           actionButton(inputId = "weights_inverse_distance_create", label = "Create and use as primary matrix"),
           actionButton(inputId = "weights_inverse_distance_create_secondary", label = "Create and use as secondary matrix")
@@ -55,7 +57,8 @@ weights_tab <- argonTabItem(
                        label = "Coding scheme style",
                        choices = list("Binary coding" = "B",
                                       "Row standardised" = "W", 
-                                      "Globally standardised" = "C")
+                                      "Globally standardised" = "C"),
+                       selected = "W"
           ),
           actionButton(inputId = "weights_k_nearest_create", label = "Create and use as primary matrix"),
           actionButton(inputId = "weights_k_nearest_create_secondary", label = "Create and use as secondary matrix")
@@ -73,7 +76,8 @@ weights_tab <- argonTabItem(
                        label = "Coding scheme style",
                        choices = list("Binary coding" = "B",
                                       "Row standardised" = "W", 
-                                      "Globally standardised" = "C")
+                                      "Globally standardised" = "C"),
+                       selected = "W"
           ),
           actionButton(inputId = "weights_baumont_create", label = "Create and use as primary matrix"),
           actionButton(inputId = "weights_baumont_create_secondary", label = "Create and use as secondary matrix")
@@ -88,7 +92,8 @@ weights_tab <- argonTabItem(
                        label = "Coding scheme style",
                        choices = list("Binary coding" = "B",
                                       "Row standardised" = "W", 
-                                      "Globally standardised" = "C")
+                                      "Globally standardised" = "C"),
+                       selected = "W"
           ),
           active = FALSE,
           actionButton(inputId = "weights_stakhovych_create", label = "Create and use as primary matrix"),
