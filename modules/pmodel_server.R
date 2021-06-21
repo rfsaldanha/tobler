@@ -62,7 +62,9 @@ output$pmodel_ols_summary <- renderPrint({
 # SAR model
 
 pmodel_sar <- eventReactive(input$pmodel_sar_estimate, {
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = "within", effect = "individual", spatial.error = "none")
+  effects <- input$pmodel_sar_effects
+  
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, effect = "individual", spatial.error = "none")
 })
 
 output$pmodel_sar_summary <- renderPrint({
@@ -78,7 +80,9 @@ output$pmodel_sar_impacts <- renderPrint({
 # SEM model
 
 pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = "within", effect = "individual", spatial.error = "b")
+  effects <- input$pmodel_sem_effects
+  
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "b")
 })
 
 output$pmodel_sem_summary <- renderPrint({
@@ -88,7 +92,9 @@ output$pmodel_sem_summary <- renderPrint({
 # SAC model
 
 pmodel_sac <- eventReactive(input$pmodel_sac_estimate, {
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = "within", effect = "individual", spatial.error = "b")
+  effects <- input$pmodel_sac_effects
+  
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = effects, effect = "individual", spatial.error = "b")
 })
 
 output$pmodel_sac_summary <- renderPrint({

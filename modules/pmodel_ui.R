@@ -65,6 +65,12 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "SAR",
           h3("SAR"),
+          radioButtons(
+            inputId = "pmodel_sar_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
           actionButton("pmodel_sar_estimate", label = "Estimate"),
           br(),br(),
           h4("Estimation"),
@@ -76,6 +82,12 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "SEM",
           h3("SEM"),
+          radioButtons(
+            inputId = "pmodel_sem_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
           actionButton("pmodel_sem_estimate", label = "Estimate"),
           br(),br(),
           h4("Estimation"),
@@ -84,6 +96,12 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "SAC",
           h3("SAC"),
+          radioButtons(
+            inputId = "pmodel_sac_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
           actionButton("pmodel_sac_estimate", label = "Estimate"),
           br(),br(),
           h4("Estimation"),
