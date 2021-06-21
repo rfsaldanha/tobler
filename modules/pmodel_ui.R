@@ -109,6 +109,51 @@ pmodel_tab <- argonTabItem(
           br(),br(),
           h4("Impacts"),
           verbatimTextOutput("pmodel_sac_impacts")
+        ),
+        argonTab(
+          tabName = "SDM",
+          h3("SDM"),
+          radioButtons(
+            inputId = "pmodel_sdm_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_sdm_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sdm_summary"),
+          br(),br(),
+          h4("Impacts"),
+          verbatimTextOutput("pmodel_sdm_impacts")
+        ),
+        argonTab(
+          tabName = "SDEM",
+          h3("SDEM"),
+          radioButtons(
+            inputId = "pmodel_sdem_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_sdem_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sdem_summary")
+        ),
+        argonTab(
+          tabName = "SLX",
+          h3("SLX"),
+          radioButtons(
+            inputId = "pmodel_slx_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_slx_estimate", label = "Estimate"),
+          br(),br(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_slx_summary")
         )
       )
     )
