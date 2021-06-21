@@ -99,7 +99,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sem_ml_summary"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sem_ml_map", height = 600)
+          leafletOutput("model_sem_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sem_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sem_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SEM (GMM)",
@@ -112,7 +115,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sem_gmm_summary"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sem_gmm_map", height = 600)
+          leafletOutput("model_sem_gmm_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sem_gmm_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sem_gmm_download", "Generate report")
         ),
         argonTab(
           tabName = "SAC (ML)",
@@ -129,7 +135,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sac_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sac_ml_map", height = 600)
+          leafletOutput("model_sac_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sac_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sac_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SAC (GSTSLS)",

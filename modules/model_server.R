@@ -236,6 +236,35 @@ output$model_sem_ml_map <- renderLeaflet({
 
 observeEvent(model_sem_ml(), removeModal())
 
+output$model_sem_ml_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sem_ml_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sem_ml_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sem_ml_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sem_ml_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_summary = summary(model_sem_ml())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
 # SEM (GMM)
 
 model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
@@ -262,12 +291,38 @@ output$model_sem_gmm_map <- renderLeaflet({
 
 observeEvent(model_sem_gmm(), removeModal())
 
+output$model_sem_gmm_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sem_gmm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sem_gmm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sem_gmm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sem_gmm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_summary = summary(model_sem_gmm())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
 
 # SAC ML
 model_sac_ml <- eventReactive(input$model_estimate_sac_ml, {
   show_modal()
-  
-  #if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
   
   if("use_secondary_w_matrix" %in% input$model_estimate_sac_ml_options){
     sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
@@ -301,6 +356,37 @@ output$model_sac_ml_map <- renderLeaflet({
 })
 
 observeEvent(model_sac_ml(), removeModal())
+
+output$model_sac_ml_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sac_ml_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sac_ml_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sac_ml_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sac_ml_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_options = input$model_sac_ml_options,
+      model_summary = summary(model_sac_ml()),
+      model_impacts = summary(impacts(model_sac_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
 
 # SAC GSTSLS
 model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
