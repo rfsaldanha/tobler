@@ -59,7 +59,7 @@ pmodel_tab <- argonTabItem(
           h3("OLS model"),
           p("Ordinary Least Squares estimator for linear regression."),
           actionButton("pmodel_ols_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_ols_summary")
         ),
@@ -74,10 +74,10 @@ pmodel_tab <- argonTabItem(
             selected = "within"
           ),
           actionButton("pmodel_sar_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_sar_summary"),
-          br(),br(),
+          hr(),
           h4("Impacts"),
           verbatimTextOutput("pmodel_sar_impacts")
         ),
@@ -92,7 +92,7 @@ pmodel_tab <- argonTabItem(
             selected = "within"
           ),
           actionButton("pmodel_sem_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_sem_summary")
         ),
@@ -107,10 +107,10 @@ pmodel_tab <- argonTabItem(
             selected = "within"
           ),
           actionButton("pmodel_sac_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_sac_summary"),
-          br(),br(),
+          hr(),
           h4("Impacts"),
           verbatimTextOutput("pmodel_sac_impacts")
         ),
@@ -125,10 +125,10 @@ pmodel_tab <- argonTabItem(
             selected = "within"
           ),
           actionButton("pmodel_sdm_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_sdm_summary"),
-          br(),br(),
+          hr(),
           h4("Impacts"),
           verbatimTextOutput("pmodel_sdm_impacts")
         ),
@@ -143,7 +143,7 @@ pmodel_tab <- argonTabItem(
             selected = "within"
           ),
           actionButton("pmodel_sdem_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_sdem_summary")
         ),
@@ -157,7 +157,7 @@ pmodel_tab <- argonTabItem(
             selected = "within"
           ),
           actionButton("pmodel_slx_estimate", label = "Estimate"),
-          br(),br(),
+          hr(),
           h4("Estimation"),
           verbatimTextOutput("pmodel_slx_summary")
         )
