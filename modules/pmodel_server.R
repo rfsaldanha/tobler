@@ -184,46 +184,6 @@ lag_independent_variables <- function(x){
   lag.listw(x = w_matrix$listw, var = x)
 }
 
-# SDM model
-
-pmodel_sdm <- eventReactive(input$pmodel_sdm_estimate, {
-  show_modal()
-  
-  effects <- input$pmodel_sdm_effects
-  
-  independent_variables <- input$pmodel_independent_variable
-  
-  lagged_data <- geodata_original()@data %>%
-    mutate(across(starts_with(independent_variables), lag_independent_variables)) %>%
-    select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
-    pivot_longer(
-      cols = 2:last_col()
-    ) %>%
-    mutate(
-      variable = as.character(gsub("[[:digit:]]", "", name)),
-      time = as.character(gsub("[[:alpha:]]", "", name))
-    ) %>%
-    select(1, variable, time, value) %>%
-    pivot_wider(
-      names_from = variable,
-      values_from = value
-    ) %>%
-    arrange(1, time)
-  
-  spml(formula(pesp()), data = lagged_data, listw = w_matrix$listw, lag=TRUE, model = effects, effect = "individual", spatial.error = "none")
-})
-
-output$pmodel_sdm_summary <- renderPrint({
-  summary(pmodel_sdm())
-})
-
-output$pmodel_sdm_impacts <- renderPrint({
-  res <- splm:::impacts.splm(pmodel_sdm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
-  summary(res, zstats=TRUE, short=TRUE)
-})
-
-observeEvent(pmodel_sdm(), removeModal())
-
 # SDEM model
 
 pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {

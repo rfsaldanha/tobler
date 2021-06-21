@@ -117,24 +117,6 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sac_impacts")
         ),
         argonTab(
-          tabName = "SDM (ML)",
-          h3("SDM (ML)"),
-          p("Spatial Durbin panel Model (SDM) with maximum likelihood (ML) estimator."),
-          radioButtons(
-            inputId = "pmodel_sdm_effects", 
-            label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
-            selected = "within"
-          ),
-          actionButton("pmodel_sdm_estimate", label = "Estimate"),
-          hr(),
-          h4("Estimation"),
-          verbatimTextOutput("pmodel_sdm_summary"),
-          hr(),
-          h4("Impacts"),
-          verbatimTextOutput("pmodel_sdm_impacts")
-        ),
-        argonTab(
           tabName = "SDEM (ML)",
           h3("SDEM (ML)"),
           p("Spatial Durbin Error panel Model (SDEM) with maximum likelihood (ML) estimator."),
