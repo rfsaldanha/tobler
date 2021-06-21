@@ -44,7 +44,9 @@ model_tab <- argonTabItem(
           leafletOutput("model_ols_map", height = 600),
           hr(),
           h4("Lagrange multiplier"),
-          verbatimTextOutput("model_ols_lagrange")
+          verbatimTextOutput("model_ols_lagrange"),
+          hr(),
+          downloadButton("model_ols_download", "Generate report")
         ),
         argonTab(
           tabName = "SAR (ML)",

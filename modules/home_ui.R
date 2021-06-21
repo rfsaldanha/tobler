@@ -23,6 +23,18 @@ home_tab <- argonTabItem(
         p('The name is a tribute to the geographer Waldo R. Tobler and his First Law of Geography: "Everything is related to everything else, but near things are more related than distant things."'),
         p("This is a prototype. All results must be checked and validated by the users."),
         p("Developers: Raphael Saldanha (Fiocruz); Eduardo Almeida (UFJF).")
+      ),
+      argonCard(
+        width = 12,
+        src = NULL,
+        #icon = icon("cogs"),
+        status = "success",
+        shadow = TRUE,
+        border_level = 2,
+        hover_shadow = TRUE,
+        title = "General options",
+        textInput(inputId = "author_name", label = "Author name for PDF reports", value = "..."),
+        textAreaInput(inputId = "general_observations", label = "General observations for PDF reports")
       )
     )
   )
