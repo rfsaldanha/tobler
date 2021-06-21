@@ -52,6 +52,8 @@ output$pmodel_pesaran_test_results <- renderPrint({
 # OLS model
 
 pmodel_ols <- eventReactive(input$pmodel_ols_estimate, {
+  show_modal()
+  
   plm(formula = formula(pesp()), data = geodata()@data)
 })
 
@@ -59,9 +61,13 @@ output$pmodel_ols_summary <- renderPrint({
   summary(pmodel_ols())
 })
 
+observeEvent(pmodel_ols(), removeModal())
+
 # SAR model
 
 pmodel_sar <- eventReactive(input$pmodel_sar_estimate, {
+  show_modal()
+  
   effects <- input$pmodel_sar_effects
   
   spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, effect = "individual", spatial.error = "none")
@@ -76,10 +82,13 @@ output$pmodel_sar_impacts <- renderPrint({
   summary(res, zstats=TRUE, short=TRUE)
 })
 
+observeEvent(pmodel_sar(), removeModal())
 
 # SEM model
 
 pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
+  show_modal()
+  
   effects <- input$pmodel_sem_effects
   
   spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "b")
@@ -89,9 +98,13 @@ output$pmodel_sem_summary <- renderPrint({
   summary(pmodel_sem())
 })
 
+observeEvent(pmodel_sem(), removeModal())
+
 # SAC model
 
 pmodel_sac <- eventReactive(input$pmodel_sac_estimate, {
+  show_modal()
+  
   effects <- input$pmodel_sac_effects
   
   spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = effects, effect = "individual", spatial.error = "b")
@@ -106,6 +119,8 @@ output$pmodel_sac_impacts <- renderPrint({
   summary(res, zstats=TRUE, short=TRUE)
 })
 
+observeEvent(pmodel_sac(), removeModal())
+
 # Function to lag independent variables
 lag_independent_variables <- function(x){
   lag.listw(x = w_matrix$listw, var = x)
@@ -114,6 +129,8 @@ lag_independent_variables <- function(x){
 # SDM model
 
 pmodel_sdm <- eventReactive(input$pmodel_sdm_estimate, {
+  show_modal()
+  
   effects <- input$pmodel_sdm_effects
   
   independent_variables <- input$pmodel_independent_variable
@@ -147,10 +164,13 @@ output$pmodel_sdm_impacts <- renderPrint({
   summary(res, zstats=TRUE, short=TRUE)
 })
 
+observeEvent(pmodel_sdm(), removeModal())
 
 # SDEM model
 
 pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
+  show_modal()
+  
   effects <- input$pmodel_sdem_effects
   
   independent_variables <- input$pmodel_independent_variable
@@ -179,10 +199,13 @@ output$pmodel_sdem_summary <- renderPrint({
   summary(pmodel_sdem())
 })
 
+observeEvent(pmodel_sdem(), removeModal())
 
 # SLX model
 
 pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
+  show_modal()
+  
   effects <- input$pmodel_slx_effects
   
   independent_variables <- input$pmodel_independent_variable
@@ -210,3 +233,5 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
 output$pmodel_slx_summary <- renderPrint({
   summary(pmodel_slx())
 })
+
+observeEvent(pmodel_slx(), removeModal())
