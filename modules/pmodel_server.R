@@ -194,15 +194,22 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
   
   independent_variables <- input$pmodel_independent_variable
   
+  lagged_term <- geodata_original()@data %>%
+    select(starts_with(independent_variables)) %>%
+    rename(setNames(names(.), paste0('W_', names(.)))) %>%
+    mutate(
+      across(everything(), lag_independent_variables)
+    )
+  
   lagged_data <- geodata_original()@data %>%
-    mutate(across(starts_with(independent_variables), lag_independent_variables)) %>%
     select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
+    bind_cols(lagged_term) %>%
     pivot_longer(
       cols = 2:last_col()
     ) %>%
     mutate(
       variable = as.character(gsub("[[:digit:]]", "", name)),
-      time = as.character(gsub("[[:alpha:]]", "", name))
+      time = as.character(gsub("[[:alpha:],_]", "", name))
     ) %>%
     select(1, variable, time, value) %>%
     pivot_wider(
@@ -211,7 +218,9 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
     ) %>%
     arrange(1, time)
   
-  spml(formula(pesp()), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
+  esp <- paste0(pesp(), " + ", paste0("W_", input$pmodel_independent_variable, collapse = " + "))
+  
+  spml(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
 })
 
 output$pmodel_sdem_summary <- renderPrint({
@@ -229,15 +238,22 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   
   independent_variables <- input$pmodel_independent_variable
   
+  lagged_term <- geodata_original()@data %>%
+    select(starts_with(independent_variables)) %>%
+    rename(setNames(names(.), paste0('W_', names(.)))) %>%
+    mutate(
+      across(everything(), lag_independent_variables)
+    )
+  
   lagged_data <- geodata_original()@data %>%
-    mutate(across(starts_with(independent_variables), lag_independent_variables)) %>%
     select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
+    bind_cols(lagged_term) %>%
     pivot_longer(
       cols = 2:last_col()
     ) %>%
     mutate(
       variable = as.character(gsub("[[:digit:]]", "", name)),
-      time = as.character(gsub("[[:alpha:]]", "", name))
+      time = as.character(gsub("[[:alpha:],_]", "", name))
     ) %>%
     select(1, variable, time, value) %>%
     pivot_wider(
@@ -246,7 +262,9 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
     ) %>%
     arrange(1, time)
   
-  plm(formula(pesp()), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+  esp <- paste0(pesp(), " + ", paste0("W_", input$pmodel_independent_variable, collapse = " + "))
+  
+  plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
 })
 
 output$pmodel_slx_summary <- renderPrint({
