@@ -1,5 +1,5 @@
 # Show modal function
-show_modal <- function(time = 3){
+show_modal <- function(time = input$modal_time){
   fortune <- statquote()
   showModal(session = getDefaultReactiveDomain(),
             modalDialog(

@@ -34,7 +34,8 @@ home_tab <- argonTabItem(
         hover_shadow = TRUE,
         title = "General options",
         textInput(inputId = "author_name", label = "Author name for PDF reports", value = "..."),
-        textAreaInput(inputId = "general_observations", label = "General observations for PDF reports")
+        textAreaInput(inputId = "general_observations", label = "General observations for PDF reports"),
+        numericInput(inputId = "modal_time", label = "Additional time for quote window while the model is being estimated (seconds).", value = 3, min = 0, step = 1)
       )
     )
   )
