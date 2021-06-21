@@ -148,8 +148,9 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sdem_summary")
         ),
         argonTab(
-          tabName = "SLX",
-          h3("SLX"),
+          tabName = "SLX (ML)",
+          h3("SLX (ML)"),
+          p("Spatial Lag X (SLX) panel model with maximum likelihood (ML) estimator."),
           radioButtons(
             inputId = "pmodel_slx_effects", 
             label = h3("Effects"),
