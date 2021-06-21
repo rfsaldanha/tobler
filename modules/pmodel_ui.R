@@ -70,7 +70,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sar_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           actionButton("pmodel_sar_estimate", label = "Estimate"),
@@ -88,7 +88,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sem_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           uiOutput("pmodel_sem_error_type_UI"),
@@ -104,7 +104,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sac_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           uiOutput("pmodel_sac_error_type_UI"),
@@ -123,7 +123,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sdem_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           uiOutput("pmodel_sdem_error_type_UI"),
@@ -139,7 +139,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_slx_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           actionButton("pmodel_slx_estimate", label = "Estimate"),
