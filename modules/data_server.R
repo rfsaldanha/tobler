@@ -1,4 +1,15 @@
-geodata <- reactive({
+output$data_panel <- renderUI({
+  if(input$data_type == "Panel"){
+    variables <- names(geodata_original()@data)
+    tagList(
+      selectInput("pdata_id_variable", label = "ID variable", choices = variables),
+      selectInput("pdata_variables", label = "Measure/time variables", choices = variables, multiple = TRUE),
+      p("* Try to use a variable name pattern like INCOME1990, CRIME2010, UNEMPL2010, or INCOME90, CRIME10, UNEMPL10.")
+    )
+  }
+})
+
+geodata_original <- reactive({
   req(input$data_file$datapath)
   
   withProgress(message = "Processing", detail = "Loading data", value = 0,{
@@ -23,6 +34,39 @@ geodata <- reactive({
 
   # Return data
   shape
+})
+
+
+geodata <- reactive({
+  
+  if(input$data_type == "Panel"){
+    req(input$pdata_id_variable)
+    req(input$pdata_variables)
+    
+    shape <- geodata_original()
+    
+    res <- shape@data %>%
+      select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
+      pivot_longer(
+        cols = 2:last_col()
+      ) %>%
+      mutate(
+        variable = as.character(gsub("[[:digit:]]", "", name)),
+        time = as.character(gsub("[[:alpha:]]", "", name))
+      ) %>%
+      select(1, variable, time, value) %>%
+      pivot_wider(
+        names_from = variable,
+        values_from = value
+      ) %>%
+      arrange(1, time)
+    
+    shape@data <- res
+    
+    shape
+  } else {
+    geodata_original()
+  }
 })
 
 observeEvent(geodata(), {

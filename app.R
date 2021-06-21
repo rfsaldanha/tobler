@@ -14,8 +14,12 @@ library(tmap)
 library(htmltools)
 library(spdep)
 library(spatialreg)
+library(plm)
+library(splm)
 library(reshape2)
 library(statquotes)
+
+# Shiny options
 options(
   shiny.maxRequestSize=30*1024^2, 
   shiny.sanitize.errors = FALSE
@@ -33,6 +37,7 @@ source("modules/map_ui.R")
 source("modules/weights_ui.R")
 source("modules/autocor_ui.R")
 source("modules/model_ui.R")
+source("modules/pmodel_ui.R")
 
 # App
 shiny::shinyApp(
@@ -57,7 +62,8 @@ shiny::shinyApp(
         map_tab,
         weights_tab,
         autocor_tab,
-        model_tab
+        model_tab,
+        pmodel_tab
       )
     ),
     footer = argonFooter
@@ -71,6 +77,7 @@ shiny::shinyApp(
     source("modules/weights_server.R", local = TRUE)
     source("modules/autocor_server.R", local = TRUE)
     source("modules/model_server.R", local = TRUE)
+    source("modules/pmodel_server.R", local = TRUE)
     
   }
 )
