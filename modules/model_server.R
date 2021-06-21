@@ -63,8 +63,7 @@ output$model_ols_download <- downloadHandler(
     
     
     params <- list(
-      author_name = input$author_name,
-      general_observations = input$general_observations,
+      general_observations = input$model_ols_general_observations,
       data_file = input$data_file[1],
       data_type = input$data_type,
       original_data = geodata_original()@data,

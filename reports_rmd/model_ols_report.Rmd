@@ -1,7 +1,6 @@
 ---
 title: "Cross Section OLS model report"
-author: "`r params$author_name`"
-date: "`r format(Sys.time())`"
+author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
   - \usepackage{titling}
@@ -9,7 +8,6 @@ header-includes:
     \includegraphics[width=2in,height=2in]{tobleR.png}\LARGE\\}
   - \posttitle{\end{center}}
 params:
-  author_name: NA
   general_observations: NA
   data_file: NA
   data_type: NA

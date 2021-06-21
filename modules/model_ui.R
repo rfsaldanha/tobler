@@ -46,6 +46,7 @@ model_tab <- argonTabItem(
           h4("Lagrange multiplier"),
           verbatimTextOutput("model_ols_lagrange"),
           hr(),
+          textAreaInput(inputId = "model_ols_general_observations", label = "General observations for PDF report"),
           downloadButton("model_ols_download", "Generate report")
         ),
         argonTab(
