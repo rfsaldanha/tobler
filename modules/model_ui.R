@@ -63,7 +63,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sar_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sar_ml_map", height = 600)
+          leafletOutput("model_sar_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sar_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sar_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SAR (STSLS)",
@@ -80,7 +83,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sar_stsls_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sar_stsls_map", height = 600)
+          leafletOutput("model_sar_stsls_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sar_stsls_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sar_stsls_download", "Generate report")
         ),
         argonTab(
           tabName = "SEM (ML)",

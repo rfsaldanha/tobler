@@ -51,7 +51,7 @@ output$model_ols_lagrange <- renderPrint({
 observeEvent(model_ols(), removeModal())
 
 output$model_ols_download <- downloadHandler(
-  # For PDF output, change this to "report.pdf"
+  
   filename = paste0("tobler_cross_section_ols_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
   content = function(file) {
     
@@ -113,6 +113,36 @@ output$model_sar_ml_map <- renderLeaflet({
 
 observeEvent(model_sar_ml(), removeModal())
 
+output$model_sar_ml_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sar_ml_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sar_ml_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sar_ml_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sar_ml_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_summary = summary(model_sar_ml()),
+      model_impacts = summary(impacts(model_sar_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
 # SAR STSLS
 model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
   show_modal()
@@ -147,6 +177,37 @@ output$model_sar_stsls_map <- renderLeaflet({
 })
 
 observeEvent(model_sar_stsls(), removeModal())
+
+output$model_sar_stsls_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sar_stsls_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sar_stsls_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sar_stsls_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sar_stsls_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_options = input$model_sar_stsls_options,
+      model_summary = summary(model_sar_stsls()),
+      model_impacts = summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
 
 # SEM (ML)
 model_sem_ml <- eventReactive(input$model_estimate_sem_ml, {

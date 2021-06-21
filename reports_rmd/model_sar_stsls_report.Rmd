@@ -1,0 +1,63 @@
+---
+title: "Cross Section SAR model (STSLS) report"
+author: "`r format(Sys.time())`"
+output: pdf_document
+header-includes:
+  - \usepackage{titling}
+  - \pretitle{\begin{center}
+    \includegraphics[width=2in,height=2in]{tobleR.png}\LARGE\\}
+  - \posttitle{\end{center}}
+params:
+  general_observations: NA
+  data_file: NA
+  data_type: NA
+  original_data: NA
+  spatial_weights_matrix: NA
+  model_specification: NA
+  model_options: NA
+  model_summary: NA
+  model_impacts: NA
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+```
+
+```{r echo=FALSE, results='asis'}
+cat(params$general_observations)
+```
+
+# Data
+
+* File name: `r params$data_file`
+* Data type: `r params$data_type`
+* Dimensions: `r dim(params$original_data)[1]` rows and `r dim(params$original_data)[2]` columns.
+
+# Spatial weights matrix
+
+`r params$spatial_weights_matrix`
+
+# Model
+
+## Model specification
+
+```{r echo=FALSE, results='asis'}
+cat(params$model_specification)
+```
+
+## Model options
+
+* Heteroskedasticity correction: `r if("is_robust" %in% params$model_options) "Yes" else "No"`
+* Use W2X as instrument: `r if("not_w2x" %in% params$model_options) "No" else "Yes"`
+
+## Model summary
+
+```{r echo=FALSE}
+params$model_summary
+```
+
+## Model impacts
+
+```{r echo=FALSE}
+params$model_impacts
+```
