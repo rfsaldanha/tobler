@@ -14,6 +14,62 @@ output$pmodel_independent_variable_UI <- renderUI({
   selectInput("pmodel_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
 })
 
+# Error type options for SEM
+
+output$pmodel_sem_error_type_UI <- renderUI({
+  if(input$pmodel_sem_effects == "random"){
+    radioButtons(
+      inputId = "pmodel_sem_error_type", 
+      label = h3("Error type"),
+      choices = list("Baltagi" = "b", "Kapoor, Kelejian and Prucha" = "kkp"), 
+      selected = "b"
+    )
+  } else {
+    radioButtons(
+      inputId = "pmodel_sem_error_type", 
+      label = h3("Error type"),
+      choices = list("Baltagi" = "b"), 
+      selected = "b"
+    )
+  }
+})
+
+output$pmodel_sac_error_type_UI <- renderUI({
+  if(input$pmodel_sac_effects == "random"){
+    radioButtons(
+      inputId = "pmodel_sac_error_type", 
+      label = h3("Error type"),
+      choices = list("Baltagi" = "b", "Kapoor, Kelejian and Prucha" = "kkp"), 
+      selected = "b"
+    )
+  } else {
+    radioButtons(
+      inputId = "pmodel_sac_error_type", 
+      label = h3("Error type"),
+      choices = list("Baltagi" = "b"), 
+      selected = "b"
+    )
+  }
+})
+
+output$pmodel_sdem_error_type_UI <- renderUI({
+  if(input$pmodel_sdem_effects == "random"){
+    radioButtons(
+      inputId = "pmodel_sdem_error_type", 
+      label = h3("Error type"),
+      choices = list("Baltagi" = "b", "Kapoor, Kelejian and Prucha" = "kkp"), 
+      selected = "b"
+    )
+  } else {
+    radioButtons(
+      inputId = "pmodel_sdem_error_type", 
+      label = h3("Error type"),
+      choices = list("Baltagi" = "b"), 
+      selected = "b"
+    )
+  }
+})
+
 # Panel model specification
 pesp <- reactive({
   paste0(as.character(input$pmodel_dependent_variable), " ~ ", paste0(input$pmodel_independent_variable, collapse = " + "))
@@ -90,8 +146,9 @@ pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
   show_modal()
   
   effects <- input$pmodel_sem_effects
+  error_type <- input$pmodel_sem_error_type
   
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "b")
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
 })
 
 output$pmodel_sem_summary <- renderPrint({
@@ -106,8 +163,9 @@ pmodel_sac <- eventReactive(input$pmodel_sac_estimate, {
   show_modal()
   
   effects <- input$pmodel_sac_effects
+  error_type <- input$pmodel_sac_error_type
   
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = effects, effect = "individual", spatial.error = "b")
+  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = effects, effect = "individual", spatial.error = error_type)
 })
 
 output$pmodel_sac_summary <- renderPrint({
@@ -172,6 +230,7 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
   show_modal()
   
   effects <- input$pmodel_sdem_effects
+  error_type <- input$pmodel_sdem_error_type
   
   independent_variables <- input$pmodel_independent_variable
   
@@ -192,7 +251,7 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
     ) %>%
     arrange(1, time)
   
-  spml(formula(pesp()), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "b")
+  spml(formula(pesp()), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
 })
 
 output$pmodel_sdem_summary <- renderPrint({

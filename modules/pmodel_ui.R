@@ -91,6 +91,7 @@ pmodel_tab <- argonTabItem(
             choices = list("Fixed (within)" = "within", "Random" = "random"), 
             selected = "within"
           ),
+          uiOutput("pmodel_sem_error_type_UI"),
           actionButton("pmodel_sem_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
@@ -106,6 +107,7 @@ pmodel_tab <- argonTabItem(
             choices = list("Fixed (within)" = "within", "Random" = "random"), 
             selected = "within"
           ),
+          uiOutput("pmodel_sac_error_type_UI"),
           actionButton("pmodel_sac_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
@@ -142,6 +144,7 @@ pmodel_tab <- argonTabItem(
             choices = list("Fixed (within)" = "within", "Random" = "random"), 
             selected = "within"
           ),
+          uiOutput("pmodel_sdem_error_type_UI"),
           actionButton("pmodel_sdem_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
