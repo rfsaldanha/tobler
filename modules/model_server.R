@@ -449,8 +449,8 @@ output$model_sac_gstsls_download <- downloadHandler(
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
       model_options = input$model_sac_gstsls_options,
-      model_summary = summary(sac_gstsls()),
-      model_impacts = summary(impacts(sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_summary = summary(model_sac_gstsls()),
+      model_impacts = summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
