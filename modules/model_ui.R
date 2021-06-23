@@ -174,7 +174,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_slx_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_slx_ml_map", height = 600)
+          leafletOutput("model_slx_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_slx_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_slx_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SDM (ML)",
@@ -190,7 +193,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sdm_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sdm_ml_map", height = 600)
+          leafletOutput("model_sdm_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sdm_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sdm_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SDEM (ML)",
