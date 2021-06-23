@@ -13,8 +13,8 @@ params:
   data_type: NA
   spatial_weights_matrix: NA
   model_specification: NA
-  model_error_type: NA
   model_effects: NA
+  model_error_type: NA
   model_summary: NA
 ---
 
@@ -39,6 +39,7 @@ cat(params$general_observations)
 cat(params$model_specification)
 ```
 
+* Effects: `r params$model_effects`
 * Error type: `r params$model_error_type`
 
 ## Model summary
