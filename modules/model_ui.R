@@ -201,7 +201,7 @@ model_tab <- argonTabItem(
         argonTab(
           tabName = "SDEM (ML)",
           active = FALSE,
-          h3("SDM (ML)"),
+          h3("SDEM (ML)"),
           p("Spatial Durbin Error Model (SDEM) with maximum likelihood (ML) estimator."),
           actionButton("model_estimate_sdem_ml", "Estimate", icon = icon("math"), status = "primary"),
           hr(),
@@ -212,7 +212,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sdem_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sdem_ml_map", height = 600)
+          leafletOutput("model_sdem_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sdem_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sdem_ml_download", "Generate report")
         )
       )
     )

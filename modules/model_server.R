@@ -618,3 +618,33 @@ output$model_sdem_ml_map <- renderLeaflet({
 observeEvent(model_sdem_ml(), removeModal())
 
 
+output$model_sdem_ml_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sdem_ml_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sdem_ml_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sdem_ml_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sdem_ml_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_summary = summary(model_sdem_ml()),
+      model_impacts = summary(impacts(model_sdem_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
