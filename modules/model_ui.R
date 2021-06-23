@@ -155,7 +155,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sac_gstsls_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sac_gstsls_map", height = 600)
+          leafletOutput("model_sac_gstsls_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sac_gstsls_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sac_gstsls_download", "Generate report")
         ),
         argonTab(
           tabName = "SLX (ML)",
