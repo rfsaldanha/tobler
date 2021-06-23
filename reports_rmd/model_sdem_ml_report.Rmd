@@ -1,5 +1,5 @@
 ---
-title: "Cross Section SDEM model (ML) report"
+title: "Cross Section Spatial Durbin Error Model (SDEM) with maximum likelihood (ML) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:

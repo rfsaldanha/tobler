@@ -1,5 +1,5 @@
 ---
-title: "Cross Section SAC model (GSTSLS) report"
+title: "Cross Section Spatial Autocorrelation Model (SAC) with Generalized Spatial Two Stage Least Squares (GSTSLS) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:

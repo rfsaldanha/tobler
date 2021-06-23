@@ -1,5 +1,5 @@
 ---
-title: "Cross Section SEM model (ML) report"
+title: "Cross Section Spatial Error Model (SEM) with maximum likelihood (ML) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
