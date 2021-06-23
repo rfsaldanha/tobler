@@ -34,12 +34,14 @@ pmodel_tab <- argonTabItem(
           active = TRUE,
           h3("Hausman Test for panel models"), 
           actionButton("pmodel_hausman_test_execute", label = "Execute"), 
+          hr(),
           verbatimTextOutput("pmodel_hausman_test_results")
         ),
         argonTab(
           tabName = "Pesaran Test",
           h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
           actionButton("pmodel_pesaran_test_execute", label = "Execute"),
+          hr(),
           verbatimTextOutput("pmodel_pesaran_test_results")
         )
       ),
