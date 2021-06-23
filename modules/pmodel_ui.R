@@ -45,7 +45,10 @@ pmodel_tab <- argonTabItem(
           h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
           actionButton("pmodel_pesaran_test_execute", label = "Execute"),
           hr(),
-          verbatimTextOutput("pmodel_pesaran_test_results")
+          verbatimTextOutput("pmodel_pesaran_test_results"),
+          hr(),
+          textAreaInput(inputId = "pmodel_pesaran_test_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_pesaran_test_download", "Generate report")
         )
       ),
       br(),

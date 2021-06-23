@@ -131,6 +131,34 @@ output$pmodel_pesaran_test_results <- renderPrint({
   print(pmodel_pesaran_test())
 })
 
+output$pmodel_pesaran_test_download <- downloadHandler(
+  
+  filename = paste0("tobler_pmodel_pesaran_test_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_pesaran_test_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_pesaran_test_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    params <- list(
+      general_observations = input$pmodel_pesaran_test_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      test_summary = pmodel_pesaran_test()
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
 
 
 
