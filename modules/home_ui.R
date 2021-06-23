@@ -33,7 +33,7 @@ home_tab <- argonTabItem(
         border_level = 2,
         hover_shadow = TRUE,
         title = "General options",
-        numericInput(inputId = "modal_time", label = "Additional time for quote window while the model is being estimated (seconds).", value = 3, min = 1, step = 1)
+        numericInput(inputId = "modal_time", label = "Additional time for quote window while a model is being estimated (seconds).", value = 3, min = 1, step = 1)
       )
     )
   )
