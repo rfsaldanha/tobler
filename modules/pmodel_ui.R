@@ -150,7 +150,10 @@ pmodel_tab <- argonTabItem(
           actionButton("pmodel_sdem_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_sdem_summary")
+          verbatimTextOutput("pmodel_sdem_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sdem_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sdem_download", "Generate report")
         ),
         argonTab(
           tabName = "SLX (ML)",
