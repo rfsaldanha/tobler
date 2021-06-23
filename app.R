@@ -36,6 +36,7 @@ source("modules/weights_ui.R")
 source("modules/autocor_ui.R")
 source("modules/model_ui.R")
 source("modules/pmodel_ui.R")
+source("modules/about_ui.R")
 
 # App
 shiny::shinyApp(
@@ -61,7 +62,8 @@ shiny::shinyApp(
         weights_tab,
         autocor_tab,
         model_tab,
-        pmodel_tab
+        pmodel_tab,
+        about_tab
       )
     ),
     footer = argonFooter
@@ -76,6 +78,7 @@ shiny::shinyApp(
     source("modules/autocor_server.R", local = TRUE)
     source("modules/model_server.R", local = TRUE)
     source("modules/pmodel_server.R", local = TRUE)
+    source("modules/about_server.R", local = TRUE)
     
   }
 )
