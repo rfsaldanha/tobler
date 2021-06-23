@@ -35,7 +35,10 @@ pmodel_tab <- argonTabItem(
           h3("Hausman Test for panel models"), 
           actionButton("pmodel_hausman_test_execute", label = "Execute"), 
           hr(),
-          verbatimTextOutput("pmodel_hausman_test_results")
+          verbatimTextOutput("pmodel_hausman_test_results"),
+          hr(),
+          textAreaInput(inputId = "pmodel_hausman_test_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_hausman_test_download", "Generate report")
         ),
         argonTab(
           tabName = "Pesaran Test",
