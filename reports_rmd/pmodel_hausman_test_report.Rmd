@@ -33,15 +33,13 @@ cat(params$general_observations)
 
 `r params$spatial_weights_matrix`
 
-# Model
-
-## Model specification
+# Model specification
 
 ```{r echo=FALSE, results='asis'}
 cat(params$model_specification)
 ```
 
-## Test result
+# Test result
 
 ```{r echo=FALSE}
 params$test_summary
