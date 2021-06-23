@@ -1,5 +1,5 @@
 ---
-title: "Panel SLX model"
+title: "Panel Spatial Lag X (SLX) panel model with maximum likelihood (ML) estimator model"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:

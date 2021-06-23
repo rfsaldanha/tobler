@@ -1,5 +1,5 @@
 ---
-title: "Panel OLS model"
+title: "Panel Ordinary Least Squares estimator for linear regression model"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
