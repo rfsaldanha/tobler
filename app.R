@@ -1,7 +1,5 @@
 library(shiny)
 library(argonR)
-#devtools::install_github("RinteRface/argonDash")
-#withr::with_libpaths(new = "/usr/local/lib/R/site-library", install_github("RinteRface/argonDash"))
 library(argonDash)
 library(shinycssloaders)
 library(tidyverse)
