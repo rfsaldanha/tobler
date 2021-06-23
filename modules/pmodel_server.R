@@ -329,6 +329,42 @@ output$pmodel_sac_impacts <- renderPrint({
 
 observeEvent(pmodel_sac(), removeModal())
 
+output$pmodel_sac_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_sac_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_sac_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_sac_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$pmodel_sac_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_effects = input$pmodel_sac_effects,
+      model_error_type = input$pmodel_sac_error_type,
+      model_summary = summary(pmodel_sac()),
+      model_impacts = summary(splm:::impacts.splm(pmodel_sac(), listw = w_matrix$listw, time = length(unique(geodata()@data$time))), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
+
+
+
 # Function to lag independent variables
 lag_independent_variables <- function(x){
   lag.listw(x = w_matrix$listw, var = x)

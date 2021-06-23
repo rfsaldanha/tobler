@@ -131,7 +131,10 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sac_summary"),
           hr(),
           h4("Impacts"),
-          verbatimTextOutput("pmodel_sac_impacts")
+          verbatimTextOutput("pmodel_sac_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sac_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sac_download", "Generate report")
         ),
         argonTab(
           tabName = "SDEM (ML)",
