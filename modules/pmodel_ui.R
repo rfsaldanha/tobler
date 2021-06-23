@@ -90,7 +90,10 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sar_summary"),
           hr(),
           h4("Impacts"),
-          verbatimTextOutput("pmodel_sar_impacts")
+          verbatimTextOutput("pmodel_sar_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sar_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sar_download", "Generate report")
         ),
         argonTab(
           tabName = "SEM (ML)",
@@ -106,7 +109,10 @@ pmodel_tab <- argonTabItem(
           actionButton("pmodel_sem_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_sem_summary")
+          verbatimTextOutput("pmodel_sem_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sem_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sem_download", "Generate report")
         ),
         argonTab(
           tabName = "SAC (ML)",

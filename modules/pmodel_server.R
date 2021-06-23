@@ -226,6 +226,37 @@ output$pmodel_sar_impacts <- renderPrint({
 
 observeEvent(pmodel_sar(), removeModal())
 
+output$pmodel_sar_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_sar_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_sar_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_sar_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$pmodel_sar_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_effects = input$pmodel_sar_effects,
+      model_summary = summary(pmodel_sar()),
+      model_impacts = summary(splm:::impacts.splm(pmodel_sar(), listw = w_matrix$listw, time = length(unique(geodata()@data$time))), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
 # SEM model
 
 pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
@@ -242,6 +273,39 @@ output$pmodel_sem_summary <- renderPrint({
 })
 
 observeEvent(pmodel_sem(), removeModal())
+
+output$pmodel_sem_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_sem_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_sem_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_sem_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$pmodel_sem_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_error_type = input$pmodel_sem_error_type,
+      model_effects = input$pmodel_sem_effects,
+      model_summary = summary(pmodel_sem())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
 
 # SAC model
 
