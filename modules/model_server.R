@@ -67,6 +67,7 @@ output$model_ols_download <- downloadHandler(
       data_file = input$data_file[1],
       data_type = input$data_type,
       original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
       model_summary = summary(model_ols()),
       model_error = lm.morantest(model_ols(), w_matrix$listw),
