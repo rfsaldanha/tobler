@@ -15,7 +15,6 @@ library(spdep)
 library(spatialreg)
 library(plm)
 library(splm)
-library(reshape2)
 library(statquotes)
 
 # Shiny options
