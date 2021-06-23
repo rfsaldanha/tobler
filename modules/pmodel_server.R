@@ -490,3 +490,32 @@ output$pmodel_slx_summary <- renderPrint({
 })
 
 observeEvent(pmodel_slx(), removeModal())
+
+output$pmodel_slx_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_slx_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_slx_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_slx_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$pmodel_slx_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_effects = input$pmodel_slx_effects,
+      model_summary = summary(pmodel_slx())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)

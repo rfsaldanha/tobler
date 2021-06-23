@@ -168,7 +168,10 @@ pmodel_tab <- argonTabItem(
           actionButton("pmodel_slx_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_slx_summary")
+          verbatimTextOutput("pmodel_slx_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_slx_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_slx_download", "Generate report")
         )
       )
     )
