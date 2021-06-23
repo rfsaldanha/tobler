@@ -12,7 +12,6 @@ params:
   data_file: NA
   data_type: NA
   original_data: NA
-  spatial_weights_matrix: NA
   model_specification: NA
   model_summary: NA
   model_error: NA
@@ -32,10 +31,6 @@ cat(params$general_observations)
 * File name: `r params$data_file`
 * Data type: `r params$data_type`
 * Dimensions: `r dim(params$original_data)[1]` rows and `r dim(params$original_data)[2]` columns.
-
-# Spatial weights matrix
-
-`r params$spatial_weights_matrix`
 
 # Model
 
