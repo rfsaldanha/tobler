@@ -69,7 +69,10 @@ pmodel_tab <- argonTabItem(
           actionButton("pmodel_ols_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_ols_summary")
+          verbatimTextOutput("pmodel_ols_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_ols_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_ols_download", "Generate report")
         ),
         argonTab(
           tabName = "SAR (ML)",

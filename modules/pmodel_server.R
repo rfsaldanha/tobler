@@ -176,6 +176,35 @@ output$pmodel_ols_summary <- renderPrint({
 
 observeEvent(pmodel_ols(), removeModal())
 
+output$pmodel_ols_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_ols_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_ols_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_ols_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$pmodel_ols_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      model_specification = pesp(),
+      model_summary = summary(pmodel_ols())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
 # SAR model
 
 pmodel_sar <- eventReactive(input$pmodel_sar_estimate, {
