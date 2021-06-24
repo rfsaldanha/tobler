@@ -53,7 +53,7 @@ shiny::shinyApp(
     "))
     ),
     title = "tobler",
-    author = "Raphael Saldanha",
+    author = "Raphael Saldanha, Eduardo Almeida",
     description = "Spatial Econometrics with R",
     sidebar = argonSidebar,
     header = argonHeader,
