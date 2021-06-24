@@ -256,6 +256,60 @@ output$pmodel_sar_download <- downloadHandler(
   }
 )
 
+# SAR GM model
+
+pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
+  show_modal()
+  
+  effects <- input$pmodel_sar_gm_effects
+
+  spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, spatial.error = FALSE)
+})
+
+output$pmodel_sar_gm_summary <- renderPrint({
+  summary(pmodel_sar_gm())
+})
+
+output$pmodel_sar_gm_impacts <- renderPrint({
+  res <- splm:::impacts.splm(pmodel_sar_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+  summary(res, zstats=TRUE, short=TRUE)
+})
+
+observeEvent(pmodel_sar_gm(), removeModal())
+
+output$pmodel_sar_gm_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_sar_gm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_sar_gm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_sar_gm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$pmodel_sar_gm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_effects = input$pmodel_sar_gm_effects,
+      model_summary = summary(pmodel_sar_gm()),
+      model_impacts = summary(splm:::impacts.splm(pmodel_sar_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time))), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
+
 
 # SEM model
 

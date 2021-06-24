@@ -96,6 +96,27 @@ pmodel_tab <- argonTabItem(
           downloadButton("pmodel_sar_download", "Generate report")
         ),
         argonTab(
+          tabName = "SAR (GM)",
+          h3("SAR (GM)"),
+          p("Spatial Autoregressive (SAR) panel model with generalized moments (GM) estimator."),
+          radioButtons(
+            inputId = "pmodel_sar_gm_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_sar_gm_estimate", label = "Estimate"),
+          hr(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sar_gm_summary"),
+          hr(),
+          h4("Impacts"),
+          verbatimTextOutput("pmodel_sar_gm_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sar_gm_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sar_gm_download", "Generate report")
+        ),
+        argonTab(
           tabName = "SEM (ML)",
           h3("SEM (ML)"),
           p("Spatial Error panel Model (SEM) model with maximum likelihood (ML) estimator."),
