@@ -19,7 +19,9 @@ library(statquotes)
 
 # Shiny options
 options(
+  # File upload size
   shiny.maxRequestSize=30*1024^2, 
+  # Show errors to users
   shiny.sanitize.errors = FALSE
 ) 
 
