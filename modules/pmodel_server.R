@@ -292,9 +292,9 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
   }
 })
 
@@ -407,6 +407,81 @@ output$pmodel_sem_download <- downloadHandler(
       model_error_type = input$pmodel_sem_error_type,
       model_effects = input$pmodel_sem_effects,
       model_summary = summary(pmodel_sem())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+# SEM GM model
+
+pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
+  show_modal()
+  
+  effects <- input$pmodel_sem_gm_effects
+  
+  if(length(input$pmodel_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$pmodel_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  if(effects == "within"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+  } else if(effects == "random"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+  }
+})
+
+output$pmodel_sem_gm_summary <- renderPrint({
+  summary(pmodel_sem_gm())
+})
+
+observeEvent(pmodel_sem_gm(), removeModal())
+
+output$pmodel_sem_gm_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_sem_gm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_sem_gm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_sem_gm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    if(length(input$pmodel_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$pmodel_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
+    params <- list(
+      general_observations = input$pmodel_sem_gm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_endog = endog,
+      model_instruments = instruments,
+      model_effects = input$pmodel_sem_gm_effects,
+      model_summary = summary(pmodel_sem_gm())
     )
     
     rmarkdown::render(tempReport, output_file = file,
