@@ -18,6 +18,12 @@ pmodel_tab <- argonTabItem(
         ),
         argonRow(
           uiOutput("pmodel_independent_variable_UI")
+        ),
+        argonRow(
+          uiOutput("pmodel_endog_variable_UI")
+        ),
+        argonRow(
+          uiOutput("pmodel_instruments_variable_UI")
         )
       ),
       argonH1(display = 4, "Tests"),

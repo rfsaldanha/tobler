@@ -14,6 +14,22 @@ output$pmodel_independent_variable_UI <- renderUI({
   selectInput("pmodel_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
 })
 
+output$pmodel_endog_variable_UI <- renderUI({
+  variables <- geodata()@data %>%
+    select(3:last_col()) %>%
+    names()
+  
+  selectInput("pmodel_endog_variable", label = "Additional endogenous variables", choices = variables, multiple = TRUE)
+})
+
+output$pmodel_instruments_variable_UI <- renderUI({
+  variables <- geodata()@data %>%
+    select(3:last_col()) %>%
+    names()
+  
+  selectInput("pmodel_instruments_variable", label = "External instrument variables", choices = variables, multiple = TRUE)
+})
+
 # Error type options for SEM
 
 output$pmodel_sem_error_type_UI <- renderUI({
@@ -263,13 +279,23 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   
   effects <- input$pmodel_sar_gm_effects
   
-  if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects)
-  } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, method = "ec2sls")
-  }
-
+  if(length(input$pmodel_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
   
+  if(length(input$pmodel_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  if(effects == "within"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments)
+  } else if(effects == "random"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, method = "ec2sls", endog = endog, instruments = instruments)
+  }
 })
 
 output$pmodel_sar_gm_summary <- renderPrint({
@@ -277,8 +303,14 @@ output$pmodel_sar_gm_summary <- renderPrint({
 })
 
 output$pmodel_sar_gm_impacts <- renderPrint({
-  res <- splm:::impacts.splm(pmodel_sar_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
-  summary(res, zstats=TRUE, short=TRUE)
+  req(pmodel_sar_gm())
+  
+  if(length(input$pmodel_endog_variable) == 0 & length(input$pmodel_instruments_variable) == 0){
+    res <- splm:::impacts.splm(pmodel_sar_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+    summary(res, zstats=TRUE, short=TRUE)
+  } else {
+    cat("No impacts estimates when endogenous variables are present in the system.")
+  }
 })
 
 observeEvent(pmodel_sar_gm(), removeModal())
@@ -294,6 +326,24 @@ output$pmodel_sar_gm_download <- downloadHandler(
     file.copy("reports_rmd/pmodel_sar_gm_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$pmodel_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$pmodel_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
+    if(length(input$pmodel_endog_variable) == 0 & length(input$pmodel_instruments_variable) == 0){
+      res <- splm:::impacts.splm(pmodel_sar_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+      impacts <- summary(res, zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- "No impacts estimates when endogenous variables are present in the system."
+    }
     
     params <- list(
       general_observations = input$pmodel_sar_gm_general_observations,
@@ -301,9 +351,11 @@ output$pmodel_sar_gm_download <- downloadHandler(
       data_type = input$data_type,
       spatial_weights_matrix = w_matrix$name,
       model_specification = pesp(),
+      model_endog = endog,
+      model_instruments = instruments,
       model_effects = input$pmodel_sar_gm_effects,
       model_summary = summary(pmodel_sar_gm()),
-      model_impacts = summary(splm:::impacts.splm(pmodel_sar_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time))), zstats=TRUE, short=TRUE)
+      model_impacts = impacts
     )
     
     rmarkdown::render(tempReport, output_file = file,

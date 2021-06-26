@@ -13,6 +13,8 @@ params:
   data_type: NA
   spatial_weights_matrix: NA
   model_specification: NA
+  model_endog: NA
+  model_instruments: NA
   model_effects: NA
   model_summary: NA
   model_impacts: NA
@@ -40,6 +42,8 @@ cat(params$model_specification)
 ```
 
 * Effects: `r params$model_effects`
+* Endogenous variables: `r params$model_endog`
+* External instruments variables: `r params$model_instruments`
 
 ## Model summary
 
