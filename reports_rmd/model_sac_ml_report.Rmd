@@ -1,5 +1,5 @@
 ---
-title: "Cross Section Spatial Autocorrelation Model (SAC) with maximum likelihood (ML) estimator report"
+title: "Cross Section Spatial Autocorrelation Model (SAC) with maximum likelihood (ML) estimator"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
