@@ -262,8 +262,14 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   show_modal()
   
   effects <- input$pmodel_sar_gm_effects
+  
+  if(effects == "within"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects)
+  } else if(effects == "random"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, method = "ec2sls")
+  }
 
-  spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, spatial.error = FALSE)
+  
 })
 
 output$pmodel_sar_gm_summary <- renderPrint({
