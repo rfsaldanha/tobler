@@ -46,6 +46,11 @@ argonSidebar <- argonDashSidebar(
       tabName = "pmodel",
       icon = argonIcon(name = "ungroup", color = "info"),
       "Spatial Panel Models"
+    ),
+    argonSidebarItem(
+      tabName = "about",
+      icon = argonIcon(name = "bulb-61", color = "info"),
+      "About"
     )
   )
 )

@@ -8,7 +8,7 @@ observeEvent(input$weights_contiguity_create, {
       w_matrix$nb <- w_nb
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- paste0("Rook matrix")
+      w_matrix$name <- glue("Rook matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Rook matrix created as primary.", type = "message")
     } else {
       w_nb <- poly2nb(pl = geodata_original(), queen = FALSE)
@@ -16,7 +16,7 @@ observeEvent(input$weights_contiguity_create, {
       w_matrix$nb <- w_nblag
       w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- paste0("Rook matrix")
+      w_matrix$name <- glue("Rook matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Rook matrix created as primary.", type = "message")
     }
   } else if(input$weights_contiguity_radio == 2){
@@ -25,7 +25,7 @@ observeEvent(input$weights_contiguity_create, {
       w_matrix$nb <- w_nb
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- paste0("Queen matrix")
+      w_matrix$name <- glue("Queen matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Queen matrix created as primary.", type = "message")
     } else {
       w_nb <- poly2nb(pl = geodata_original(), queen = TRUE)
@@ -33,7 +33,7 @@ observeEvent(input$weights_contiguity_create, {
       w_matrix$nb <- w_nblag
       w_matrix$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- paste0("Queen matrix")
+      w_matrix$name <- glue("Queen matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Queen matrix created as primary.", type = "message")
     }
   }
@@ -47,7 +47,7 @@ observeEvent(input$weights_contiguity_create_secondary, {
       w_matrix_secondary$nb <- w_nb
       w_matrix_secondary$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
-      w_matrix_secondary$name <- paste0("Rook matrix")
+      w_matrix$name <- glue("Rook matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Rook matrix created as secondary.", type = "message")
     } else {
       w_nb <- poly2nb(pl = geodata_original(), queen = FALSE)
@@ -55,7 +55,7 @@ observeEvent(input$weights_contiguity_create_secondary, {
       w_matrix_secondary$nb <- w_nblag
       w_matrix_secondary$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
-      w_matrix_secondary$name <- paste0("Rook matrix")
+      w_matrix$name <- glue("Rook matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Rook matrix created as secondary.", type = "message")
     }
   } else if(input$weights_contiguity_radio == 2){
@@ -64,7 +64,7 @@ observeEvent(input$weights_contiguity_create_secondary, {
       w_matrix_secondary$nb <- w_nb
       w_matrix_secondary$listw <- nb2listw(w_nb, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
-      w_matrix_secondary$name <- paste0("Queen matrix")
+      w_matrix$name <- glue("Queen matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Queen matrix created as secondary.", type = "message")
     } else {
       w_nb <- poly2nb(pl = geodata_original(), queen = TRUE)
@@ -72,7 +72,7 @@ observeEvent(input$weights_contiguity_create_secondary, {
       w_matrix_secondary$nb <- w_nblag
       w_matrix_secondary$listw <- nb2listw(w_nblag, style = input$weights_contiguity_style, zero.policy = TRUE)
       w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
-      w_matrix_secondary$name <- paste0("Queen matrix")
+      w_matrix$name <- glue("Queen matrix with order {input$weights_contiguity_order} and {input$weights_contiguity_style} style.")
       showNotification(ui = "Queen matrix created as secondary.", type = "message")
     }
   }
@@ -90,7 +90,7 @@ observeEvent(input$weights_inverse_distance_create, {
   w_matrix$nb <- w_nb
   w_matrix$listw <- nb2listw(w_nb, glist=dlist, style = input$weights_inverse_distance_style, zero.policy = TRUE)
   w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-  w_matrix$name <- paste0("Inverse distance matrix")
+  w_matrix$name <- glue("Inverse distance matrix with {input$weights_inverse_distance_lower_bound} lower bound, {input$weights_inverse_distance_upper_bound} upper bound, {input$weights_inverse_distance_power} power and {input$weights_inverse_distance_style} style.")
   showNotification(ui = "Inverse distance matrix created as primary.", type = "message")
   
 })
@@ -121,7 +121,7 @@ observeEvent(input$weights_k_nearest_create, {
   w_matrix$nb <- w_nb
   w_matrix$listw <- nb2listw(w_nb, style = input$weights_k_nearest_style, zero.policy = TRUE)
   w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-  w_matrix$name <- paste0("K-Nearest Neighbors")
+  w_matrix$name <- glue("K = {input$weights_k_nearest_k} Nearest Neighbors matrix.")
   showNotification(ui = "K-Nearest Neighbors matrix as primary.", type = "message")
   
 })
@@ -196,7 +196,7 @@ observeEvent(input$weights_baumont_create, {
     w_matrix$nb <- w_nb
     w_matrix$listw <- nb2listw(w_nb, style = input$weights_baumont_style, zero.policy = TRUE)
     w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-    w_matrix$name <- paste0("Baumont (2004) procedure, k=", maxi, " selected")
+    w_matrix$name <- paste0("Baumont (2004) procedure, k=", maxi, " selected.")
     showNotification(ui = "Baumont procedure executed for primary matrix.", type = "message")
   })
   
@@ -243,7 +243,7 @@ observeEvent(input$weights_baumont_create_secondary, {
     w_matrix_secondary$nb <- w_nb
     w_matrix_secondary$listw <- nb2listw(w_nb, style = input$weights_baumont_style, zero.policy = TRUE)
     w_matrix_secondary$tr <- trW(as(w_matrix_secondary$listw, "CsparseMatrix"), type="mult")
-    w_matrix_secondary$name <- paste0("Baumont (2004) procedure, k=", maxi, " selected")
+    w_matrix_secondary$name <- paste0("Baumont (2004) procedure, k=", maxi, " selected.")
     showNotification(ui = "Baumont procedure executed for secondary matrix.", type = "message")
   })
   
@@ -397,14 +397,14 @@ observeEvent(input$weights_stakhovych_create, {
       w_matrix$nb <- poly2nb(shape, queen = TRUE)
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "Queen matrix"
+      w_matrix$name <- "Stakhovych Procedure. Queen matrix."
       
     } else if(df_top$Matriz == "W_Rook"){
       
       w_matrix$nb <- poly2nb(shape, queen = FALSE)
       w_matrix$listw <- nb2listw(w_nb, style = input$weights_stakhovych_style, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "Queen matrix"
+      w_matrix$name <- "Stakhovych Procedure. Queen matrix."
       
     } else if(df_top$Matriz == "W_dist_inv"){
       
@@ -414,41 +414,41 @@ observeEvent(input$weights_stakhovych_create, {
       dlist <- lapply(dlist, function(x) 1/x)
       w_matrix$listw <- nb2listw(w_matrix$nb, glist=dlist, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "Inverse distance matrix"
+      w_matrix$name <- "Stakhovych Procedure. Inverse distance matrix."
       
     } else if(df_top$Matriz == "W_k1"){
       w_matrix$nb <- knn2nb(knearneigh(coords, k=1))
       w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "K-Nearest Neighbors with k=1"
+      w_matrix$name <- "Stakhovych Procedure. K-Nearest Neighbors with k=1"
       
     } else if(df_top$Matriz == "W_k5"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=5))
       w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "K-Nearest Neighbors with k=5"
+      w_matrix$name <- "Stakhovych Procedure. K-Nearest Neighbors with k=5"
       
     } else if(df_top$Matriz == "W_k10"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=10))
       w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "K-Nearest Neighbors with k=10"
+      w_matrix$name <- "Stakhovych Procedure. K-Nearest Neighbors with k=10"
       
     } else if(df_top$Matriz == "W_k15"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=15))
       w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "K-Nearest Neighbors with k=15"
+      w_matrix$name <- "Stakhovych Procedure. K-Nearest Neighbors with k=15"
       
     } else if(df_top$Matriz == "W_k20"){
       
       w_matrix$nb <- knn2nb(knearneigh(coords, k=20))
       w_matrix$listw <- nb2listw(w_matrix$nb, zero.policy = TRUE)
       w_matrix$tr <- trW(as(w_matrix$listw, "CsparseMatrix"), type="mult")
-      w_matrix$name <- "K-Nearest Neighbors with k=20"
+      w_matrix$name <- "Stakhovych Procedure. K-Nearest Neighbors with k=20"
       
     } 
     

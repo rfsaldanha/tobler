@@ -44,7 +44,10 @@ model_tab <- argonTabItem(
           leafletOutput("model_ols_map", height = 600),
           hr(),
           h4("Lagrange multiplier"),
-          verbatimTextOutput("model_ols_lagrange")
+          verbatimTextOutput("model_ols_lagrange"),
+          hr(),
+          textAreaInput(inputId = "model_ols_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_ols_download", "Generate report")
         ),
         argonTab(
           tabName = "SAR (ML)",
@@ -60,7 +63,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sar_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sar_ml_map", height = 600)
+          leafletOutput("model_sar_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sar_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sar_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SAR (STSLS)",
@@ -77,7 +83,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sar_stsls_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sar_stsls_map", height = 600)
+          leafletOutput("model_sar_stsls_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sar_stsls_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sar_stsls_download", "Generate report")
         ),
         argonTab(
           tabName = "SEM (ML)",
@@ -90,7 +99,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sem_ml_summary"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sem_ml_map", height = 600)
+          leafletOutput("model_sem_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sem_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sem_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SEM (GMM)",
@@ -103,7 +115,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sem_gmm_summary"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sem_gmm_map", height = 600)
+          leafletOutput("model_sem_gmm_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sem_gmm_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sem_gmm_download", "Generate report")
         ),
         argonTab(
           tabName = "SAC (ML)",
@@ -120,7 +135,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sac_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sac_ml_map", height = 600)
+          leafletOutput("model_sac_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sac_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sac_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SAC (GSTSLS)",
@@ -137,7 +155,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sac_gstsls_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sac_gstsls_map", height = 600)
+          leafletOutput("model_sac_gstsls_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sac_gstsls_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sac_gstsls_download", "Generate report")
         ),
         argonTab(
           tabName = "SLX (ML)",
@@ -153,7 +174,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_slx_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_slx_ml_map", height = 600)
+          leafletOutput("model_slx_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_slx_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_slx_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SDM (ML)",
@@ -169,12 +193,15 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sdm_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sdm_ml_map", height = 600)
+          leafletOutput("model_sdm_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sdm_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sdm_ml_download", "Generate report")
         ),
         argonTab(
           tabName = "SDEM (ML)",
           active = FALSE,
-          h3("SDM (ML)"),
+          h3("SDEM (ML)"),
           p("Spatial Durbin Error Model (SDEM) with maximum likelihood (ML) estimator."),
           actionButton("model_estimate_sdem_ml", "Estimate", icon = icon("math"), status = "primary"),
           hr(),
@@ -185,7 +212,10 @@ model_tab <- argonTabItem(
           verbatimTextOutput("model_sdem_ml_impacts"),
           hr(),
           h4("Residual map"),
-          leafletOutput("model_sdem_ml_map", height = 600)
+          leafletOutput("model_sdem_ml_map", height = 600),
+          hr(),
+          textAreaInput(inputId = "model_sdem_ml_general_observations", label = "General observations for PDF report"),
+          downloadButton("model_sdem_ml_download", "Generate report")
         )
       )
     )

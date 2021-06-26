@@ -18,6 +18,12 @@ pmodel_tab <- argonTabItem(
         ),
         argonRow(
           uiOutput("pmodel_independent_variable_UI")
+        ),
+        argonRow(
+          uiOutput("pmodel_endog_variable_UI")
+        ),
+        argonRow(
+          uiOutput("pmodel_instruments_variable_UI")
         )
       ),
       argonH1(display = 4, "Tests"),
@@ -34,13 +40,21 @@ pmodel_tab <- argonTabItem(
           active = TRUE,
           h3("Hausman Test for panel models"), 
           actionButton("pmodel_hausman_test_execute", label = "Execute"), 
-          verbatimTextOutput("pmodel_hausman_test_results")
+          hr(),
+          verbatimTextOutput("pmodel_hausman_test_results"),
+          hr(),
+          textAreaInput(inputId = "pmodel_hausman_test_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_hausman_test_download", "Generate report")
         ),
         argonTab(
           tabName = "Pesaran Test",
           h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
           actionButton("pmodel_pesaran_test_execute", label = "Execute"),
-          verbatimTextOutput("pmodel_pesaran_test_results")
+          hr(),
+          verbatimTextOutput("pmodel_pesaran_test_results"),
+          hr(),
+          textAreaInput(inputId = "pmodel_pesaran_test_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_pesaran_test_download", "Generate report")
         )
       ),
       br(),
@@ -61,7 +75,10 @@ pmodel_tab <- argonTabItem(
           actionButton("pmodel_ols_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_ols_summary")
+          verbatimTextOutput("pmodel_ols_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_ols_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_ols_download", "Generate report")
         ),
         argonTab(
           tabName = "SAR (ML)",
@@ -70,7 +87,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sar_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           actionButton("pmodel_sar_estimate", label = "Estimate"),
@@ -79,7 +96,31 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sar_summary"),
           hr(),
           h4("Impacts"),
-          verbatimTextOutput("pmodel_sar_impacts")
+          verbatimTextOutput("pmodel_sar_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sar_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sar_download", "Generate report")
+        ),
+        argonTab(
+          tabName = "SAR (GM)",
+          h3("SAR (GM)"),
+          p("Spatial Autoregressive (SAR) panel model with generalized moments (GM) estimator."),
+          radioButtons(
+            inputId = "pmodel_sar_gm_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_sar_gm_estimate", label = "Estimate"),
+          hr(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sar_gm_summary"),
+          hr(),
+          h4("Impacts"),
+          verbatimTextOutput("pmodel_sar_gm_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sar_gm_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sar_gm_download", "Generate report")
         ),
         argonTab(
           tabName = "SEM (ML)",
@@ -88,14 +129,35 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sem_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           uiOutput("pmodel_sem_error_type_UI"),
           actionButton("pmodel_sem_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_sem_summary")
+          verbatimTextOutput("pmodel_sem_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sem_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sem_download", "Generate report")
+        ),
+        argonTab(
+          tabName = "SEM (GM)",
+          h3("SEM (GM)"),
+          p("Spatial Error panel Model (SEM) model with generalized moments (GM) estimator."),
+          radioButtons(
+            inputId = "pmodel_sem_gm_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_sem_gm_estimate", label = "Estimate"),
+          hr(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sem_gm_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sem_gm_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sem_gm_download", "Generate report")
         ),
         argonTab(
           tabName = "SAC (ML)",
@@ -104,7 +166,7 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sac_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           uiOutput("pmodel_sac_error_type_UI"),
@@ -114,25 +176,31 @@ pmodel_tab <- argonTabItem(
           verbatimTextOutput("pmodel_sac_summary"),
           hr(),
           h4("Impacts"),
-          verbatimTextOutput("pmodel_sac_impacts")
+          verbatimTextOutput("pmodel_sac_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sac_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sac_download", "Generate report")
         ),
         argonTab(
-          tabName = "SDM (ML)",
-          h3("SDM (ML)"),
-          p("Spatial Durbin panel Model (SDM) with maximum likelihood (ML) estimator."),
+          tabName = "SAC (GM)",
+          h3("SAC (GM)"),
+          p("Spatial Autocorrelation panel Model (SAC) with generalized moments (GM) estimator."),
           radioButtons(
-            inputId = "pmodel_sdm_effects", 
+            inputId = "pmodel_sac_gm_effects", 
             label = h3("Effects"),
             choices = list("Fixed (within)" = "within", "Random" = "random"), 
             selected = "within"
           ),
-          actionButton("pmodel_sdm_estimate", label = "Estimate"),
+          actionButton("pmodel_sac_gm_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_sdm_summary"),
+          verbatimTextOutput("pmodel_sac_gm_summary"),
           hr(),
           h4("Impacts"),
-          verbatimTextOutput("pmodel_sdm_impacts")
+          verbatimTextOutput("pmodel_sac_gm_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sac_gm_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sac_gm_download", "Generate report")
         ),
         argonTab(
           tabName = "SDEM (ML)",
@@ -141,14 +209,17 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_sdem_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           uiOutput("pmodel_sdem_error_type_UI"),
           actionButton("pmodel_sdem_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_sdem_summary")
+          verbatimTextOutput("pmodel_sdem_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sdem_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sdem_download", "Generate report")
         ),
         argonTab(
           tabName = "SLX (ML)",
@@ -157,13 +228,16 @@ pmodel_tab <- argonTabItem(
           radioButtons(
             inputId = "pmodel_slx_effects", 
             label = h3("Effects"),
-            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
             selected = "within"
           ),
           actionButton("pmodel_slx_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),
-          verbatimTextOutput("pmodel_slx_summary")
+          verbatimTextOutput("pmodel_slx_summary"),
+          hr(),
+          textAreaInput(inputId = "pmodel_slx_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_slx_download", "Generate report")
         )
       )
     )
