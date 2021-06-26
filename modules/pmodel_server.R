@@ -19,7 +19,7 @@ output$pmodel_endog_variable_UI <- renderUI({
     select(3:last_col()) %>%
     names()
   
-  selectInput("pmodel_endog_variable", label = "Additional endogenous variables", choices = variables, multiple = TRUE)
+  selectInput("pmodel_endog_variable", label = "Additional endogenous variables (optional, for GM estimation)", choices = variables, multiple = TRUE)
 })
 
 output$pmodel_instruments_variable_UI <- renderUI({
@@ -27,7 +27,7 @@ output$pmodel_instruments_variable_UI <- renderUI({
     select(3:last_col()) %>%
     names()
   
-  selectInput("pmodel_instruments_variable", label = "External instrument variables", choices = variables, multiple = TRUE)
+  selectInput("pmodel_instruments_variable", label = "External instrument variables (optional, for GM estimation)", choices = variables, multiple = TRUE)
 })
 
 # Error type options for SEM
