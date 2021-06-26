@@ -182,6 +182,27 @@ pmodel_tab <- argonTabItem(
           downloadButton("pmodel_sac_download", "Generate report")
         ),
         argonTab(
+          tabName = "SAC (GM)",
+          h3("SAC (GM)"),
+          p("Spatial Autocorrelation panel Model (SAC) with generalized moments (GM) estimator."),
+          radioButtons(
+            inputId = "pmodel_sac_gm_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random"), 
+            selected = "within"
+          ),
+          actionButton("pmodel_sac_gm_estimate", label = "Estimate"),
+          hr(),
+          h4("Estimation"),
+          verbatimTextOutput("pmodel_sac_gm_summary"),
+          hr(),
+          h4("Impacts"),
+          verbatimTextOutput("pmodel_sac_gm_impacts"),
+          hr(),
+          textAreaInput(inputId = "pmodel_sac_gm_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_sac_gm_download", "Generate report")
+        ),
+        argonTab(
           tabName = "SDEM (ML)",
           h3("SDEM (ML)"),
           p("Spatial Durbin Error panel Model (SDEM) with maximum likelihood (ML) estimator."),

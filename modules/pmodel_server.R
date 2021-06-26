@@ -548,6 +548,99 @@ output$pmodel_sac_download <- downloadHandler(
 )
 
 
+# SAC GM model
+
+pmodel_sac_gm <- eventReactive(input$pmodel_sac_gm_estimate, {
+  show_modal()
+  
+  effects <- input$pmodel_sac_gm_effects
+  
+  if(length(input$pmodel_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$pmodel_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  if(effects == "within"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+  } else if(effects == "random"){
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+  }
+})
+
+output$pmodel_sac_gm_summary <- renderPrint({
+  summary(pmodel_sac_gm())
+})
+
+output$pmodel_sac_gm_impacts <- renderPrint({
+  req(pmodel_sac_gm())
+  
+  if(length(input$pmodel_endog_variable) == 0 & length(input$pmodel_instruments_variable) == 0){
+    res <- splm:::impacts.splm(pmodel_sac_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+    summary(res, zstats=TRUE, short=TRUE)
+  } else {
+    cat("No impacts estimates when endogenous variables are present in the system.")
+  }
+})
+
+observeEvent(pmodel_sac_gm(), removeModal())
+
+output$pmodel_sac_gm_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_sac_gm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_sac_gm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_sac_gm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    if(length(input$pmodel_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$pmodel_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
+    if(length(input$pmodel_endog_variable) == 0 & length(input$pmodel_instruments_variable) == 0){
+      res <- splm:::impacts.splm(pmodel_sac_gm(), listw = w_matrix$listw, time = length(unique(geodata()@data$time)))
+      impacts <- summary(res, zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- "No impacts estimates when endogenous variables are present in the system."
+    }
+    
+    params <- list(
+      general_observations = input$pmodel_sac_gm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_endog = endog,
+      model_instruments = instruments,
+      model_effects = input$pmodel_sac_gm_effects,
+      model_summary = summary(pmodel_sac_gm()),
+      model_impacts = impacts
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
 
 
 

@@ -1,0 +1,60 @@
+---
+title: "Panel Spatial Autocorrelation Model (SAC) with generalized moments (GM) estimator model"
+author: "`r format(Sys.time())`"
+output: pdf_document
+header-includes:
+  - \usepackage{titling}
+  - \pretitle{\begin{center}
+    \includegraphics[width=2in,height=2in]{tobleR.png}\LARGE\\}
+  - \posttitle{\end{center}}
+params:
+  general_observations: NA
+  data_file: NA
+  data_type: NA
+  spatial_weights_matrix: NA
+  model_specification: NA
+  model_endog: NA
+  model_instruments: NA
+  model_effects: NA
+  model_summary: NA
+  model_impacts: NA
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+```
+
+```{r echo=FALSE, results='asis'}
+cat(params$general_observations)
+```
+
+# Data
+
+* File name: `r params$data_file`
+* Data type: `r params$data_type`
+
+# Model
+
+## Model specification
+
+```{r echo=FALSE, results='asis'}
+cat(params$model_specification)
+```
+
+* Effects: `r params$model_effects`
+* Endogenous variables: `r params$model_endog`
+* External instruments variables: `r params$model_instruments`
+
+## Model summary
+
+```{r echo=FALSE}
+params$model_summary
+```
+
+## Model impacts
+
+```{r echo=FALSE}
+params$model_impacts
+```
+
+
