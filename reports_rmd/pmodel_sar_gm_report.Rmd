@@ -1,5 +1,5 @@
 ---
-title: "Panel Spatial Autoregressive (SAR) panel model with generalized moments (GM) estimator model"
+title: "Panel Spatial Autoregressive (SAR) model with generalized moments (GM) estimator model"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
