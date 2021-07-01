@@ -72,6 +72,12 @@ pmodel_tab <- argonTabItem(
           active = TRUE,
           h3("OLS model"),
           p("Ordinary Least Squares estimator for linear regression."),
+          radioButtons(
+            inputId = "pmodel_ols_effects", 
+            label = h3("Effects"),
+            choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
+            selected = "within"
+          ),
           actionButton("pmodel_ols_estimate", label = "Estimate"),
           hr(),
           h4("Estimation"),

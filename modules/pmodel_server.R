@@ -183,7 +183,9 @@ output$pmodel_pesaran_test_download <- downloadHandler(
 pmodel_ols <- eventReactive(input$pmodel_ols_estimate, {
   show_modal()
   
-  plm(formula = formula(pesp()), data = geodata()@data)
+  effects <- input$pmodel_ols_effects
+  
+  plm(formula = formula(pesp()), data = geodata()@data, model = effects)
 })
 
 output$pmodel_ols_summary <- renderPrint({
