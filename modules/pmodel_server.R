@@ -11,7 +11,7 @@ output$pmodel_independent_variable_UI <- renderUI({
     select(3:last_col()) %>%
     names()
   
-  selectInput("pmodel_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
+  multiInput("pmodel_independent_variable", label = "Independent variables", choices = variables)
 })
 
 output$pmodel_endog_variable_UI <- renderUI({
@@ -19,7 +19,7 @@ output$pmodel_endog_variable_UI <- renderUI({
     select(3:last_col()) %>%
     names()
   
-  selectInput("pmodel_endog_variable", label = "Additional endogenous variables (optional, for GM estimator)", choices = variables, multiple = TRUE)
+  multiInput("pmodel_endog_variable", label = "Additional endogenous variables (optional, for GM estimator)", choices = variables)
 })
 
 output$pmodel_instruments_variable_UI <- renderUI({
@@ -27,7 +27,7 @@ output$pmodel_instruments_variable_UI <- renderUI({
     select(3:last_col()) %>%
     names()
   
-  selectInput("pmodel_instruments_variable", label = "External instrument variables (optional, for GM estimator)", choices = variables, multiple = TRUE)
+  multiInput("pmodel_instruments_variable", label = "External instrument variables (optional, for GM estimator)", choices = variables)
 })
 
 # Error type options for SEM

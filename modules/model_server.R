@@ -5,7 +5,7 @@ output$model_dependent_variable_UI <- renderUI({
 
 output$model_independent_variable_UI <- renderUI({
   variables <- names(geodata_original()@data)
-  selectInput("model_independent_variable", label = "Independent variables", choices = variables, multiple = TRUE)
+  multiInput("model_independent_variable", label = "Independent variables", choices = variables)
 })
 
 # Model specification
