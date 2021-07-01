@@ -3,6 +3,7 @@ argonFooter <- argonDashFooter(
   src = "https://github.com/rfsaldanha/tobler",
   argonFooterMenu(
     argonFooterItem("Fiocruz"),
-    argonFooterItem("UFJF")
+    argonFooterItem("UFJF"),
+    argonFooterItem("Unicamp")
   )
 )
