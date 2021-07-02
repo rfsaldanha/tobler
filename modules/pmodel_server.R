@@ -211,6 +211,7 @@ output$pmodel_ols_download <- downloadHandler(
       data_file = input$data_file[1],
       data_type = input$data_type,
       model_specification = pesp(),
+      model_effects = input$pmodel_ols_effects,
       model_summary = summary(pmodel_ols())
     )
     
