@@ -305,7 +305,7 @@ output$model_sem_ml_download <- downloadHandler(
 # SEM (GMM)
 
 model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
-  robust_option <- if_else("is_robust" %in% input$model_sar_stsls_options, TRUE, FALSE)
+  robust_option <- if_else("is_robust" %in% input$model_sem_stsls_options, TRUE, FALSE)
   
   if(length(input$model_endog_variable) > 0){
     endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))

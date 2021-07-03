@@ -128,6 +128,7 @@ model_tab <- argonTabItem(
       p("Spatial Error Model (SEM) with Generalized Method of Moments (GMM) estimator."),
       withMathJax("$$ y = X \\beta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
+      checkboxGroupInput("model_sem_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
       actionButton("model_estimate_sem_gmm", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
