@@ -47,7 +47,7 @@ pmodel_tab <- argonTabItem(
           downloadButton("pmodel_hausman_test_download", "Generate report")
         ),
         argonTab(
-          tabName = "Pesaran Test",
+          tabName = "Pesaran's CD Test",
           h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
           radioButtons(
             inputId = "pmodel_pesaran_test_type", 
@@ -61,6 +61,16 @@ pmodel_tab <- argonTabItem(
           hr(),
           textAreaInput(inputId = "pmodel_pesaran_test_general_observations", label = "General observations for PDF report"),
           downloadButton("pmodel_pesaran_test_download", "Generate report")
+        ),
+        argonTab(
+          tabName = "Baltagi, Song and Koh LM test",
+          h3("Baltagi, Song and Koh LM test for spatial panels"),
+          actionButton("pmodel_bsk_test_execute", label = "Execute"),
+          hr(),
+          verbatimTextOutput("pmodel_bsk_test_results"),
+          hr(),
+          textAreaInput(inputId = "pmodel_bsk_test_general_observations", label = "General observations for PDF report"),
+          downloadButton("pmodel_bsk_test_download", "Generate report")
         )
       ),
       br(),

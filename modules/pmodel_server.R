@@ -197,6 +197,62 @@ output$pmodel_pesaran_test_download <- downloadHandler(
 
 
 
+# BSK test
+pmodel_bsk_test <- eventReactive(input$pmodel_bsk_test_execute, {
+
+  res_lmh <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LMH")
+  res_lm1 <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LM1")
+  res_lm2 <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LM2")
+  res_clm_mu <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "CLMmu")
+  res_clm_lambda <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "CLMlambda")
+  
+  res <- cbind(
+    c(res_lmh$statistic, res_lmh$p.value),
+    c(res_lm1$statistic, res_lm1$p.value),
+    c(res_lm2$statistic, res_lm2$p.value),
+    c(res_clm_mu$statistic, res_clm_mu$p.value),
+    c(res_clm_lambda$statistic, res_clm_lambda$p.value)
+  )
+  
+  dimnames(res) <- list(c("test", "p-value"), c("LM joint","LM mu","LM lambda", "CLM mu", "CLM lambda"))
+  round(x = res, digits = 5)
+  
+})
+
+output$pmodel_bsk_test_results <- renderPrint({
+  print(pmodel_bsk_test())
+})
+
+output$pmodel_bsk_test_download <- downloadHandler(
+  
+  filename = paste0("tobler_pmodel_bsk_test_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_bsk_test_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_bsk_test_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    params <- list(
+      general_observations = input$pmodel_bsk_test_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      test_summary = pmodel_bsk_test()
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
+
 # OLS model
 
 pmodel_ols <- eventReactive(input$pmodel_ols_estimate, {
