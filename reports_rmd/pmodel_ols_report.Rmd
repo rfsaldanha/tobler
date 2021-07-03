@@ -12,6 +12,7 @@ params:
   data_file: NA
   data_type: NA
   model_specification: NA
+  model_effects: NA
   model_summary: NA
 ---
 
@@ -35,6 +36,8 @@ cat(params$general_observations)
 ```{r echo=FALSE, results='asis'}
 cat(params$model_specification)
 ```
+
+* Effects: `r params$model_effects`
 
 ## Model summary
 

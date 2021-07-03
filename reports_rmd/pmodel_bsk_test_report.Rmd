@@ -1,5 +1,5 @@
 ---
-title: "Pesaran's Cross Section test for cross sectional dependence in panel models report"
+title: "Baltagi, Song and Koh LM test for spatial panels report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
@@ -13,7 +13,6 @@ params:
   data_type: NA
   spatial_weights_matrix: NA
   model_specification: NA
-  test_type: NA
   test_summary: NA
 ---
 
@@ -41,8 +40,6 @@ cat(params$model_specification)
 ```
 
 # Test results
-
-Test type: `r params$test_type`
 
 ```{r echo=FALSE}
 params$test_summary
