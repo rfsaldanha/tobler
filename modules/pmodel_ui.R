@@ -94,6 +94,7 @@ pmodel_tab <- argonTabItem(
       active = TRUE,
       h3("OLS model"),
       p("Ordinary Least Squares estimator for linear regression."),
+      withMathJax("$$ y_t = \\alpha + X_t \\beta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_ols_effects", 
         label = h3("Effects"),
@@ -112,6 +113,7 @@ pmodel_tab <- argonTabItem(
       tabName = "SAR (ML)",
       h3("SAR (ML)"),
       p("Spatial Autoregressive (SAR) panel model with maximum likelihood (ML) estimator."),
+      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sar_effects", 
         label = h3("Effects"),
@@ -133,6 +135,7 @@ pmodel_tab <- argonTabItem(
       tabName = "SAR (GM)",
       h3("SAR (GM)"),
       p("Spatial Autoregressive (SAR) panel model with generalized moments (GM) estimator."),
+      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sar_gm_effects", 
         label = h3("Effects"),
@@ -154,6 +157,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SEM (ML)",
       h3("SEM (ML)"),
       p("Spatial Error panel Model (SEM) model with maximum likelihood (ML) estimator."),
+      withMathJax("$$ y_t = X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sem_effects", 
         label = h3("Effects"),
@@ -173,6 +178,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SEM (GM)",
       h3("SEM (GM)"),
       p("Spatial Error panel Model (SEM) model with generalized moments (GM) estimator."),
+      withMathJax("$$ y_t = X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sem_gm_effects", 
         label = h3("Effects"),
@@ -191,6 +198,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SAC (ML)",
       h3("SAC (ML)"),
       p("Spatial Autocorrelation panel Model (SAC) with maximum likelihood (ML) estimator."),
+      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sac_effects", 
         label = h3("Effects"),
@@ -213,6 +222,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SAC (GM)",
       h3("SAC (GM)"),
       p("Spatial Autocorrelation panel Model (SAC) with generalized moments (GM) estimator."),
+      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sac_gm_effects", 
         label = h3("Effects"),
@@ -234,6 +245,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SDEM (ML)",
       h3("SDEM (ML)"),
       p("Spatial Durbin Error panel Model (SDEM) with maximum likelihood (ML) estimator."),
+      withMathJax("$$ y_t = X_t \\beta + WX_t \\theta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sdem_effects", 
         label = h3("Effects"),
@@ -253,6 +266,7 @@ pmodel_tab <- argonTabItem(
       tabName = "SLX (ML)",
       h3("SLX (ML)"),
       p("Spatial Lag X (SLX) panel model with maximum likelihood (ML) estimator."),
+      withMathJax("$$ y_t = X_t \\beta + WX_t \\theta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_slx_effects", 
         label = h3("Effects"),
