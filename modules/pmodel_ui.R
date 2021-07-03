@@ -49,6 +49,12 @@ pmodel_tab <- argonTabItem(
         argonTab(
           tabName = "Pesaran Test",
           h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
+          radioButtons(
+            inputId = "pmodel_pesaran_test_type", 
+            label = h3("Type"),
+            choices = c("Global", "Local"),
+            selected = "Global"
+          ),
           actionButton("pmodel_pesaran_test_execute", label = "Execute"),
           hr(),
           verbatimTextOutput("pmodel_pesaran_test_results"),

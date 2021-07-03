@@ -13,6 +13,7 @@ params:
   data_type: NA
   spatial_weights_matrix: NA
   model_specification: NA
+  test_type: NA
   test_summary: NA
 ---
 
@@ -39,7 +40,9 @@ cat(params$general_observations)
 cat(params$model_specification)
 ```
 
-# Test result
+# Test results
+
+Test type: `r params$test_type`
 
 ```{r echo=FALSE}
 params$test_summary
