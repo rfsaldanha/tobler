@@ -216,13 +216,13 @@ output$model_sar_stsls_download <- downloadHandler(
     if(length(input$model_endog_variable) > 0){
       endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
     } else (
-      endog = NULL
+      endog = "None"
     )
     
     if(length(input$model_instruments_variable) > 0){
       instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
     } else {
-      instruments <- NULL
+      instruments <- "None"
     }
     
     params <- list(
@@ -305,7 +305,24 @@ output$model_sem_ml_download <- downloadHandler(
 # SEM (GMM)
 
 model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
-  GMerrorsar(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
+  robust_option <- if_else("is_robust" %in% input$model_sar_stsls_options, TRUE, FALSE)
+  
+  if(length(input$model_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$model_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  spreg(
+    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+    model = "error", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+  )
 })
 
 output$model_sem_gmm_summary <- renderPrint({
@@ -339,6 +356,17 @@ output$model_sem_gmm_download <- downloadHandler(
     file.copy("reports_rmd/model_sem_gmm_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$model_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
     
     params <- list(
       general_observations = input$model_sem_gmm_general_observations,
@@ -347,6 +375,8 @@ output$model_sem_gmm_download <- downloadHandler(
       original_data = geodata_original()@data,
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
+      model_endog = endog,
+      model_instruments = instruments,
       model_summary = summary(model_sem_gmm())
     )
     
