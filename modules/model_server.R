@@ -460,14 +460,29 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   show_modal()
   
   robust_option <- if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
-  not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
+  
+  if(length(input$model_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$model_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
   
   if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
-    gstsls(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-           robust = robust_option, W2X = not_w2x_option, listw2 = w_matrix_secondary$listw)
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+      model = "sarar",  listw2 = w_matrix_secondary$listw, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+    )
   } else {
-    gstsls(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-           robust = robust_option, W2X = not_w2x_option)
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+      model = "sarar", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+    )
   }
   
 })
@@ -507,6 +522,17 @@ output$model_sac_gstsls_download <- downloadHandler(
     file.copy("reports_rmd/model_sac_gstsls_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$model_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
     
     params <- list(
       general_observations = input$model_sac_gstsls_general_observations,
@@ -515,6 +541,8 @@ output$model_sac_gstsls_download <- downloadHandler(
       original_data = geodata_original()@data,
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
+      model_endog = endog,
+      model_instruments = instruments,
       model_options = input$model_sac_gstsls_options,
       model_summary = summary(model_sac_gstsls()),
       model_impacts = summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
