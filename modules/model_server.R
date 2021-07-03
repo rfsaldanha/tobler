@@ -8,6 +8,16 @@ output$model_independent_variable_UI <- renderUI({
   multiInput("model_independent_variable", label = "Independent variables", choices = variables)
 })
 
+output$model_endog_variable_UI <- renderUI({
+  variables <- names(geodata_original()@data)
+  multiInput("model_endog_variable", label = "Additional endogenous variables (optional, for STSLS and GMM estimators)", choices = variables)
+})
+
+output$model_instruments_variable_UI <- renderUI({
+  variables <- names(geodata_original()@data)
+  multiInput("model_instruments_variable", label = "External instrument variables (optional, for STSLS and GMM estimators)", choices = variables)
+})
+
 # Model specification
 esp <- reactive({
   paste0(as.character(input$model_dependent_variable), " ~ ", paste0(input$model_independent_variable, collapse = " + "))
@@ -148,10 +158,24 @@ model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
   show_modal()
   
   robust_option <- if_else("is_robust" %in% input$model_sar_stsls_options, TRUE, FALSE)
-  not_w2x_option <- if_else("not_w2x" %in% input$model_sar_stsls_options, FALSE, TRUE)
   
-  stsls(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-        robust = robust_option, W2X = not_w2x_option)
+  if(length(input$model_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$model_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  spreg(
+    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+    model = "lag", het = robust_option, endog = endog, instruments = instruments
+  )
+  
 })
 
 output$model_sar_stsls_summary <- renderPrint({
@@ -189,6 +213,17 @@ output$model_sar_stsls_download <- downloadHandler(
     file.copy("reports_rmd/model_sar_stsls_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+    } else (
+      endog = NULL
+    )
+    
+    if(length(input$model_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- NULL
+    }
     
     params <- list(
       general_observations = input$model_sar_stsls_general_observations,
@@ -197,6 +232,8 @@ output$model_sar_stsls_download <- downloadHandler(
       original_data = geodata_original()@data,
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
+      model_endog = endog,
+      model_instruments = instruments,
       model_options = input$model_sar_stsls_options,
       model_summary = summary(model_sar_stsls()),
       model_impacts = summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)

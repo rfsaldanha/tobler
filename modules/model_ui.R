@@ -20,6 +20,16 @@ model_tab <- argonTabItem(
         width = 6,
         uiOutput("model_independent_variable_UI")
       )
+    ),
+    fluidRow(
+      column(
+        width = 6,
+        uiOutput("model_endog_variable_UI")
+      ),
+      column(
+        width = 6,
+        uiOutput("model_instruments_variable_UI")
+      )
     )
   ),
   argonTabSet(
@@ -78,7 +88,7 @@ model_tab <- argonTabItem(
       h3("SAR (STSLS)"),
       p("Spatial Autoregressive (SAR) model with Generalized Spatial Two Stage Least Squares (STSLS) estimator."),
       withMathJax("$$ y = \\rho Wy + X \\beta + \\varepsilon $$"),
-      checkboxGroupInput("model_sar_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust", "Do not use W2X as instrument" = "not_w2x")),
+      checkboxGroupInput("model_sar_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
       actionButton("model_estimate_sar_stsls", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
