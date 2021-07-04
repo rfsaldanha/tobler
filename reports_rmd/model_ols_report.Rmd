@@ -1,5 +1,5 @@
 ---
-title: "Cross Section Ordinary Least Squares (OLS) estimator for linear regression"
+title: "Cross Section Ordinary Least Squares (OLS) estimator for linear regression report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:

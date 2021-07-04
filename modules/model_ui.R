@@ -20,6 +20,16 @@ model_tab <- argonTabItem(
         width = 6,
         uiOutput("model_independent_variable_UI")
       )
+    ),
+    fluidRow(
+      column(
+        width = 6,
+        uiOutput("model_endog_variable_UI")
+      ),
+      column(
+        width = 6,
+        uiOutput("model_instruments_variable_UI")
+      )
     )
   ),
   argonTabSet(
@@ -56,7 +66,7 @@ model_tab <- argonTabItem(
       tabName = "SAR (ML)",
       active = FALSE,
       h3("SAR (ML)"),
-      p("Spatial Autoregressive (SAR) model with maximum likelihood (ML) estimator."),
+      p("Spatial Autoregressive (SAR) model with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = \\rho Wy + X \\beta + \\varepsilon $$"),
       actionButton("model_estimate_sar_ml", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
@@ -78,7 +88,7 @@ model_tab <- argonTabItem(
       h3("SAR (STSLS)"),
       p("Spatial Autoregressive (SAR) model with Generalized Spatial Two Stage Least Squares (STSLS) estimator."),
       withMathJax("$$ y = \\rho Wy + X \\beta + \\varepsilon $$"),
-      checkboxGroupInput("model_sar_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust", "Do not use W2X as instrument" = "not_w2x")),
+      checkboxGroupInput("model_sar_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
       actionButton("model_estimate_sar_stsls", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
@@ -97,7 +107,7 @@ model_tab <- argonTabItem(
       tabName = "SEM (ML)",
       active = FALSE,
       h3("SEM (ML)"),
-      p("Spatial Error Model (SEM) with maximum likelihood (ML) estimator."),
+      p("Spatial Error Model (SEM) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = X \\beta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
       actionButton("model_estimate_sem_ml", "Estimate", icon = icon("math"), status = "primary"),
@@ -118,6 +128,7 @@ model_tab <- argonTabItem(
       p("Spatial Error Model (SEM) with Generalized Method of Moments (GMM) estimator."),
       withMathJax("$$ y = X \\beta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
+      checkboxGroupInput("model_sem_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
       actionButton("model_estimate_sem_gmm", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
@@ -133,7 +144,7 @@ model_tab <- argonTabItem(
       tabName = "SAC (ML)",
       active = FALSE,
       h3("SAC (ML)"),
-      p("Spatial Autocorrelation Model (SAC) with maximum likelihood (ML) estimator."),
+      p("Spatial Autocorrelation Model (SAC) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = \\rho Wy + X \\beta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon $$"),
       checkboxGroupInput("model_estimate_sac_ml_options", "Options", choices = c("Use secondary weights matrix for error term" = "use_secondary_w_matrix")),
@@ -158,7 +169,7 @@ model_tab <- argonTabItem(
       p("Spatial Autocorrelation Model (SAC) with Generalized Spatial Two Stage Least Squares (GSTSLS) estimator."),
       withMathJax("$$ y = \\rho Wy + X \\beta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon $$"),
-      checkboxGroupInput("model_sac_gstsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust", "Do not use W2X as instrument" = "not_w2x", "Use secondary weights matrix for error term" = "use_secondary_w_matrix")),
+      checkboxGroupInput("model_sac_gstsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust", "Use secondary weights matrix for error term" = "use_secondary_w_matrix")),
       actionButton("model_estimate_sac_gstsls", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
@@ -177,7 +188,7 @@ model_tab <- argonTabItem(
       tabName = "SLX (ML)",
       active = FALSE,
       h3("SLX (ML)"),
-      p("Spatial Lag X (SLX) model with maximum likelihood (ML) estimator."),
+      p("Spatial Lag X (SLX) model with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = X \\beta + WX \\theta + \\varepsilon $$"),
       actionButton("model_estimate_slx_ml", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
@@ -197,7 +208,7 @@ model_tab <- argonTabItem(
       tabName = "SDM (ML)",
       active = FALSE,
       h3("SDM (ML)"),
-      p("Spatial Durbin Model (SDM) with maximum likelihood (ML) estimator."),
+      p("Spatial Durbin Model (SDM) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = \\rho Wy X \\beta + WX \\theta + \\varepsilon $$"),
       actionButton("model_estimate_sdm_ml", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
@@ -214,10 +225,31 @@ model_tab <- argonTabItem(
       downloadButton("model_sdm_ml_download", "Generate report")
     ),
     argonTab(
+      tabName = "SDM (GMM)",
+      active = FALSE,
+      h3("SDM (GMM)"),
+      p("Spatial Durbin Model (SDM) with Generalized Method of Moments (GMM) estimator."),
+      withMathJax("$$ y = \\rho Wy X \\beta + WX \\theta + \\varepsilon $$"),
+      checkboxGroupInput("model_sdm_gmm_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
+      actionButton("model_estimate_sdm_gmm", "Estimate", icon = icon("math"), status = "primary"),
+      hr(),
+      h4("Estimation"),
+      verbatimTextOutput("model_sdm_gmm_summary"),
+      hr(),
+      h4("Impacts"),
+      verbatimTextOutput("model_sdm_gmm_impacts"),
+      hr(),
+      h4("Residual map"),
+      leafletOutput("model_sdm_gmm_map", height = 600),
+      hr(),
+      textAreaInput(inputId = "model_sdm_gmm_general_observations", label = "General observations for PDF report"),
+      downloadButton("model_sdm_gmm_download", "Generate report")
+    ),
+    argonTab(
       tabName = "SDEM (ML)",
       active = FALSE,
       h3("SDEM (ML)"),
-      p("Spatial Durbin Error Model (SDEM) with maximum likelihood (ML) estimator."),
+      p("Spatial Durbin Error Model (SDEM) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = X \\beta + WX \\theta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
       actionButton("model_estimate_sdem_ml", "Estimate", icon = icon("math"), status = "primary"),
@@ -233,6 +265,28 @@ model_tab <- argonTabItem(
       hr(),
       textAreaInput(inputId = "model_sdem_ml_general_observations", label = "General observations for PDF report"),
       downloadButton("model_sdem_ml_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "SDEM (GMM)",
+      active = FALSE,
+      h3("SDEM (GMM)"),
+      p("Spatial Durbin Error Model (SDEM) with Generalized Method of Moments (GMM) estimator."),
+      withMathJax("$$ y = X \\beta + WX \\theta + \\xi $$"),
+      withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
+      checkboxGroupInput("model_sdem_gmm_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
+      actionButton("model_estimate_sdem_gmm", "Estimate", icon = icon("math"), status = "primary"),
+      hr(),
+      h4("Estimation"),
+      verbatimTextOutput("model_sdem_gmm_summary"),
+      hr(),
+      h4("Impacts"),
+      verbatimTextOutput("model_sdem_gmm_impacts"),
+      hr(),
+      h4("Residual map"),
+      leafletOutput("model_sdem_gmm_map", height = 600),
+      hr(),
+      textAreaInput(inputId = "model_sdem_gmm_general_observations", label = "General observations for PDF report"),
+      downloadButton("model_sdem_gmm_download", "Generate report")
     )
   )
 )

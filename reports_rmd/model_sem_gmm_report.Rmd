@@ -1,5 +1,5 @@
 ---
-title: "Cross Section Spatial Error Model (SEM) with Generalized Method of Moments (GMM) estimator"
+title: "Cross Section Spatial Error Model (SEM) with Generalized Method of Moments (GMM) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
@@ -14,6 +14,8 @@ params:
   original_data: NA
   spatial_weights_matrix: NA
   model_specification: NA
+  model_endog: NA
+  model_instruments: NA
   model_summary: NA
 ---
 
@@ -42,6 +44,9 @@ cat(params$general_observations)
 ```{r echo=FALSE, results='asis'}
 cat(params$model_specification)
 ```
+
+* Endogenous variables: `r params$model_endog`
+* External instruments variables: `r params$model_instruments`
 
 ## Model summary
 

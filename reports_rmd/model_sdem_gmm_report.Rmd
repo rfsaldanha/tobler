@@ -1,5 +1,5 @@
 ---
-title: "Spatial Durbin Error Panel Model (SDEM) with Maximum Likelihood (ML) estimator report"
+title: "Cross Section Spatial Error Durbin Model (SDEM) with Generalized Method of Moments (GMM) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
@@ -11,11 +11,13 @@ params:
   general_observations: NA
   data_file: NA
   data_type: NA
+  original_data: NA
   spatial_weights_matrix: NA
   model_specification: NA
-  model_effects: NA
-  model_error_type: NA
+  model_endog: NA
+  model_instruments: NA
   model_summary: NA
+  model_impacts: NA
 ---
 
 ```{r include=FALSE}
@@ -30,6 +32,11 @@ cat(params$general_observations)
 
 * File name: `r params$data_file`
 * Data type: `r params$data_type`
+* Dimensions: `r dim(params$original_data)[1]` rows and `r dim(params$original_data)[2]` columns.
+
+# Spatial weights matrix
+
+`r params$spatial_weights_matrix`
 
 # Model
 
@@ -39,8 +46,8 @@ cat(params$general_observations)
 cat(params$model_specification)
 ```
 
-* Effects: `r params$model_effects`
-* Error type: `r params$model_error_type`
+* Endogenous variables: `r params$model_endog`
+* External instruments variables: `r params$model_instruments`
 
 ## Model summary
 
@@ -48,5 +55,8 @@ cat(params$model_specification)
 params$model_summary
 ```
 
+## Model impacts
 
-
+```{r echo=FALSE}
+params$model_impacts
+```
