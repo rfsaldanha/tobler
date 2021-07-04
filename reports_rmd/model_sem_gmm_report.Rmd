@@ -1,5 +1,5 @@
 ---
-title: "Cross Section Spatial Error Model (SEM) with Generalized Method of Moments (GMM) estimator"
+title: "Cross Section Spatial Error Model (SEM) with Generalized Method of Moments (GMM) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:

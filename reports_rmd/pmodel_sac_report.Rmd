@@ -1,5 +1,5 @@
 ---
-title: "Spatial Autocorrelation Panel Model (SAC) with maximum likelihood (ML) estimator"
+title: "Spatial Autocorrelation Panel Model (SAC) with Maximum Likelihood (ML) estimator report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
