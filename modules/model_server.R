@@ -25,7 +25,6 @@ esp <- reactive({
 
 # OLS Model
 model_ols <- eventReactive(input$model_estimate_ols, {
-  
   show_modal()
   
   lm(formula = formula(esp()), data = geodata_original()@data)
@@ -305,6 +304,8 @@ output$model_sem_ml_download <- downloadHandler(
 # SEM (GMM)
 
 model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
+  show_modal()
+  
   robust_option <- if_else("is_robust" %in% input$model_sem_stsls_options, TRUE, FALSE)
   
   if(length(input$model_endog_variable) > 0){
