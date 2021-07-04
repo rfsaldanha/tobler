@@ -765,6 +765,18 @@ output$model_sdm_gmm_download <- downloadHandler(
     file.copy("reports_rmd/model_sdm_gmm_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$model_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
     if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
       impacts <- summary(impacts(model_sdm_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     } else {
@@ -778,6 +790,8 @@ output$model_sdm_gmm_download <- downloadHandler(
       original_data = geodata_original()@data,
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
+      model_endog = endog,
+      model_instruments = instruments,
       model_summary = summary(model_sdm_gmm()),
       model_impacts = impacts
     )
@@ -919,6 +933,18 @@ output$model_sdem_gmm_download <- downloadHandler(
     file.copy("reports_rmd/model_sdem_gmm_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$model_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
     if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
       impacts <- summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     } else {
@@ -932,6 +958,8 @@ output$model_sdem_gmm_download <- downloadHandler(
       original_data = geodata_original()@data,
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
+      model_endog = endog,
+      model_instruments = instruments,
       model_summary = summary(model_sdem_gmm()),
       model_impacts = impacts
     )
