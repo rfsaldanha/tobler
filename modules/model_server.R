@@ -182,7 +182,11 @@ output$model_sar_stsls_summary <- renderPrint({
 })
 
 output$model_sar_stsls_impacts <- renderPrint({
-  summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+    summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  } else {
+    cat("Impacts for model with additional endogenous variables not yet available.")
+  }
 })
 
 output$model_sar_stsls_map <- renderLeaflet({
@@ -224,6 +228,12 @@ output$model_sar_stsls_download <- downloadHandler(
       instruments <- "None"
     }
     
+    if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+      impacts< - summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
+    }
+    
     params <- list(
       general_observations = input$model_sar_stsls_general_observations,
       data_file = input$data_file[1],
@@ -235,7 +245,7 @@ output$model_sar_stsls_download <- downloadHandler(
       model_instruments = instruments,
       model_options = input$model_sar_stsls_options,
       model_summary = summary(model_sar_stsls()),
-      model_impacts = summary(impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = impacts
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -493,7 +503,11 @@ output$model_sac_gstsls_summary <- renderPrint({
 })
 
 output$model_sac_gstsls_impacts <- renderPrint({
-  summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+    summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  } else {
+    cat("Impacts for model with additional endogenous variables not yet available.")
+  }
 })
 
 output$model_sac_gstsls_map <- renderLeaflet({
@@ -535,6 +549,12 @@ output$model_sac_gstsls_download <- downloadHandler(
       instruments <- "None"
     }
     
+    if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+      impacts <- summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
+    }
+    
     params <- list(
       general_observations = input$model_sac_gstsls_general_observations,
       data_file = input$data_file[1],
@@ -546,7 +566,7 @@ output$model_sac_gstsls_download <- downloadHandler(
       model_instruments = instruments,
       model_options = input$model_sac_gstsls_options,
       model_summary = summary(model_sac_gstsls()),
-      model_impacts = summary(impacts(model_sac_gstsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = impacts
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -711,7 +731,11 @@ output$model_sdm_gmm_summary <- renderPrint({
 })
 
 output$model_sdm_gmm_impacts <- renderPrint({
-  summary(impacts(model_sdm_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+    summary(impacts(model_sdm_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  } else {
+    cat("Impacts for model with additional endogenous variables not yet available.")
+  }
 })
 
 output$model_sdm_gmm_map <- renderLeaflet({
@@ -741,6 +765,11 @@ output$model_sdm_gmm_download <- downloadHandler(
     file.copy("reports_rmd/model_sdm_gmm_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+      impacts <- summary(impacts(model_sdm_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
+    }
     
     params <- list(
       general_observations = input$model_sdm_gmm_general_observations,
@@ -750,7 +779,7 @@ output$model_sdm_gmm_download <- downloadHandler(
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
       model_summary = summary(model_sdm_gmm()),
-      model_impacts = summary(impacts(model_sdm_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = impacts
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -856,7 +885,11 @@ output$model_sdem_gmm_summary <- renderPrint({
 })
 
 output$model_sdem_gmm_impacts <- renderPrint({
-  summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+    summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  } else {
+    cat("Impacts for model with additional endogenous variables not yet available.")
+  }
 })
 
 output$model_sdem_gmm_map <- renderLeaflet({
@@ -875,7 +908,6 @@ output$model_sdem_gmm_map <- renderLeaflet({
 
 observeEvent(model_sdem_gmm(), removeModal())
 
-
 output$model_sdem_gmm_download <- downloadHandler(
   
   filename = paste0("tobler_cross_section_sdem_gmm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
@@ -887,6 +919,11 @@ output$model_sdem_gmm_download <- downloadHandler(
     file.copy("reports_rmd/model_sdem_gmm_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+      impacts <- summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
+    }
     
     params <- list(
       general_observations = input$model_sdem_gmm_general_observations,
@@ -896,7 +933,7 @@ output$model_sdem_gmm_download <- downloadHandler(
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
       model_summary = summary(model_sdem_gmm()),
-      model_impacts = summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = impacts
     )
     
     rmarkdown::render(tempReport, output_file = file,
