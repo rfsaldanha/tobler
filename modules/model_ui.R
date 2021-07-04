@@ -265,6 +265,28 @@ model_tab <- argonTabItem(
       hr(),
       textAreaInput(inputId = "model_sdem_ml_general_observations", label = "General observations for PDF report"),
       downloadButton("model_sdem_ml_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "SDEM (GMM)",
+      active = FALSE,
+      h3("SDEM (GMM)"),
+      p("Spatial Durbin Error Model (SDEM) with Generalized Method of Moments (GMM) estimator."),
+      withMathJax("$$ y = X \\beta + WX \\theta + \\xi $$"),
+      withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
+      checkboxGroupInput("model_sdem_gmm_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
+      actionButton("model_estimate_sdem_gmm", "Estimate", icon = icon("math"), status = "primary"),
+      hr(),
+      h4("Estimation"),
+      verbatimTextOutput("model_sdem_gmm_summary"),
+      hr(),
+      h4("Impacts"),
+      verbatimTextOutput("model_sdem_gmm_impacts"),
+      hr(),
+      h4("Residual map"),
+      leafletOutput("model_sdem_gmm_map", height = 600),
+      hr(),
+      textAreaInput(inputId = "model_sdem_gmm_general_observations", label = "General observations for PDF report"),
+      downloadButton("model_sdem_gmm_download", "Generate report")
     )
   )
 )

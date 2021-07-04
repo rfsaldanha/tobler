@@ -823,3 +823,85 @@ output$model_sdem_ml_download <- downloadHandler(
   }
 )
 
+
+
+
+# SDEM (GMM)
+model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
+  show_modal()
+  
+  robust_option <- if_else("is_robust" %in% input$model_sem_stsls_options, TRUE, FALSE)
+  
+  if(length(input$model_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$model_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  spreg(
+    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+    model = "error", Durbin = TRUE, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+  )
+})
+
+output$model_sdem_gmm_summary <- renderPrint({
+  summary(model_sdem_gmm(), Nagelkerke = TRUE, Hausman = TRUE)
+})
+
+output$model_sdem_gmm_impacts <- renderPrint({
+  summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+})
+
+output$model_sdem_gmm_map <- renderLeaflet({
+  geodata_res <- geodata_original()
+  geodata_res@data$residuals <- resid(model_sdem_gmm())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
+
+observeEvent(model_sdem_gmm(), removeModal())
+
+
+output$model_sdem_gmm_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_sdem_gmm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_sdem_gmm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_sdem_gmm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    params <- list(
+      general_observations = input$model_sdem_gmm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_summary = summary(model_sdem_gmm()),
+      model_impacts = summary(impacts(model_sdem_gmm(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
