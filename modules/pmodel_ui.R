@@ -71,6 +71,14 @@ pmodel_tab <- argonTabItem(
     argonTab(
       tabName = "Baltagi, Song and Koh LM test",
       h3("Baltagi, Song and Koh LM tests for spatial panels"),
+      withMathJax(),
+      tags$ul(
+        tags$li(withMathJax("LM joint: One-sided joint LM test for \\( H^a_0 : \\lambda = \\sigma^2_\\mu = 0 \\)")), 
+        tags$li(withMathJax("LM mu: Marginal LM test for \\( H^b_0 : \\sigma^2_\\mu = 0 \\) assuming \\( \\lambda = 0 \\)")), 
+        tags$li(withMathJax("LM lambda: Marginal LM test for \\( H^C_0 : \\lambda = 0 \\) assuming \\( \\sigma^2_\\mu = 0 \\)")),
+        tags$li(withMathJax("CLM mu: Conditional LM test for \\( H^e_0 : \\sigma^2_\\mu = 0 \\) assuming \\( \\lambda = 0  \\text{ or } \\lambda \\neq 0\\)")),
+        tags$li(withMathJax("CLM lambda: Conditional LM test for \\( H^d_0 : \\lambda = 0  \\) assuming \\( \\sigma^2_\\mu \\geq 0 \\)"))
+      ),
       tags$a(href="https://doi.org/10.1016/S0304-4076(03)00120-9", target="_blank", "Baltagi, Song and Koh (2003) paper link."),
       br(),br(),
       actionButton("pmodel_bsk_test_execute", label = "Execute"),
