@@ -198,7 +198,7 @@ pmodel_tab <- argonTabItem(
       tabName = "SAC (ML)",
       h3("SAC (ML)"),
       p("Spatial Autocorrelation panel Model (SAC) with Maximum Likelihood (ML) estimator."),
-      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\xi_t $$"),
       withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sac_effects", 
