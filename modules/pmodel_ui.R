@@ -70,13 +70,35 @@ pmodel_tab <- argonTabItem(
     ),
     argonTab(
       tabName = "Baltagi, Song and Koh LM test",
-      h3("Baltagi, Song and Koh LM test for spatial panels"),
+      h3("Baltagi, Song and Koh LM tests for spatial panels"),
+      withMathJax(),
+      tags$ul(
+        tags$li(withMathJax("LM joint: One-sided joint LM test for \\( H^a_0 : \\lambda = \\sigma^2_\\mu = 0 \\)")), 
+        tags$li(withMathJax("LM mu: Marginal LM test for \\( H^b_0 : \\sigma^2_\\mu = 0 \\) assuming \\( \\lambda = 0 \\)")), 
+        tags$li(withMathJax("LM lambda: Marginal LM test for \\( H^C_0 : \\lambda = 0 \\) assuming \\( \\sigma^2_\\mu = 0 \\)")),
+        tags$li(withMathJax("CLM mu: Conditional LM test for \\( H^e_0 : \\sigma^2_\\mu = 0 \\) assuming \\( \\lambda = 0  \\text{ or } \\lambda \\neq 0\\)")),
+        tags$li(withMathJax("CLM lambda: Conditional LM test for \\( H^d_0 : \\lambda = 0  \\) assuming \\( \\sigma^2_\\mu \\geq 0 \\)"))
+      ),
+      tags$a(href="https://doi.org/10.1016/S0304-4076(03)00120-9", target="_blank", "Baltagi, Song and Koh (2003) paper link."),
+      br(),br(),
       actionButton("pmodel_bsk_test_execute", label = "Execute"),
       hr(),
       verbatimTextOutput("pmodel_bsk_test_results"),
       hr(),
       textAreaInput(inputId = "pmodel_bsk_test_general_observations", label = "General observations for PDF report"),
       downloadButton("pmodel_bsk_test_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "Baltagi, Song, Jung and Koh LM test",
+      h3("Baltagi, Song, Jung and Koh LM tests for spatial panels"),
+      tags$a(href="https://doi.org/10.1016/j.jeconom.2006.09.001", target="_blank", "Baltagi, Song, Jung and Koh (2007) paper link."),
+      br(),br(),
+      actionButton("pmodel_bsjk_test_execute", label = "Execute"),
+      hr(),
+      verbatimTextOutput("pmodel_bsjk_test_results"),
+      hr(),
+      textAreaInput(inputId = "pmodel_bsjk_test_general_observations", label = "General observations for PDF report"),
+      downloadButton("pmodel_bsjk_test_download", "Generate report")
     )
   ),
   br(),
@@ -113,7 +135,7 @@ pmodel_tab <- argonTabItem(
       tabName = "SAR (ML)",
       h3("SAR (ML)"),
       p("Spatial Autoregressive (SAR) panel model with Maximum Likelihood (ML) estimator."),
-      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\varepsilon_t $$"),
+      withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sar_effects", 
         label = h3("Effects"),
@@ -135,7 +157,7 @@ pmodel_tab <- argonTabItem(
       tabName = "SAR (GM)",
       h3("SAR (GM)"),
       p("Spatial Autoregressive (SAR) panel model with Generalized Moments (GM) estimator."),
-      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\varepsilon_t $$"),
+      withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sar_gm_effects", 
         label = h3("Effects"),
@@ -158,7 +180,7 @@ pmodel_tab <- argonTabItem(
       h3("SEM (ML)"),
       p("Spatial Error panel Model (SEM) model with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y_t = X_t \\beta + \\xi_t $$"),
-      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
+      withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sem_effects", 
         label = h3("Effects"),
@@ -179,7 +201,7 @@ pmodel_tab <- argonTabItem(
       h3("SEM (GM)"),
       p("Spatial Error panel Model (SEM) model with Generalized Moments (GM) estimator."),
       withMathJax("$$ y_t = X_t \\beta + \\xi_t $$"),
-      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
+      withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sem_gm_effects", 
         label = h3("Effects"),
@@ -198,8 +220,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SAC (ML)",
       h3("SAC (ML)"),
       p("Spatial Autocorrelation panel Model (SAC) with Maximum Likelihood (ML) estimator."),
-      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\xi_t $$"),
-      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
+      withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sac_effects", 
         label = h3("Effects"),
@@ -222,8 +244,8 @@ pmodel_tab <- argonTabItem(
       tabName = "SAC (GM)",
       h3("SAC (GM)"),
       p("Spatial Autocorrelation panel Model (SAC) with Generalized Moments (GM) estimator."),
-      withMathJax("$$ y_t = \\rho Wy_t + X_t \\beta + \\xi_t $$"),
-      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
+      withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\xi_t $$"),
+      withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sac_gm_effects", 
         label = h3("Effects"),
@@ -246,7 +268,7 @@ pmodel_tab <- argonTabItem(
       h3("SDEM (ML)"),
       p("Spatial Durbin Error panel Model (SDEM) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y_t = X_t \\beta + WX_t \\theta + \\xi_t $$"),
-      withMathJax("$$ \\xi_t = \\lambda W \\xi_t + \\varepsilon_t $$"),
+      withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sdem_effects", 
         label = h3("Effects"),

@@ -252,6 +252,59 @@ output$pmodel_bsk_test_download <- downloadHandler(
 
 
 
+# BSJK test
+pmodel_bsjk_test <- eventReactive(input$pmodel_bsjk_test_execute, {
+  
+  res_c1 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.1")
+  res_c2 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.2")
+  res_c3 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.3")
+  res_j <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "J")
+  
+  res <- cbind(
+    c(res_c1$statistic, res_c1$p.value),
+    c(res_c2$statistic, res_c2$p.value),
+    c(res_c3$statistic, res_c3$p.value),
+    c(res_j$statistic, res_j$p.value)
+  )
+  
+  dimnames(res) <- list(c("test", "p-value"), c("C.1","C.2","C.3", "J"))
+  round(x = res, digits = 5)
+  
+})
+
+output$pmodel_bsjk_test_results <- renderPrint({
+  print(pmodel_bsjk_test())
+})
+
+output$pmodel_bsjk_test_download <- downloadHandler(
+  
+  filename = paste0("tobler_pmodel_bsjk_test_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_bsjk_test_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_bsjk_test_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    params <- list(
+      general_observations = input$pmodel_bsjk_test_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      test_summary = pmodel_bsjk_test()
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
 
 # OLS model
 

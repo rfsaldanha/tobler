@@ -1,5 +1,5 @@
 ---
-title: "Baltagi, Song and Koh LM tests for spatial panels report"
+title: "Baltagi, Song, Jung and Koh LM tests for spatial panels report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
