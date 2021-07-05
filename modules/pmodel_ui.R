@@ -71,6 +71,8 @@ pmodel_tab <- argonTabItem(
     argonTab(
       tabName = "Baltagi, Song and Koh LM test",
       h3("Baltagi, Song and Koh LM tests for spatial panels"),
+      tags$a(href="https://doi.org/10.1016/S0304-4076(03)00120-9", target="_blank", "Baltagi, Song and Koh (2003) paper link."),
+      br(),br(),
       actionButton("pmodel_bsk_test_execute", label = "Execute"),
       hr(),
       verbatimTextOutput("pmodel_bsk_test_results"),
@@ -81,6 +83,8 @@ pmodel_tab <- argonTabItem(
     argonTab(
       tabName = "Baltagi, Song, Jung and Koh LM test",
       h3("Baltagi, Song, Jung and Koh LM tests for spatial panels"),
+      tags$a(href="https://doi.org/10.1016/j.jeconom.2006.09.001", target="_blank", "Baltagi, Song, Jung and Koh (2007) paper link."),
+      br(),br(),
       actionButton("pmodel_bsjk_test_execute", label = "Execute"),
       hr(),
       verbatimTextOutput("pmodel_bsjk_test_results"),
