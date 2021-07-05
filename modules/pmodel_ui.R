@@ -70,13 +70,23 @@ pmodel_tab <- argonTabItem(
     ),
     argonTab(
       tabName = "Baltagi, Song and Koh LM test",
-      h3("Baltagi, Song and Koh LM test for spatial panels"),
+      h3("Baltagi, Song and Koh LM tests for spatial panels"),
       actionButton("pmodel_bsk_test_execute", label = "Execute"),
       hr(),
       verbatimTextOutput("pmodel_bsk_test_results"),
       hr(),
       textAreaInput(inputId = "pmodel_bsk_test_general_observations", label = "General observations for PDF report"),
       downloadButton("pmodel_bsk_test_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "Baltagi, Song, Jung and Koh LM test",
+      h3("Baltagi, Song, Jung and Koh LM tests for spatial panels"),
+      actionButton("pmodel_bsjk_test_execute", label = "Execute"),
+      hr(),
+      verbatimTextOutput("pmodel_bsjk_test_results"),
+      hr(),
+      textAreaInput(inputId = "pmodel_bsjk_test_general_observations", label = "General observations for PDF report"),
+      downloadButton("pmodel_bsjk_test_download", "Generate report")
     )
   ),
   br(),
