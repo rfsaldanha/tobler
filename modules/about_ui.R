@@ -30,6 +30,7 @@ about_tab <- argonTabItem(
           tags$li("htmltools"),
           tags$li("spdep"),
           tags$li("spatialreg"),
+          tags$li("sphet"),
           tags$li("plm"),
           tags$li("splm"),
           tags$li("statquotes")
