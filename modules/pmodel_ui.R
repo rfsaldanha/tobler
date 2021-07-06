@@ -71,7 +71,6 @@ pmodel_tab <- argonTabItem(
     argonTab(
       tabName = "Baltagi, Song and Koh LM test",
       h3("Baltagi, Song and Koh LM tests for spatial panels"),
-      withMathJax(),
       tags$ul(
         tags$li(withMathJax("LM joint: One-sided joint LM test for \\( H^a_0 : \\lambda = \\sigma^2_\\mu = 0 \\)")), 
         tags$li(withMathJax("LM mu: Marginal LM test for \\( H^b_0 : \\sigma^2_\\mu = 0 \\) assuming \\( \\lambda = 0 \\)")), 
@@ -91,6 +90,12 @@ pmodel_tab <- argonTabItem(
     argonTab(
       tabName = "Baltagi, Song, Jung and Koh LM test",
       h3("Baltagi, Song, Jung and Koh LM tests for spatial panels"),
+      tags$ul(
+        tags$li(withMathJax("C1: \\( H^h_0 : \\lambda = 0 \\) (allowing \\( \\rho \\neq 0 \\) and \\( \\sigma^2_\\mu > 0 \\) ), and the alternative is \\( H^h_1 : \\lambda \\neq 0 \\) (allowing \\( \\rho \\neq 0 \\) and \\( \\sigma^2_\\mu > 0 \\) ). This is a one-dimensional conditional test for no spatial error correlation allowing the presence of both serial correlation and random region effects.")), 
+        tags$li(withMathJax("C2: \\( H^i_0 : \\rho = 0 \\) (allowing \\( \\lambda \\neq 0 \\) and \\( \\sigma^2_\\mu > 0 \\) ), and the alternative is \\( H^i_1 : \\rho \\neq 0  \\) (allowing \\( \\lambda \\neq 0 \\) and \\(\\sigma^2_\\mu > 0 \\) ). This is a one-dimensional conditional test for no serial correlation allowing the presence of both spatial error correlation and random region effects.")),
+        tags$li(withMathJax("C3: \\( H^j_0 : \\sigma^2_\\mu = 0 \\) (allowing \\( \\rho \\neq 0 \\) and \\( \\lambda \\neq 0 \\) ), and the alternative is \\( H^j_1 : \\sigma^2_\\mu > 0 \\) (allowing \\( \\rho \\neq 0 \\) and \\( \\lambda \\neq 0 \\) ). This is a one-dimensional conditional test for zero random region effects allowing the presence of both serial and spatial error correlation.")),
+        tags$li(withMathJax("J: \\(H^a_0 : \\lambda = \\rho = \\sigma^2_\\mu = 0 \\) , this is the joint hypothesis that there is no spatial or serial error correlation and no random region effects. The alternative \\( H^a_1 \\) is that at least one component is not zero, so that there may be serial or spatial error correlation or random region effects."))
+      ),
       tags$a(href="https://doi.org/10.1016/j.jeconom.2006.09.001", target="_blank", "Baltagi, Song, Jung and Koh (2007) paper link."),
       br(),br(),
       actionButton("pmodel_bsjk_test_execute", label = "Execute"),
