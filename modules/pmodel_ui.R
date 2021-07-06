@@ -69,7 +69,7 @@ pmodel_tab <- argonTabItem(
       downloadButton("pmodel_pesaran_test_download", "Generate report")
     ),
     argonTab(
-      tabName = "Baltagi, Song and Koh LM test",
+      tabName = "Baltagi, Song and Koh LM tests",
       h3("Baltagi, Song and Koh LM tests for spatial panels"),
       tags$ul(
         tags$li(withMathJax("LM joint: One-sided joint LM test for \\( H^a_0 : \\lambda = \\sigma^2_\\mu = 0 \\)")), 
@@ -88,7 +88,7 @@ pmodel_tab <- argonTabItem(
       downloadButton("pmodel_bsk_test_download", "Generate report")
     ),
     argonTab(
-      tabName = "Baltagi, Song, Jung and Koh LM test",
+      tabName = "Baltagi, Song, Jung and Koh LM tests",
       h3("Baltagi, Song, Jung and Koh LM tests for spatial panels"),
       tags$ul(
         tags$li(withMathJax("C1: \\( H^h_0 : \\lambda = 0 \\) (allowing \\( \\rho \\neq 0 \\) and \\( \\sigma^2_\\mu > 0 \\) ), and the alternative is \\( H^h_1 : \\lambda \\neq 0 \\) (allowing \\( \\rho \\neq 0 \\) and \\( \\sigma^2_\\mu > 0 \\) ). This is a one-dimensional conditional test for no spatial error correlation allowing the presence of both serial correlation and random region effects.")), 
