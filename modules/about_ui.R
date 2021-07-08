@@ -14,27 +14,7 @@ about_tab <- argonTabItem(
         hover_shadow = TRUE,
         title = "About",
         p("Tobler is an R Shiny app and relies on several packages to work."),
-        tags$ul(
-          tags$li("shiny"), 
-          tags$li("argonR"), 
-          tags$li("argonDash"),
-          tags$li("shinycssloaders"),
-          tags$li("tidyverse"),
-          tags$li("glue"),
-          tags$li("DT"),
-          tags$li("rgdal"),
-          tags$li("cleangeo"),
-          tags$li("leaflet"),
-          tags$li("highcharter"),
-          tags$li("tmap"),
-          tags$li("htmltools"),
-          tags$li("spdep"),
-          tags$li("spatialreg"),
-          tags$li("sphet"),
-          tags$li("plm"),
-          tags$li("splm"),
-          tags$li("statquotes")
-        )
+        uiOutput("citation_UI")
       ),
       argonCard(
         width = 12,
