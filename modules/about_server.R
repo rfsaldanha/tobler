@@ -4,7 +4,7 @@ output$session_info <- renderPrint({
   sessionInfo()
 })
 
-packages_names <- c("base", "argonR", "argonDash", "shinycssloaders", "tidyverse", "glue", "DT", "rgdal", "cleangeo", "leaflet", "highcharter", "tmap", "htmltools", "spdep", "spatialreg", "sphet", "plm", "splm", "statquotes")
+packages_names <- c("base", "shiny", "argonR", "argonDash", "shinycssloaders", "tidyverse", "glue", "DT", "rgdal", "cleangeo", "leaflet", "highcharter", "tmap", "htmltools", "spdep", "spatialreg", "sphet", "plm", "splm", "statquotes")
 citation_ui_list <- list()
 
 for (i in 1:length(packages_names)){
