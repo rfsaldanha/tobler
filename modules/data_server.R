@@ -1,3 +1,11 @@
+output$data_file_UI <- renderUI({
+  if(input$data_file_type == "GML"){
+    fileInput("data_file", label = "", multiple = FALSE, accept = c(".gml", ".geojson", ".json"))
+  } else if(input$data_file_type == "Shapefile") {
+    fileInput("data_file", label = "", multiple = TRUE, accept = c('.shp','.dbf','.sbn','.sbx','.shx','.prj'))
+  }
+})
+
 output$data_panel <- renderUI({
   if(input$data_type == "Panel"){
     variables <- names(geodata_original()@data)
@@ -14,7 +22,27 @@ geodata_original <- reactive({
   
   withProgress(message = "Processing", detail = "Loading data", value = 0,{
     # Load data
-    shape <- readOGR(input$data_file$datapath)
+    if(input$data_file_type == "GML"){
+      # Read GML
+      shape <- readOGR(input$data_file$datapath)
+    } else if(input$data_file_type == "Shapefile") {
+      # Name of the temporary directory where files are uploaded
+      tmp_dir_name <- dirname(input$data_file$datapath[1])
+      
+      # Rename files
+      for (i in 1:nrow(input$data_file)) {
+        file.rename(
+          input$data_file$datapath[i],
+          paste0(tmp_dir_name, "/", input$data_file$name[i])
+        )
+      }
+      
+      # Read shapefile
+      shape <- readOGR(paste(tmp_dir_name,
+                             input$data_file$name[grep(pattern = "*.shp$", input$data_file$name)],
+                             sep = "/"
+      ))
+    }
     incProgress(amount = 0.3, detail = "Data loaded")
     
     # Validate and clean data
