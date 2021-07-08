@@ -17,7 +17,7 @@ for (i in 1:length(packages_names)){
     border_level = 2,
     hover_shadow = TRUE,
     title = packages_names[i],
-    HTML(capture.output(cat(format(citation(packages_names[i]), "text"), sep = "<br><br>")))
+    markdown(capture.output(cat(format(citation(packages_names[i]), "text"), sep = "<br><br>")))
   )
 }
 
