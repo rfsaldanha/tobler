@@ -388,7 +388,7 @@ output$model_sem_gmm_download <- downloadHandler(
       model_specification = esp(),
       model_endog = endog,
       model_instruments = instruments,
-      model_summary = summary(model_sem_gmm())
+      model_summary = summary(model_sem_gmm(), Hausman = TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -731,7 +731,7 @@ output$model_slx_stsls_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_options = input$model_slx_stsls_options,
-      model_summary = summary(model_slx_stsls()),
+      model_summary = summary(model_slx_stsls(), Hausman = TRUE),
       model_impacts = impacts
     )
     
