@@ -783,10 +783,18 @@ model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
     instruments <- NULL
   }
   
-  spreg(
-    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-    model = "error", Durbin = TRUE, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
-  )
+  if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+      model = "error", listw2 = w_matrix_secondary$listw, Durbin = TRUE, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+    )
+  } else {
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+      model = "error", Durbin = TRUE, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+    )
+  }
+
 })
 
 output$model_sdem_gmm_summary <- renderPrint({
@@ -855,6 +863,7 @@ output$model_sdem_gmm_download <- downloadHandler(
       model_specification = esp(),
       model_endog = endog,
       model_instruments = instruments,
+      model_options = input$model_sdem_gmm_options,
       model_summary = summary(model_sdem_gmm()),
       model_impacts = impacts
     )
