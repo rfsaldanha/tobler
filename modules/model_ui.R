@@ -205,6 +205,27 @@ model_tab <- argonTabItem(
       downloadButton("model_slx_ml_download", "Generate report")
     ),
     argonTab(
+      tabName = "SLX (STSLS)",
+      active = FALSE,
+      h3("SLX (STSLS)"),
+      p("Spatial Lag X (SLX) model with Generalized Spatial Two Stage Least Squares (GSTSLS) estimator."),
+      withMathJax("$$ y = X \\beta + WX \\theta + \\varepsilon $$"),
+      checkboxGroupInput("model_slx_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
+      actionButton("model_estimate_slx_stsls", "Estimate", icon = icon("math"), status = "primary"),
+      hr(),
+      h4("Estimation"),
+      verbatimTextOutput("model_slx_stsls_summary"),
+      hr(),
+      h4("Impacts"),
+      verbatimTextOutput("model_slx_stsls_impacts"),
+      hr(),
+      h4("Residual map"),
+      leafletOutput("model_slx_stsls_map", height = 600),
+      hr(),
+      textAreaInput(inputId = "model_slx_stsls_general_observations", label = "General observations for PDF report"),
+      downloadButton("model_slx_stsls_download", "Generate report")
+    ),
+    argonTab(
       tabName = "SDM (ML)",
       active = FALSE,
       h3("SDM (ML)"),

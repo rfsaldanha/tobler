@@ -637,6 +637,113 @@ output$model_slx_ml_download <- downloadHandler(
 )
 
 
+
+# SLX (STSLS)
+model_slx_stsls <- eventReactive(input$model_estimate_slx_stsls, {
+  show_modal()
+  
+  robust_option <- if_else("is_robust" %in% input$model_slx_stsls_options, TRUE, FALSE)
+  
+  if(length(input$model_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$model_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  spreg(
+    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, lag.instr = FALSE, Durbin = TRUE,
+    model = "ols", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+  )
+  
+})
+
+output$model_slx_stsls_summary <- renderPrint({
+  summary(model_slx_stsls(), Hausman = TRUE)
+})
+
+output$model_slx_stsls_impacts <- renderPrint({
+  if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+    summary(sphet::impacts(model_slx_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  } else {
+    cat("Impacts for model with additional endogenous variables not yet available.")
+  }
+})
+
+output$model_slx_stsls_map <- renderLeaflet({
+  geodata_res <- geodata_original()
+  geodata_res@data$residuals <- resid(model_slx_stsls())
+  
+  map <- tm_shape(geodata_res) +
+    tm_fill(col = "residuals",
+            palette = "-RdBu",
+            alpha = 0.7,
+            midpoint = 0,
+            title = "Residuals") +
+    tm_borders()
+  tmap_leaflet(map)
+})
+
+observeEvent(model_slx_stsls(), removeModal())
+
+output$model_slx_stsls_download <- downloadHandler(
+  
+  filename = paste0("tobler_cross_section_slx_stsls_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "model_slx_stsls_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/model_slx_stsls_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    
+    if(length(input$model_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$model_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
+    if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
+      impacts <- summary(sphet::impacts(model_slx_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+    } else {
+      impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
+    }
+    
+    params <- list(
+      general_observations = input$model_slx_stsls_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      original_data = geodata_original()@data,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = esp(),
+      model_endog = endog,
+      model_instruments = instruments,
+      model_options = input$model_slx_stsls_options,
+      model_summary = summary(model_slx_stsls()),
+      model_impacts = impacts
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
 # SDM (ML)
 model_sdm_ml <- eventReactive(input$model_estimate_sdm_ml, {
   show_modal()
