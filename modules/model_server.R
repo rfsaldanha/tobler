@@ -470,8 +470,6 @@ output$model_sac_ml_download <- downloadHandler(
 model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   show_modal()
   
-  robust_option <- if_else("is_robust" %in% input$model_sac_gstsls_options, TRUE, FALSE)
-  
   if(length(input$model_endog_variable) > 0){
     endog <- paste0(" ~ ", paste0(input$model_endog_variable, collapse = " + "))
   } else (
@@ -487,12 +485,12 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
     spreg(
       formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "sarar",  listw2 = w_matrix_secondary$listw, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+      model = "sarar",  listw2 = w_matrix_secondary$listw, step1.c = TRUE, het = FALSE, endog = endog, instruments = instruments
     )
   } else {
     spreg(
       formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "sarar", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+      model = "sarar", step1.c = TRUE, het = FALSE, endog = endog, instruments = instruments
     )
   }
   

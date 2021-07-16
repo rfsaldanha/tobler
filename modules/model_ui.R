@@ -169,7 +169,7 @@ model_tab <- argonTabItem(
       p("Spatial Autocorrelation Model (SAC) with Generalized Spatial Two Stage Least Squares (GSTSLS) estimator."),
       withMathJax("$$ y = \\lambda Wy + X \\beta + \\xi $$"),
       withMathJax("$$ \\xi = \\rho W \\xi + \\varepsilon $$"),
-      checkboxGroupInput("model_sac_gstsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust", "Use secondary weights matrix for error term" = "use_secondary_w_matrix")),
+      checkboxGroupInput("model_sac_gstsls_options", "Options", choices = c("Use secondary weights matrix for error term" = "use_secondary_w_matrix")),
       actionButton("model_estimate_sac_gstsls", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
