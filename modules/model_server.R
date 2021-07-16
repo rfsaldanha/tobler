@@ -221,15 +221,15 @@ output$model_sar_stsls_download <- downloadHandler(
     } else (
       endog = "None"
     )
-    
+
     if(length(input$model_instruments_variable) > 0){
       instruments <- paste0(" ~ ", paste0(input$model_instruments_variable, collapse = " + "))
     } else {
       instruments <- "None"
     }
-    
+
     if(length(input$model_endog_variable) == 0 & length(input$model_instruments_variable) == 0){
-      impacts< - summary(sphet::impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      impacts <- summary(sphet::impacts(model_sar_stsls(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     } else {
       impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
     }
