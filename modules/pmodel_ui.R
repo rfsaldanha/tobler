@@ -58,6 +58,12 @@ pmodel_tab <- argonTabItem(
       active = TRUE,
       h3("Hausman Test for spatial panel models"), 
       # withMathJax("$$ H = NT(\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W)^\\top (\\hat{\\Sigma}_W - \\hat{\\Sigma}_\\text{FGLS})^1 (\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W) $$"),
+      p("SAC model with random effects and SAC model with fixed effects."),
+      withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SAC}_\\text{FGLS} - \\hat{\\theta}^\\text{SAC}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SAC}_\\text{within} - \\hat{\\Sigma}^\\text{SAC}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SAC}_\\text{FGLS} - \\hat{\\theta}^\\text{SAC}_\\text{within} \\right)$$"),
+      p("SAR model with random effects and SAR model with random effects."),
+      withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SAR}_\\text{FGLS} - \\hat{\\theta}^\\text{SAR}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SAR}_\\text{within} - \\hat{\\Sigma}^\\text{SAR}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SAR}_\\text{FGLS} - \\hat{\\theta}^\\text{SAR}_\\text{within} \\right)$$"),
+      p("SEM model with random effects and SEM model with fixed effects."),
+      withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SEM}_\\text{FGLS} - \\hat{\\theta}^\\text{SEM}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SEM}_\\text{within} - \\hat{\\Sigma}^\\text{SEM}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SEM}_\\text{FGLS} - \\hat{\\theta}^\\text{SEM}_\\text{within} \\right)$$"),
       radioButtons(
         inputId = "pmodel_hausman_spatial_test_error_type", 
         label = h3("Error type"),
