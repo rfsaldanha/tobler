@@ -54,6 +54,24 @@ pmodel_tab <- argonTabItem(
       downloadButton("pmodel_hausman_test_download", "Generate report")
     ),
     argonTab(
+      tabName = "Hausman Test for spatial panel models", 
+      active = TRUE,
+      h3("Hausman Test for spatial panel models"), 
+      # withMathJax("$$ H = NT(\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W)^\\top (\\hat{\\Sigma}_W - \\hat{\\Sigma}_\\text{FGLS})^1 (\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W) $$"),
+      radioButtons(
+        inputId = "pmodel_hausman_spatial_test_error_type", 
+        label = h3("Error type"),
+        choices = list("Baltagi" = "b", "Kapoor, Kelejian and Prucha" = "kkp"), 
+        selected = "b"
+      ),
+      actionButton("pmodel_hausman_spatial_test_execute", label = "Execute"), 
+      hr(),
+      verbatimTextOutput("pmodel_hausman_spatial_test_results"),
+      hr(),
+      textAreaInput(inputId = "pmodel_hausman_spatial_test_general_observations", label = "General observations for PDF report"),
+      downloadButton("pmodel_hausman_spatial_test_download", "Generate report")
+    ),
+    argonTab(
       tabName = "Pesaran's CD Test",
       h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
       radioButtons(
