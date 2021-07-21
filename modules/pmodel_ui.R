@@ -45,6 +45,7 @@ pmodel_tab <- argonTabItem(
       tabName = "Hausman Test", 
       active = TRUE,
       h3("Hausman Test for panel models"), 
+      withMathJax("$$ H = NT(\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W)^\\top (\\hat{\\Sigma}_W - \\hat{\\Sigma}_\\text{FGLS})^1 (\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W) $$"),
       actionButton("pmodel_hausman_test_execute", label = "Execute"), 
       hr(),
       verbatimTextOutput("pmodel_hausman_test_results"),
