@@ -423,9 +423,9 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = TRUE)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = TRUE)
   }
 })
 
@@ -568,9 +568,9 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = TRUE)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = TRUE)
   }
 })
 
@@ -699,9 +699,9 @@ pmodel_sac_gm <- eventReactive(input$pmodel_sac_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = TRUE)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = TRUE)
   }
 })
 
