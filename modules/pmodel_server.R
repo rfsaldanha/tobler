@@ -194,6 +194,7 @@ output$pmodel_hausman_spatial_test_download <- downloadHandler(
       data_type = input$data_type,
       spatial_weights_matrix = w_matrix$name,
       model_specification = pesp(),
+      test_error_type = input$pmodel_hausman_spatial_test_error_type,
       test_summary = pmodel_hausman_spatial_test()
     )
     
