@@ -307,6 +307,25 @@ pmodel_tab <- argonTabItem(
       hr(),
       textAreaInput(inputId = "pmodel_slx_general_observations", label = "General observations for PDF report"),
       downloadButton("pmodel_slx_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "SLX (GM)",
+      h3("SLX (GM)"),
+      p("Spatial Lag X (GM) panel model with Generalized Moments (GM) estimator."),
+      withMathJax("$$ y_t = X_t \\beta + WX_t \\theta + \\varepsilon_t $$"),
+      radioButtons(
+        inputId = "pmodel_slx_gm_effects", 
+        label = h3("Effects"),
+        choices = list("Fixed (within)" = "within", "Random" = "random"), 
+        selected = "within"
+      ),
+      actionButton("pmodel_slx_gm_estimate", label = "Estimate"),
+      hr(),
+      h4("Estimation"),
+      verbatimTextOutput("pmodel_slx_gm_summary"),
+      hr(),
+      textAreaInput(inputId = "pmodel_slx_gm_general_observations", label = "General observations for PDF report"),
+      downloadButton("pmodel_slx_gm_download", "Generate report")
     )
   )
 )

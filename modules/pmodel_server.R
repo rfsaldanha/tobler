@@ -865,17 +865,21 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   
   effects <- input$pmodel_slx_effects
   
+  id_variable <- input$pdata_id_variable
+  other_variables <- input$pdata_variables
+  dependent_variables <- input$pmodel_dependent_variable
   independent_variables <- input$pmodel_independent_variable
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = independent_variables)]
   
   lagged_term <- geodata_original()@data %>%
-    select(starts_with(independent_variables)) %>%
+    select(all_of(independent_variables_full_name)) %>%
     rename(setNames(names(.), paste0('W_', names(.)))) %>%
     mutate(
       across(everything(), lag_independent_variables)
     )
   
   lagged_data <- geodata_original()@data %>%
-    select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
+    select(all_of(id_variable), all_of(other_variables)) %>%
     bind_cols(lagged_term) %>%
     pivot_longer(
       cols = 2:last_col()
@@ -922,6 +926,119 @@ output$pmodel_slx_download <- downloadHandler(
       model_specification = pesp(),
       model_effects = input$pmodel_slx_effects,
       model_summary = summary(pmodel_slx())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
+# SLX GM model
+
+pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
+  show_modal()
+  
+  effects <- input$pmodel_slx_gm_effects
+  
+  id_variable <- input$pdata_id_variable
+  other_variables <- input$pdata_variables
+  dependent_variables <- input$pmodel_dependent_variable
+  independent_variables <- input$pmodel_independent_variable
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = independent_variables)]
+  
+  lagged_term <- geodata_original()@data %>%
+    select(all_of(independent_variables_full_name)) %>%
+    rename(setNames(names(.), paste0('W_', names(.)))) %>%
+    mutate(
+      across(everything(), lag_independent_variables)
+    )
+  
+  lagged_data <- geodata_original()@data %>%
+    select(all_of(id_variable), all_of(other_variables)) %>%
+    bind_cols(lagged_term) %>%
+    pivot_longer(
+      cols = 2:last_col()
+    ) %>%
+    mutate(
+      variable = as.character(gsub("[[:digit:]]", "", name)),
+      time = as.character(gsub("[[:alpha:],_]", "", name))
+    ) %>%
+    select(1, variable, time, value) %>%
+    pivot_wider(
+      names_from = variable,
+      values_from = value
+    ) %>%
+    arrange(1, time)
+  
+  esp <- paste0(pesp(), " + ", paste0("W_", input$pmodel_independent_variable, collapse = " + "))
+  
+  
+  if(length(input$pmodel_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$pmodel_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  if(is.null(endog) | is.null(instruments)){
+    plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+  } else {
+    spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = TRUE)
+  }
+  
+  
+  
+  
+})
+
+output$pmodel_slx_gm_summary <- renderPrint({
+  summary(pmodel_slx_gm())
+})
+
+observeEvent(pmodel_slx_gm(), removeModal())
+
+output$pmodel_slx_gm_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_slx_gm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_slx_gm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_slx_gm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    if(length(input$pmodel_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$pmodel_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
+    params <- list(
+      general_observations = input$pmodel_slx_gm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_endog = endog,
+      model_instruments = instruments,
+      model_effects = input$pmodel_slx_gm_effects,
+      model_summary = summary(pmodel_slx_gm())
     )
     
     rmarkdown::render(tempReport, output_file = file,
