@@ -1020,6 +1020,7 @@ pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
   show_modal()
   
   effects <- input$pmodel_slx_gm_effects
+  lag_instruments <- if_else("lag_instruments" %in% input$pmodel_slx_gm_options, TRUE, FALSE)
   
   id_variable <- input$pdata_id_variable
   other_variables <- input$pdata_variables
@@ -1069,7 +1070,7 @@ pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
   if(is.null(endog) | is.null(instruments)){
     plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
   } else {
-    spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = TRUE)
+    spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   }
   
   
@@ -1115,6 +1116,7 @@ output$pmodel_slx_gm_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_effects = input$pmodel_slx_gm_effects,
+      model_options = input$pmodel_slx_gm_options,
       model_summary = summary(pmodel_slx_gm())
     )
     
