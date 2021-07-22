@@ -194,6 +194,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
+      checkboxGroupInput(inputId = "pmodel_sar_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
       actionButton("pmodel_sar_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
