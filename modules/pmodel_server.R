@@ -627,6 +627,7 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
   show_modal()
   
   effects <- input$pmodel_sem_gm_effects
+  lag_instruments <- if_else("lag_instruments" %in% input$pmodel_sem_gm_options, TRUE, FALSE)
   
   if(length(input$pmodel_endog_variable) > 0){
     endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
@@ -641,9 +642,9 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = TRUE)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = TRUE)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   }
 })
 
@@ -685,6 +686,7 @@ output$pmodel_sem_gm_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_effects = input$pmodel_sem_gm_effects,
+      model_options = input$pmodel_sem_gm_options,
       model_summary = summary(pmodel_sem_gm())
     )
     
