@@ -2,7 +2,6 @@
 FROM rocker/shiny:latest
 # system libraries of general use
 RUN apt-get update && apt-get install -y \
-RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     sudo \
     pandoc \
     pandoc-citeproc \
@@ -10,7 +9,7 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libcairo2-dev \
     libxt-dev \
     libssl-dev \
-    libssh2-1-dev \
+    libssh2-1-dev 
     gdal-bin \
     proj-bin \
     libgdal-dev \
