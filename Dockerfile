@@ -1,5 +1,5 @@
 # get shiny serves plus tidyverse packages image
-FROM rocker/shiny-verse:latest
+FROM rocker/shiny-verse:3.6.3
 # system libraries of general use
 RUN apt-get update && apt-get install -y \
     sudo \
@@ -47,9 +47,9 @@ COPY footer.R ./app
 COPY header.R ./app
 COPY sidebar.R ./app
 COPY LICENSE ./app
-ADD modules/ ./app/modules/
-ADD reports_rmd/ ./app/reports_rmd/
-ADD www/ ./app/www/
+COPY modules/ ./app/modules/
+COPY reports_rmd/ ./app/reports_rmd/
+COPY www/ ./app/www/
 # select port
 EXPOSE 3838
 # run app on container start
