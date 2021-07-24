@@ -3,15 +3,14 @@ FROM rocker/shiny:latest
 # system libraries of general use
 RUN apt-get update && apt-get install -y \
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-    libxml2-dev \
+    sudo \
+    pandoc \
+    pandoc-citeproc \
+    libcurl4-gnutls-dev \
     libcairo2-dev \
-    libsqlite3-dev \
-    libmariadbd-dev \
-    libpq-dev \
-    libssh2-1-dev \
-    unixodbc-dev \
-    libcurl4-openssl-dev \
+    libxt-dev \
     libssl-dev \
+    libssh2-1-dev \
     gdal-bin \
     proj-bin \
     libgdal-dev \
