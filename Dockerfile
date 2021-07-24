@@ -1,5 +1,5 @@
 # get shiny serves plus tidyverse packages image
-FROM rocker/shiny:latest
+FROM rocker/shiny-verse:latest
 # system libraries of general use
 RUN apt-get update && apt-get install -y \
     sudo \
@@ -21,12 +21,10 @@ RUN apt-get update && \
     apt-get clean  
     
 # install R packages required 
-RUN R -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('argonR', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('argonDash', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('shinycssloaders', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('shinyWidgets', repos='http://cran.rstudio.com/')"
-RUN R -e "install.packages('tidyverse', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('glue', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('DT', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('rgdal', repos='http://cran.rstudio.com/')"
