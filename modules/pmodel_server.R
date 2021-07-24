@@ -135,6 +135,77 @@ output$pmodel_hausman_test_download <- downloadHandler(
 )
 
 
+# Spatial Hausman Test
+pmodel_hausman_spatial_test <- eventReactive(input$pmodel_hausman_spatial_test_execute, {
+  
+  error_type <- input$pmodel_hausman_spatial_test_error_type
+  
+  sar_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                     lag = TRUE, model = "random", effect = "individual", spatial.error = "none")
+  
+  sar_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                    lag = TRUE, model = "within", effect = "individual", spatial.error = "none")
+  
+  sem_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                     lag = FALSE, model = "random", effect = "individual", spatial.error = error_type)
+  
+  sem_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                    lag = FALSE, model = "within", effect = "individual", spatial.error = error_type)
+  
+  sac_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                     lag = TRUE, model = "random", effect = "individual", spatial.error = error_type)
+  
+  sac_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                    lag = TRUE, model = "within", effect = "individual", spatial.error = error_type)
+  
+  test_sar <- sphtest(sar_random, sar_fixed)
+  test_sem <- sphtest(sem_random, sem_fixed)
+  test_sac <- sphtest(sac_random, sac_fixed)
+  
+  res <- cbind(
+    c(test_sar$statistic, test_sar$p.value),
+    c(test_sem$statistic, test_sem$p.value),
+    c(test_sac$statistic, test_sac$p.value)
+  )
+  
+  dimnames(res) <- list(c("test", "p-value"), c("SAR","SEM","SAC"))
+  round(x = res, digits = 5)
+  
+})
+
+output$pmodel_hausman_spatial_test_results <- renderPrint({
+  print(pmodel_hausman_spatial_test())
+})
+
+output$pmodel_hausman_spatial_test_download <- downloadHandler(
+  
+  filename = paste0("tobler_pmodel_hausman_spatial_test_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_hausman_spatial_test_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_hausman_spatial_test_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    params <- list(
+      general_observations = input$pmodel_hausman_spatial_test_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      test_error_type = input$pmodel_hausman_spatial_test_error_type,
+      test_summary = pmodel_hausman_spatial_test()
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
 
 # Pesaran test
 pmodel_pesaran_test <- eventReactive(input$pmodel_pesaran_test_execute, {
@@ -409,6 +480,7 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   show_modal()
   
   effects <- input$pmodel_sar_gm_effects
+  lag_instruments <- if_else("lag_instruments" %in% input$pmodel_sar_gm_options, TRUE, FALSE)
   
   if(length(input$pmodel_endog_variable) > 0){
     endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
@@ -423,9 +495,9 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   }
 })
 
@@ -485,6 +557,7 @@ output$pmodel_sar_gm_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_effects = input$pmodel_sar_gm_effects,
+      model_options = input$pmodel_sar_gm_options,
       model_summary = summary(pmodel_sar_gm()),
       model_impacts = impacts
     )
@@ -554,6 +627,7 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
   show_modal()
   
   effects <- input$pmodel_sem_gm_effects
+  lag_instruments <- if_else("lag_instruments" %in% input$pmodel_sem_gm_options, TRUE, FALSE)
   
   if(length(input$pmodel_endog_variable) > 0){
     endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
@@ -568,9 +642,9 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   }
 })
 
@@ -612,6 +686,7 @@ output$pmodel_sem_gm_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_effects = input$pmodel_sem_gm_effects,
+      model_options = input$pmodel_sem_gm_options,
       model_summary = summary(pmodel_sem_gm())
     )
     
@@ -685,6 +760,7 @@ pmodel_sac_gm <- eventReactive(input$pmodel_sac_gm_estimate, {
   show_modal()
   
   effects <- input$pmodel_sac_gm_effects
+  lag_instruments <- if_else("lag_instruments" %in% input$pmodel_sac_gm_options, TRUE, FALSE)
   
   if(length(input$pmodel_endog_variable) > 0){
     endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
@@ -699,9 +775,9 @@ pmodel_sac_gm <- eventReactive(input$pmodel_sac_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments)
+    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
   }
 })
 
@@ -761,6 +837,7 @@ output$pmodel_sac_gm_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_effects = input$pmodel_sac_gm_effects,
+      model_options = input$pmodel_sar_gm_options,
       model_summary = summary(pmodel_sac_gm()),
       model_impacts = impacts
     )
@@ -865,17 +942,21 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   
   effects <- input$pmodel_slx_effects
   
+  id_variable <- input$pdata_id_variable
+  other_variables <- input$pdata_variables
+  dependent_variables <- input$pmodel_dependent_variable
   independent_variables <- input$pmodel_independent_variable
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = independent_variables)]
   
   lagged_term <- geodata_original()@data %>%
-    select(starts_with(independent_variables)) %>%
+    select(all_of(independent_variables_full_name)) %>%
     rename(setNames(names(.), paste0('W_', names(.)))) %>%
     mutate(
       across(everything(), lag_independent_variables)
     )
   
   lagged_data <- geodata_original()@data %>%
-    select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
+    select(all_of(id_variable), all_of(other_variables)) %>%
     bind_cols(lagged_term) %>%
     pivot_longer(
       cols = 2:last_col()
@@ -922,6 +1003,121 @@ output$pmodel_slx_download <- downloadHandler(
       model_specification = pesp(),
       model_effects = input$pmodel_slx_effects,
       model_summary = summary(pmodel_slx())
+    )
+    
+    rmarkdown::render(tempReport, output_file = file,
+                      params = params,
+                      envir = new.env(parent = globalenv())
+    )
+  }
+)
+
+
+
+# SLX GM model
+
+pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
+  show_modal()
+  
+  effects <- input$pmodel_slx_gm_effects
+  lag_instruments <- if_else("lag_instruments" %in% input$pmodel_slx_gm_options, TRUE, FALSE)
+  
+  id_variable <- input$pdata_id_variable
+  other_variables <- input$pdata_variables
+  dependent_variables <- input$pmodel_dependent_variable
+  independent_variables <- input$pmodel_independent_variable
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = independent_variables)]
+  
+  lagged_term <- geodata_original()@data %>%
+    select(all_of(independent_variables_full_name)) %>%
+    rename(setNames(names(.), paste0('W_', names(.)))) %>%
+    mutate(
+      across(everything(), lag_independent_variables)
+    )
+  
+  lagged_data <- geodata_original()@data %>%
+    select(all_of(id_variable), all_of(other_variables)) %>%
+    bind_cols(lagged_term) %>%
+    pivot_longer(
+      cols = 2:last_col()
+    ) %>%
+    mutate(
+      variable = as.character(gsub("[[:digit:]]", "", name)),
+      time = as.character(gsub("[[:alpha:],_]", "", name))
+    ) %>%
+    select(1, variable, time, value) %>%
+    pivot_wider(
+      names_from = variable,
+      values_from = value
+    ) %>%
+    arrange(1, time)
+  
+  esp <- paste0(pesp(), " + ", paste0("W_", input$pmodel_independent_variable, collapse = " + "))
+  
+  
+  if(length(input$pmodel_endog_variable) > 0){
+    endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+  } else (
+    endog = NULL
+  )
+  
+  if(length(input$pmodel_instruments_variable) > 0){
+    instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+  } else {
+    instruments <- NULL
+  }
+  
+  if(is.null(endog) | is.null(instruments)){
+    plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+  } else {
+    spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+  }
+  
+  
+  
+  
+})
+
+output$pmodel_slx_gm_summary <- renderPrint({
+  summary(pmodel_slx_gm())
+})
+
+observeEvent(pmodel_slx_gm(), removeModal())
+
+output$pmodel_slx_gm_download <- downloadHandler(
+  
+  filename = paste0("tobler_panel_slx_gm_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
+  content = function(file) {
+    
+    tempDir <- tempdir()
+    tempReport <- file.path(tempDir, "pmodel_slx_gm_report.Rmd")
+    tempLogo <- file.path(tempDir, "tobleR.png")
+    file.copy("reports_rmd/pmodel_slx_gm_report.Rmd", tempReport, overwrite = TRUE)
+    file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
+    
+    if(length(input$pmodel_endog_variable) > 0){
+      endog <- paste0(" ~ ", paste0(input$pmodel_endog_variable, collapse = " + "))
+    } else (
+      endog = "None"
+    )
+    
+    if(length(input$pmodel_instruments_variable) > 0){
+      instruments <- paste0(" ~ ", paste0(input$pmodel_instruments_variable, collapse = " + "))
+    } else {
+      instruments <- "None"
+    }
+    
+    params <- list(
+      general_observations = input$pmodel_slx_gm_general_observations,
+      data_file = input$data_file[1],
+      data_type = input$data_type,
+      spatial_weights_matrix = w_matrix$name,
+      model_specification = pesp(),
+      model_endog = endog,
+      model_instruments = instruments,
+      model_effects = input$pmodel_slx_gm_effects,
+      model_options = input$pmodel_slx_gm_options,
+      model_summary = summary(pmodel_slx_gm())
     )
     
     rmarkdown::render(tempReport, output_file = file,

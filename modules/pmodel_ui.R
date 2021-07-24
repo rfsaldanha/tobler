@@ -45,12 +45,37 @@ pmodel_tab <- argonTabItem(
       tabName = "Hausman Test", 
       active = TRUE,
       h3("Hausman Test for panel models"), 
+      withMathJax("$$ H = NT(\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W)^\\top (\\hat{\\Sigma}_W - \\hat{\\Sigma}_\\text{FGLS})^1 (\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W) $$"),
       actionButton("pmodel_hausman_test_execute", label = "Execute"), 
       hr(),
       verbatimTextOutput("pmodel_hausman_test_results"),
       hr(),
       textAreaInput(inputId = "pmodel_hausman_test_general_observations", label = "General observations for PDF report"),
       downloadButton("pmodel_hausman_test_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "Hausman Test for spatial panel models", 
+      active = TRUE,
+      h3("Hausman Test for spatial panel models"), 
+      # withMathJax("$$ H = NT(\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W)^\\top (\\hat{\\Sigma}_W - \\hat{\\Sigma}_\\text{FGLS})^1 (\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W) $$"),
+      p("SAC model with random effects and SAC model with fixed effects."),
+      withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SAC}_\\text{FGLS} - \\hat{\\theta}^\\text{SAC}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SAC}_\\text{within} - \\hat{\\Sigma}^\\text{SAC}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SAC}_\\text{FGLS} - \\hat{\\theta}^\\text{SAC}_\\text{within} \\right)$$"),
+      p("SAR model with random effects and SAR model with random effects."),
+      withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SAR}_\\text{FGLS} - \\hat{\\theta}^\\text{SAR}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SAR}_\\text{within} - \\hat{\\Sigma}^\\text{SAR}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SAR}_\\text{FGLS} - \\hat{\\theta}^\\text{SAR}_\\text{within} \\right)$$"),
+      p("SEM model with random effects and SEM model with fixed effects."),
+      withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SEM}_\\text{FGLS} - \\hat{\\theta}^\\text{SEM}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SEM}_\\text{within} - \\hat{\\Sigma}^\\text{SEM}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SEM}_\\text{FGLS} - \\hat{\\theta}^\\text{SEM}_\\text{within} \\right)$$"),
+      radioButtons(
+        inputId = "pmodel_hausman_spatial_test_error_type", 
+        label = h3("Error type"),
+        choices = list("Baltagi" = "b", "Kapoor, Kelejian and Prucha" = "kkp"), 
+        selected = "b"
+      ),
+      actionButton("pmodel_hausman_spatial_test_execute", label = "Execute"), 
+      hr(),
+      verbatimTextOutput("pmodel_hausman_spatial_test_results"),
+      hr(),
+      textAreaInput(inputId = "pmodel_hausman_spatial_test_general_observations", label = "General observations for PDF report"),
+      downloadButton("pmodel_hausman_spatial_test_download", "Generate report")
     ),
     argonTab(
       tabName = "Pesaran's CD Test",
@@ -169,6 +194,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
+      checkboxGroupInput(inputId = "pmodel_sar_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
       actionButton("pmodel_sar_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
@@ -213,6 +239,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
+      checkboxGroupInput(inputId = "pmodel_sem_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
       actionButton("pmodel_sem_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
@@ -257,6 +284,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
+      checkboxGroupInput(inputId = "pmodel_sac_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
       actionButton("pmodel_sac_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
@@ -307,6 +335,26 @@ pmodel_tab <- argonTabItem(
       hr(),
       textAreaInput(inputId = "pmodel_slx_general_observations", label = "General observations for PDF report"),
       downloadButton("pmodel_slx_download", "Generate report")
+    ),
+    argonTab(
+      tabName = "SLX (GM)",
+      h3("SLX (GM)"),
+      p("Spatial Lag X (GM) panel model with Generalized Moments (GM) estimator."),
+      withMathJax("$$ y_t = X_t \\beta + WX_t \\theta + \\varepsilon_t $$"),
+      radioButtons(
+        inputId = "pmodel_slx_gm_effects", 
+        label = h3("Effects"),
+        choices = list("Fixed (within)" = "within", "Random" = "random"), 
+        selected = "within"
+      ),
+      checkboxGroupInput(inputId = "pmodel_slx_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
+      actionButton("pmodel_slx_gm_estimate", label = "Estimate"),
+      hr(),
+      h4("Estimation"),
+      verbatimTextOutput("pmodel_slx_gm_summary"),
+      hr(),
+      textAreaInput(inputId = "pmodel_slx_gm_general_observations", label = "General observations for PDF report"),
+      downloadButton("pmodel_slx_gm_download", "Generate report")
     )
   )
 )
