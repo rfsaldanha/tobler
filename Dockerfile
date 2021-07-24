@@ -21,6 +21,7 @@ FROM rocker/shiny-verse:3.6.3
 #    apt-get clean  
     
 # install R packages required 
+RUN R -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
 #RUN R -e "install.packages('argonR', repos='http://cran.rstudio.com/')"
 #RUN R -e "install.packages('argonDash', repos='http://cran.rstudio.com/')"
 #RUN R -e "install.packages('shinycssloaders', repos='http://cran.rstudio.com/')"
@@ -42,19 +43,18 @@ FROM rocker/shiny-verse:3.6.3
 #RUN R -e "devtools::install_github('gpiras/sphet')"
 # copy the app to the image
 
-COPY tobler_app.Rproj ./app
-COPY app.R ./app
-COPY footer.R ./app
-COPY header.R ./app
-COPY sidebar.R ./app
-COPY LICENSE ./app
-RUN mkdir ./app/modules/
-COPY modules/* ./app/modules/
-RUN mkdir ./app/reports_rmd/
-COPY reports_rmd/* ./app/reports_rmd/
-RUN mkdir ./app/www/
-COPY www/* ./app/www/
+COPY tobler_app.Rproj /srv/shiny-server/
+COPY app.R /srv/shiny-server/
+COPY footer.R /srv/shiny-server/
+COPY header.R /srv/shiny-server/
+COPY sidebar.R /srv/shiny-server/
+COPY LICENSE /srv/shiny-server/
+COPY modules /srv/shiny-server/
+COPY reports_rmd /srv/shiny-server/
+COPY www /srv/shiny-server/
 # select port
 EXPOSE 3838
-# run app on container start
-CMD ["R", "-e", "shiny::runApp('/app', host = '0.0.0.0', port = 3838)"]
+# allow permission
+RUN sudo chown -R shiny:shiny /srv/shiny-server
+# run app
+CMD ["/usr/bin/shiny-server.sh"]
