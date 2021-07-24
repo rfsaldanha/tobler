@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     
 # install R packages required 
 RUN R -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
+RUN R -e "install.packages('tidyverse', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('argonR', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('argonDash', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('shinycssloaders', repos='http://cran.rstudio.com/')"
