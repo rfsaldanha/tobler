@@ -1,33 +1,29 @@
-FROM rocker/r-ver:3.6.3
-
+# get shiny serves plus tidyverse packages image
+FROM rocker/shiny:latest
+# system libraries of general use
 RUN apt-get update && apt-get install -y \
-    sudo \
-    gdebi-core \
-    pandoc \
-    pandoc-citeproc \
-    libcurl4-gnutls-dev \
+RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+    libxml2-dev \
     libcairo2-dev \
-    libxt-dev \
-    xtail \
-    wget \
+    libsqlite3-dev \
+    libmariadbd-dev \
+    libpq-dev \
+    libssh2-1-dev \
+    unixodbc-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
     gdal-bin \
     proj-bin \
     libgdal-dev \
     libproj-dev
-
-
-# Download and install shiny server
-RUN wget --no-verbose https://download3.rstudio.org/ubuntu-14.04/x86_64/VERSION -O "version.txt" && \
-    VERSION=$(cat version.txt)  && \
-    wget --no-verbose "https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
-    gdebi -n ss-latest.deb && \
-    rm -f version.txt ss-latest.deb && \
-    . /etc/environment && \
-    R -e "install.packages(c('shiny', 'rmarkdown'), repos='$MRAN')" && \
-    cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/ && \
-    chown shiny:shiny /var/lib/shiny-server
-
+    
+# update system libraries
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean  
+    
 # install R packages required 
+RUN R -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('argonR', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('argonDash', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('shinycssloaders', repos='http://cran.rstudio.com/')"
@@ -49,16 +45,16 @@ RUN R -e "install.packages('splm', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('statquotes', repos='http://cran.rstudio.com/')"
 RUN R -e "devtools::install_github('gpiras/sphet')"
 # copy the app to the image
-COPY tobler_app.Rproj /srv/shiny-server/
-COPY app.R /srv/shiny-server/
-COPY footer.R /srv/shiny-server/
-COPY header.R /srv/shiny-server/
-COPY sidebar.R /srv/shiny-server/
-COPY LICENSE /srv/shiny-server/
-COPY modules /srv/shiny-server/modules
-COPY reports_rmd /srv/shiny-server/reports_rmd
-COPY www /srv/shiny-server/www
-
+COPY tobler_app.Rproj ./app
+COPY app.R ./app
+COPY footer.R ./app
+COPY header.R ./app
+COPY sidebar.R ./app
+COPY LICENSE ./app
+COPY modules ./app/modules
+COPY reports_rmd ./app/reports_rmd
+COPY www ./app/www
+# select port
 EXPOSE 3838
-
-CMD ["/usr/bin/shiny-server.sh"]
+# run app on container start
+CMD ["R", "-e", "shiny::runApp('/app', host = '0.0.0.0', port = 3838)"]
