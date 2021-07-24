@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libxt-dev \
     libssl-dev \
     libssh2-1-dev \
+    libudunits2-dev \
     gdal-bin \
     proj-bin \
     libgdal-dev \
