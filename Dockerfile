@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     libcairo2-dev \
     libxt-dev \
     libssl-dev \
-    libssh2-1-dev 
+    libssh2-1-dev \
     gdal-bin \
     proj-bin \
     libgdal-dev \
