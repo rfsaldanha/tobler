@@ -1,24 +1,24 @@
 # get shiny serves plus tidyverse packages image
 FROM rocker/shiny-verse:3.6.3
 # system libraries of general use
-RUN apt-get update && apt-get install -y \
-    sudo \
-    pandoc \
-    pandoc-citeproc \
-    libcurl4-gnutls-dev \
-    libcairo2-dev \
-    libxt-dev \
-    libssl-dev \
-    libssh2-1-dev \
-    gdal-bin \
-    proj-bin \
-    libgdal-dev \
-    libproj-dev
+#RUN apt-get update && apt-get install -y \
+#    sudo \
+#    pandoc \
+#    pandoc-citeproc \
+#    libcurl4-gnutls-dev \
+#    libcairo2-dev \
+#    libxt-dev \
+#    libssl-dev \
+#    libssh2-1-dev \
+#    gdal-bin \
+#    proj-bin \
+#    libgdal-dev \
+#    libproj-dev
     
 # update system libraries
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get clean  
+#RUN apt-get update && \
+#    apt-get upgrade -y && \
+#    apt-get clean  
     
 # install R packages required 
 #RUN R -e "install.packages('argonR', repos='http://cran.rstudio.com/')"
@@ -41,15 +41,16 @@ RUN apt-get update && \
 #RUN R -e "install.packages('statquotes', repos='http://cran.rstudio.com/')"
 #RUN R -e "devtools::install_github('gpiras/sphet')"
 # copy the app to the image
+
 COPY tobler_app.Rproj ./app
 COPY app.R ./app
 COPY footer.R ./app
 COPY header.R ./app
 COPY sidebar.R ./app
 COPY LICENSE ./app
-COPY modules/ ./app/modules/
-COPY reports_rmd/ ./app/reports_rmd/
-COPY www/ ./app/www/
+COPY modules ./app/modules/
+COPY reports_rmd ./app/reports_rmd/
+COPY www ./app/www/
 # select port
 EXPOSE 3838
 # run app on container start
