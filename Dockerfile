@@ -48,9 +48,12 @@ COPY footer.R ./app
 COPY header.R ./app
 COPY sidebar.R ./app
 COPY LICENSE ./app
-ADD modules ./app/modules/
-ADD reports_rmd ./app/reports_rmd/
-ADD www ./app/www/
+RUN mkdir ./app/modules/
+COPY modules/* ./app/modules/
+RUN mkdir ./app/reports_rmd/
+COPY reports_rmd/* ./app/reports_rmd/
+RUN mkdir ./app/www/
+COPY www/* ./app/www/
 # select port
 EXPOSE 3838
 # run app on container start
