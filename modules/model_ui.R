@@ -278,6 +278,7 @@ model_tab <- argonTabItem(
       withMathJax("$$ y = X \\beta + WX \\theta + \\xi $$"),
       withMathJax("$$ \\xi = \\rho W \\xi + \\varepsilon$$"),
       checkboxGroupInput("model_sdem_gmm_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust", "Use secondary weights matrix for error term" = "use_secondary_w_matrix")),
+      uiOutput("model_sdem_gmm_durbin_var_UI"),
       actionButton("model_estimate_sdem_gmm", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),

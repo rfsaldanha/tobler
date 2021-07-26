@@ -17,6 +17,7 @@ params:
   model_endog: NA
   model_instruments: NA
   model_options: NA
+  model_durbin_var: NA
   model_summary: NA
   model_impacts: NA
 ---
@@ -49,6 +50,7 @@ cat(params$model_specification)
 
 * Endogenous variables: `r params$model_endog`
 * External instruments variables: `r params$model_instruments`
+* Explanatory variables to lag: `r params$model_durbin_var`
 
 ## Model options
 

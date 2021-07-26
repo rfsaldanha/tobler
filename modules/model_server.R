@@ -942,6 +942,11 @@ output$model_sdem_ml_download <- downloadHandler(
 
 
 # SDEM (GMM)
+output$model_sdem_gmm_durbin_var_UI <- renderUI({
+  req(input$model_independent_variable)
+  multiInput("model_sdem_gmm_durbin_var", label = "Select explanatory variables to lag (leave empty for all)", choices = input$model_independent_variable)
+})
+
 model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
   show_modal()
   
@@ -959,15 +964,21 @@ model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
     instruments <- NULL
   }
   
+  if(length(input$model_sdem_gmm_durbin_var) > 0){
+    durbin_var <- formula(paste0(" ~ ", paste0(input$model_sdem_gmm_durbin_var, collapse = " + ")))
+  } else {
+    durbin_var = TRUE
+  }
+  
   if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
     spreg(
       formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "error", listw2 = w_matrix_secondary$listw, Durbin = TRUE, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+      model = "error", listw2 = w_matrix_secondary$listw, Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
     )
   } else {
     spreg(
       formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "error", Durbin = TRUE, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+      model = "error", Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
     )
   }
 
@@ -1030,6 +1041,12 @@ output$model_sdem_gmm_download <- downloadHandler(
       impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
     }
     
+    if(length(input$model_sdem_gmm_durbin_var) > 0){
+      durbin_var <- paste0(" ~ ", paste0(input$model_sdem_gmm_durbin_var, collapse = " + "))
+    } else {
+      durbin_var = "All"
+    }
+    
     params <- list(
       general_observations = input$model_sdem_gmm_general_observations,
       data_file = input$data_file[1],
@@ -1040,6 +1057,7 @@ output$model_sdem_gmm_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_options = input$model_sdem_gmm_options,
+      model_durbin_var = durbin_var,
       model_summary = summary(model_sdem_gmm()),
       model_impacts = impacts
     )
