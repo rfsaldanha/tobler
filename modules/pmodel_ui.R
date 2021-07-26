@@ -80,6 +80,7 @@ pmodel_tab <- argonTabItem(
     argonTab(
       tabName = "Pesaran's CD Test",
       h3("Pesaran's Cross Section test for cross sectional dependence in panel models"),
+      withMathJax("$$ H = \\text{ no global/local cross-sectional correlation} $$"),
       radioButtons(
         inputId = "pmodel_pesaran_test_type", 
         label = h3("Type"),
