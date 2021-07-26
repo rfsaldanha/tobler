@@ -351,6 +351,7 @@ pmodel_tab <- argonTabItem(
         selected = "within"
       ),
       checkboxGroupInput(inputId = "pmodel_slx_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
+      uiOutput("pmodel_slx_gm_durbin_var_UI"),
       actionButton("pmodel_slx_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),

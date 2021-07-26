@@ -13,6 +13,7 @@ params:
   data_type: NA
   spatial_weights_matrix: NA
   model_specification: NA
+  model_durbin_var: NA
   model_endog: NA
   model_instruments: NA
   model_effects: NA
@@ -45,6 +46,7 @@ cat(params$model_specification)
 * Endogenous variables: `r params$model_endog`
 * External instruments variables: `r params$model_instruments`
 * Lag external instrument variables: `r if_else("lag_instruments" %in% params$model_options, "Yes", "No")`
+* Explanatory variables to lag: `r params$model_durbin_var`
 
 ## Model summary
 
