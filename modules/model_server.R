@@ -656,6 +656,11 @@ output$model_slx_ml_download <- downloadHandler(
 
 
 # SLX (STSLS)
+output$model_slx_stsls_durbin_var_UI <- renderUI({
+  req(input$model_independent_variable)
+  multiInput("model_slx_stsls_durbin_var", label = "Select explanatory variables to lag (leave empty for all)", choices = input$model_independent_variable)
+})
+
 model_slx_stsls <- eventReactive(input$model_estimate_slx_stsls, {
   show_modal()
   
@@ -673,8 +678,14 @@ model_slx_stsls <- eventReactive(input$model_estimate_slx_stsls, {
     instruments <- NULL
   }
   
+  if(length(input$model_slx_stsls_durbin_var) > 0){
+    durbin_var <- formula(paste0(" ~ ", paste0(input$model_slx_stsls_durbin_var, collapse = " + ")))
+  } else {
+    durbin_var = TRUE
+  }
+  
   spreg(
-    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, lag.instr = FALSE, Durbin = TRUE,
+    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, lag.instr = FALSE, Durbin = durbin_var,
     model = "ols", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
   )
   
@@ -738,6 +749,12 @@ output$model_slx_stsls_download <- downloadHandler(
       impacts <- cat("Impacts for model with additional endogenous variables not yet available.")
     }
     
+    if(length(input$model_slx_stsls_durbin_var) > 0){
+      durbin_var <- paste0(" ~ ", paste0(input$model_slx_stsls_durbin_var, collapse = " + "))
+    } else {
+      durbin_var = "All"
+    }
+    
     params <- list(
       general_observations = input$model_slx_stsls_general_observations,
       data_file = input$data_file[1],
@@ -748,6 +765,7 @@ output$model_slx_stsls_download <- downloadHandler(
       model_endog = endog,
       model_instruments = instruments,
       model_options = input$model_slx_stsls_options,
+      model_durbin_var = durbin_var,
       model_summary = summary(model_slx_stsls(), Hausman = TRUE),
       model_impacts = impacts
     )
