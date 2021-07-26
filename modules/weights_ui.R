@@ -125,7 +125,7 @@ weights_tab <- argonTabItem(
         ),
         argonTab(
           tabName = "Secondary weights matrix",
-          active = TRUE,
+          active = FALSE,
           h3("Secondary weights matrix"),
           uiOutput("matrix_secondary_info1_UI", ),
           uiOutput("matrix_secondary_info2_UI", ),
