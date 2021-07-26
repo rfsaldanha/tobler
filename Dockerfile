@@ -52,9 +52,9 @@ COPY footer.R /srv/shiny-server/
 COPY header.R /srv/shiny-server/
 COPY sidebar.R /srv/shiny-server/
 COPY LICENSE /srv/shiny-server/
-COPY modules /srv/shiny-server/modules/
-COPY reports_rmd /srv/shiny-server/reports_rmd/
-COPY www /srv/shiny-server/www/
+COPY modules/* /srv/shiny-server/modules/
+COPY reports_rmd/* /srv/shiny-server/reports_rmd/
+COPY www/* /srv/shiny-server/www/
 
 # select port
 EXPOSE 3838
