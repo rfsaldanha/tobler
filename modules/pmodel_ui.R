@@ -310,6 +310,7 @@ pmodel_tab <- argonTabItem(
         selected = "within"
       ),
       uiOutput("pmodel_sdem_error_type_UI"),
+      uiOutput("pmodel_sdem_durbin_var_UI"),
       actionButton("pmodel_sdem_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
