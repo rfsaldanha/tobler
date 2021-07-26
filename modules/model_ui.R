@@ -255,6 +255,7 @@ model_tab <- argonTabItem(
       p("Spatial Durbin Error Model (SDEM) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = X \\beta + WX \\theta + \\xi $$"),
       withMathJax("$$ \\xi = \\lambda W \\xi + \\varepsilon$$"),
+      uiOutput("model_sdem_ml_durbin_var_UI"),
       actionButton("model_estimate_sdem_ml", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
