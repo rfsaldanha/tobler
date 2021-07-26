@@ -5,7 +5,7 @@ output$model_dependent_variable_UI <- renderUI({
 
 output$model_independent_variable_UI <- renderUI({
   variables <- names(geodata_original()@data)
-  multiInput("model_independent_variable", label = "Independent variables", choices = variables)
+  multiInput("model_independent_variable", label = "Explanatory variables", choices = variables)
 })
 
 output$model_endog_variable_UI <- renderUI({
@@ -576,10 +576,21 @@ output$model_sac_gstsls_download <- downloadHandler(
 
 
 # SLX (ML)
+output$model_slx_ml_durbin_var_UI <- renderUI({
+  req(input$model_independent_variable)
+  multiInput("model_slx_ml_durbin_var", label = "Select explanatory variables to lag (leave empty for all)", choices = input$model_independent_variable)
+})
+
 model_slx_ml <- eventReactive(input$model_estimate_slx_ml, {
   show_modal()
   
-  lmSLX(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
+  if(length(input$model_slx_ml_durbin_var) > 0){
+    durbin_var <- formula(paste0(" ~ ", paste0(input$model_slx_ml_durbin_var, collapse = " + ")))
+  } else {
+    durbin_var = TRUE
+  }
+  
+  lmSLX(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = durbin_var)
 })
 
 output$model_slx_ml_summary <- renderPrint({
@@ -607,7 +618,7 @@ output$model_slx_ml_map <- renderLeaflet({
 observeEvent(model_slx_ml(), removeModal())
 
 output$model_slx_ml_download <- downloadHandler(
-  
+
   filename = paste0("tobler_cross_section_slx_ml_model_report_", format(Sys.time(), "%Y.%m.%d_%H.%M.%S"), ".pdf"),
   content = function(file) {
     
@@ -617,6 +628,11 @@ output$model_slx_ml_download <- downloadHandler(
     file.copy("reports_rmd/model_slx_ml_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$model_slx_ml_durbin_var) > 0){
+      durbin_var <- paste0(" ~ ", paste0(input$model_slx_ml_durbin_var, collapse = " + "))
+    } else {
+      durbin_var = "All"
+    }
     
     params <- list(
       general_observations = input$model_slx_ml_general_observations,
@@ -625,6 +641,7 @@ output$model_slx_ml_download <- downloadHandler(
       original_data = geodata_original()@data,
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
+      model_durbin_var = durbin_var,
       model_summary = summary(model_slx_ml()),
       model_impacts = summary(spatialreg::impacts(model_slx_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )

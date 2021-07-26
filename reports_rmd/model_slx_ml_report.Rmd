@@ -14,6 +14,7 @@ params:
   original_data: NA
   spatial_weights_matrix: NA
   model_specification: NA
+  model_durbin_var: NA
   model_summary: NA
   model_impacts: NA
 ---
@@ -43,6 +44,8 @@ cat(params$general_observations)
 ```{r echo=FALSE, results='asis'}
 cat(params$model_specification)
 ```
+
+* Explanatory variables to lag: `r params$model_durbin_var`
 
 ## Model summary
 
