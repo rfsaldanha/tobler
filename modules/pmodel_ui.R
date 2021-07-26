@@ -330,6 +330,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random", "Pooling" = "pooling"), 
         selected = "within"
       ),
+      uiOutput("pmodel_slx_durbin_var_UI"),
       actionButton("pmodel_slx_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),

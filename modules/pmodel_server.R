@@ -889,7 +889,7 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
   
   lagged_term <- geodata_original()@data %>%
     select(all_of(durbin_full_name)) %>%
-    rename(setNames(names(.), paste0('lag.', names(.)))) %>%
+    rename(setNames(names(.), paste0('W_', names(.)))) %>%
     mutate(
       across(everything(), lag_independent_variables)
     )
@@ -911,10 +911,7 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
     ) %>%
     arrange(1, time)
   
-  esp <- paste0(pesp(), " + ", paste0("lag.", durbin_variables, collapse = " + "))
-  
-  message(names(lagged_data))
-  message(esp)
+  esp <- paste0(pesp(), " + ", paste0("W_", durbin_variables, collapse = " + "))
   
   spml(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
 })
@@ -965,6 +962,11 @@ output$pmodel_sdem_download <- downloadHandler(
 
 # SLX model
 
+output$pmodel_slx_durbin_var_UI <- renderUI({
+  req(input$pmodel_independent_variable)
+  multiInput("pmodel_slx_durbin_var", label = "Select explanatory variables to lag (leave empty for all)", choices = input$pmodel_independent_variable)
+})
+
 pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   show_modal()
   
@@ -972,19 +974,29 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   
   id_variable <- input$pdata_id_variable
   other_variables <- input$pdata_variables
+  
   dependent_variables <- input$pmodel_dependent_variable
+  dependent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = paste(dependent_variables, collapse = "|"))]
+  
   independent_variables <- input$pmodel_independent_variable
   independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = paste(independent_variables, collapse = "|"))]
   
+  if(length(input$pmodel_slx_durbin_var) > 0){
+    durbin_variables <- input$pmodel_slx_durbin_var
+  } else {
+    durbin_variables <- independent_variables
+  }
+  durbin_full_name <- other_variables[str_starts(string = other_variables, pattern = paste(durbin_variables, collapse = "|"))]
+  
   lagged_term <- geodata_original()@data %>%
-    select(all_of(independent_variables_full_name)) %>%
+    select(all_of(durbin_full_name)) %>%
     rename(setNames(names(.), paste0('W_', names(.)))) %>%
     mutate(
       across(everything(), lag_independent_variables)
     )
   
   lagged_data <- geodata_original()@data %>%
-    select(all_of(id_variable), all_of(other_variables)) %>%
+    select(all_of(id_variable), all_of(dependent_variables_full_name), all_of(independent_variables_full_name)) %>%
     bind_cols(lagged_term) %>%
     pivot_longer(
       cols = 2:last_col()
@@ -1000,7 +1012,7 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
     ) %>%
     arrange(1, time)
   
-  esp <- paste0(pesp(), " + ", paste0("W_", input$pmodel_independent_variable, collapse = " + "))
+  esp <- paste0(pesp(), " + ", paste0("W_", durbin_variables, collapse = " + "))
   
   plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
 })
@@ -1022,6 +1034,11 @@ output$pmodel_slx_download <- downloadHandler(
     file.copy("reports_rmd/pmodel_slx_report.Rmd", tempReport, overwrite = TRUE)
     file.copy("www/tobleR.png", tempLogo, overwrite = TRUE)
     
+    if(length(input$pmodel_slx_durbin_var) > 0){
+      durbin_var <- paste0(" ~ ", paste0(input$pmodel_slx_durbin_var, collapse = " + "))
+    } else {
+      durbin_var = "All"
+    }
     
     params <- list(
       general_observations = input$pmodel_slx_general_observations,
@@ -1029,6 +1046,7 @@ output$pmodel_slx_download <- downloadHandler(
       data_type = input$data_type,
       spatial_weights_matrix = w_matrix$name,
       model_specification = pesp(),
+      model_durbin_var = durbin_var,
       model_effects = input$pmodel_slx_effects,
       model_summary = summary(pmodel_slx())
     )
