@@ -233,6 +233,7 @@ model_tab <- argonTabItem(
       h3("SDM (ML)"),
       p("Spatial Durbin Model (SDM) with Maximum Likelihood (ML) estimator."),
       withMathJax("$$ y = \\rho Wy + X \\beta + WX \\theta + \\varepsilon $$"),
+      uiOutput("model_sdm_ml_durbin_var_UI"),
       actionButton("model_estimate_sdm_ml", "Estimate", icon = icon("math"), status = "primary"),
       hr(),
       h4("Estimation"),
