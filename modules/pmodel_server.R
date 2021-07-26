@@ -866,17 +866,21 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
   effects <- input$pmodel_sdem_effects
   error_type <- input$pmodel_sdem_error_type
   
+  id_variable <- input$pdata_id_variable
+  other_variables <- input$pdata_variables
+  dependent_variables <- input$pmodel_dependent_variable
   independent_variables <- input$pmodel_independent_variable
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = paste(independent_variables, collapse = "|"))]
   
   lagged_term <- geodata_original()@data %>%
-    select(starts_with(independent_variables)) %>%
+    select(all_of(independent_variables_full_name)) %>%
     rename(setNames(names(.), paste0('W_', names(.)))) %>%
     mutate(
       across(everything(), lag_independent_variables)
     )
   
   lagged_data <- geodata_original()@data %>%
-    select(!!!input$pdata_id_variable, !!!input$pdata_variables) %>%
+    select(all_of(id_variable), all_of(other_variables)) %>%
     bind_cols(lagged_term) %>%
     pivot_longer(
       cols = 2:last_col()
@@ -946,7 +950,7 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   other_variables <- input$pdata_variables
   dependent_variables <- input$pmodel_dependent_variable
   independent_variables <- input$pmodel_independent_variable
-  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = independent_variables)]
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = paste(independent_variables, collapse = "|"))]
   
   lagged_term <- geodata_original()@data %>%
     select(all_of(independent_variables_full_name)) %>%
@@ -1026,7 +1030,7 @@ pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
   other_variables <- input$pdata_variables
   dependent_variables <- input$pmodel_dependent_variable
   independent_variables <- input$pmodel_independent_variable
-  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = independent_variables)]
+  independent_variables_full_name <- other_variables[str_starts(string = other_variables, pattern = paste(independent_variables, collapse = "|"))]
   
   lagged_term <- geodata_original()@data %>%
     select(all_of(independent_variables_full_name)) %>%
