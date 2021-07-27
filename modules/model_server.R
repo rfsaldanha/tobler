@@ -186,11 +186,18 @@ model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
     instruments <- NULL
   }
   
-  spreg(
-    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-    model = "lag", het = robust_option, endog = endog, instruments = instruments
-  )
-  
+  tryCatch({
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+      model = "lag", het = robust_option, endog = endog, instruments = instruments
+    )
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_sar_stsls_summary <- renderPrint({
@@ -275,7 +282,15 @@ output$model_sar_stsls_download <- downloadHandler(
 model_sem_ml <- eventReactive(input$model_estimate_sem_ml, {
   show_modal()
   
-  errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
+  tryCatch({
+    errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_sem_ml_summary <- renderPrint({
