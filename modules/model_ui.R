@@ -86,7 +86,7 @@ model_tab <- argonTabItem(
       tabName = "SAR (STSLS)",
       active = FALSE,
       h3("SAR (STSLS)"),
-      p("Spatial Autoregressive (SAR) model with Generalized Spatial Two Stage Least Squares (STSLS) estimator."),
+      p("Spatial Autoregressive (SAR) model with Spatial Two Stage Least Squares (STSLS) estimator."),
       withMathJax("$$ y = \\lambda Wy + X \\beta + \\varepsilon $$"),
       checkboxGroupInput("model_sar_stsls_options", "Options", choices = c("Heteroskedasticity correction" = "is_robust")),
       actionButton("model_estimate_sar_stsls", "Estimate", icon = icon("math"), status = "primary"),
