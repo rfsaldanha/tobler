@@ -185,9 +185,9 @@ pmodel_tab <- argonTabItem(
       downloadButton("pmodel_sar_download", "Generate report")
     ),
     argonTab(
-      tabName = "SAR (GM)",
-      h3("SAR (GM)"),
-      p("Spatial Autoregressive (SAR) panel model with Generalized Moments (GM) estimator."),
+      tabName = "SAR (S2SLS)",
+      h3("SAR (S2SLS)"),
+      p("Spatial Autoregressive (SAR) panel model with Spatial Two Stage Least Squares (S2SLS) estimator."),
       withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\varepsilon_t $$"),
       radioButtons(
         inputId = "pmodel_sar_gm_effects", 
