@@ -113,7 +113,7 @@ output$model_sar_ml_summary <- renderPrint({
 })
 
 output$model_sar_ml_impacts <- renderPrint({
-  summary(spdep::impacts(model_sar_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  summary(spatialreg::impacts(model_sar_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
 output$model_sar_ml_map <- renderLeaflet({
@@ -152,7 +152,7 @@ output$model_sar_ml_download <- downloadHandler(
       spatial_weights_matrix = w_matrix$name,
       model_specification = esp(),
       model_summary = summary(model_sar_ml()),
-      model_impacts = summary(spdep::impacts(model_sar_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = summary(spatialreg::impacts(model_sar_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -450,7 +450,7 @@ output$model_sac_ml_summary <- renderPrint({
 })
 
 output$model_sac_ml_impacts <- renderPrint({
-  summary(spdep::impacts(model_sac_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  summary(spatialreg::impacts(model_sac_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
 output$model_sac_ml_map <- renderLeaflet({
@@ -650,7 +650,7 @@ output$model_slx_ml_summary <- renderPrint({
 })
 
 output$model_slx_ml_impacts <- renderPrint({
-  summary(spdep::impacts(model_slx_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  summary(spatialreg::impacts(model_slx_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
 output$model_slx_ml_map <- renderLeaflet({
@@ -695,7 +695,7 @@ output$model_slx_ml_download <- downloadHandler(
       model_specification = esp(),
       model_durbin_var = durbin_var,
       model_summary = summary(model_slx_ml()),
-      model_impacts = summary(spdep::impacts(model_slx_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = summary(spatialreg::impacts(model_slx_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -863,7 +863,7 @@ output$model_sdm_ml_summary <- renderPrint({
 })
 
 output$model_sdm_ml_impacts <- renderPrint({
-  summary(spdep::impacts(model_sdm_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  summary(spatialreg::impacts(model_sdm_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
 output$model_sdm_ml_map <- renderLeaflet({
@@ -908,7 +908,7 @@ output$model_sdm_ml_download <- downloadHandler(
       model_specification = esp(),
       model_durbin_var = durbin_var,
       model_summary = summary(model_sdm_ml()),
-      model_impacts = summary(spdep::impacts(model_sdm_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = summary(spatialreg::impacts(model_sdm_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
@@ -948,7 +948,7 @@ output$model_sdem_ml_summary <- renderPrint({
 })
 
 output$model_sdem_ml_impacts <- renderPrint({
-  summary(spdep::impacts(model_sdem_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+  summary(spatialreg::impacts(model_sdem_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
 })
 
 output$model_sdem_ml_map <- renderLeaflet({
@@ -994,7 +994,7 @@ output$model_sdem_ml_download <- downloadHandler(
       model_specification = esp(),
       model_durbin_var = durbin_var,
       model_summary = summary(model_sdem_ml()),
-      model_impacts = summary(spdep::impacts(model_sdem_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = summary(spatialreg::impacts(model_sdem_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
