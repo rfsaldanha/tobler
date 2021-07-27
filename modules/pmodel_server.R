@@ -646,7 +646,15 @@ pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
   effects <- input$pmodel_sem_effects
   error_type <- input$pmodel_sem_error_type
   
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
+  tryCatch({
+    spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_sem_summary <- renderPrint({
