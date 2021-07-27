@@ -971,7 +971,15 @@ model_sdem_ml <- eventReactive(input$model_estimate_sdem_ml, {
     durbin_var = TRUE
   }
   
-  errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = durbin_var)
+  tryCatch({
+    errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = durbin_var)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_sdem_ml_summary <- renderPrint({
