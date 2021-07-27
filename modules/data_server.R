@@ -27,9 +27,6 @@ geodata_original <- reactive({
       tryCatch({
         shape <- readOGR(input$data_file$datapath)
       },
-      warning = function(warn){
-        showNotification(paste0(warn), type = "warning")
-      },
       error = function(err){
         showNotification(paste0(err), type = "err", duration = NULL)
       })
@@ -51,9 +48,6 @@ geodata_original <- reactive({
                                input$data_file$name[grep(pattern = "*.shp$", input$data_file$name)],
                                sep = "/"
         ))
-      },
-      warning = function(warn){
-        showNotification(paste0(warn), type = "warning")
       },
       error = function(err){
         showNotification(paste0(err), type = "err", duration = NULL)

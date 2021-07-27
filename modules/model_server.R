@@ -30,9 +30,6 @@ model_ols <- eventReactive(input$model_estimate_ols, {
   tryCatch({
     lm(formula = formula(esp()), data = geodata_original()@data)
   },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
-  },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
   })
@@ -105,9 +102,6 @@ model_sar_ml <- eventReactive(input$model_estimate_sar_ml, {
   
   tryCatch({
     lagsarlm(formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
-  },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -191,9 +185,6 @@ model_sar_stsls <- eventReactive(input$model_estimate_sar_stsls, {
       formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
       model = "lag", het = robust_option, endog = endog, instruments = instruments
     )
-  },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -285,9 +276,6 @@ model_sem_ml <- eventReactive(input$model_estimate_sem_ml, {
   tryCatch({
     errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
   },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
-  },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
   })
@@ -367,9 +355,6 @@ model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
       model = "error", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
     )
   },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
-  },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
   })
@@ -445,18 +430,12 @@ model_sac_ml <- eventReactive(input$model_estimate_sac_ml, {
     tryCatch({
       sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
     },
-    warning = function(warn){
-      showNotification(paste0(warn), type = "warning")
-    },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
     })
   } else {
     tryCatch({
       sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw) 
-    },
-    warning = function(warn){
-      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -547,9 +526,6 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
         model = "sarar",  listw2 = w_matrix_secondary$listw, step1.c = step1.c_option, het = robust_option, endog = endog, instruments = instruments
       )
     },
-    warning = function(warn){
-      showNotification(paste0(warn), type = "warning")
-    },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
     })
@@ -559,9 +535,6 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
         formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
         model = "sarar", step1.c = step1.c_option, het = robust_option, endog = endog, instruments = instruments
       )
-    },
-    warning = function(warn){
-      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -667,9 +640,6 @@ model_slx_ml <- eventReactive(input$model_estimate_slx_ml, {
   tryCatch({
     lmSLX(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = durbin_var)
   },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
-  },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
   })
@@ -771,9 +741,6 @@ model_slx_stsls <- eventReactive(input$model_estimate_slx_stsls, {
       formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, lag.instr = FALSE, Durbin = durbin_var,
       model = "ols", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
     )
-  },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -886,9 +853,6 @@ model_sdm_ml <- eventReactive(input$model_estimate_sdm_ml, {
   tryCatch({
     lagsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = durbin_var)
   },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
-  },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
   })
@@ -973,9 +937,6 @@ model_sdem_ml <- eventReactive(input$model_estimate_sdem_ml, {
   
   tryCatch({
     errorsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, Durbin = durbin_var)
-  },
-  warning = function(warn){
-    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -1082,9 +1043,6 @@ model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
         model = "error", listw2 = w_matrix_secondary$listw, Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
       )
     },
-    warning = function(warn){
-      showNotification(paste0(warn), type = "warning")
-    },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
     })
@@ -1094,9 +1052,6 @@ model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
         formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
         model = "error", Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
       )
-    },
-    warning = function(warn){
-      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
