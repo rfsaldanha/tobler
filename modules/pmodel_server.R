@@ -417,7 +417,15 @@ pmodel_ols <- eventReactive(input$pmodel_ols_estimate, {
   
   effects <- input$pmodel_ols_effects
   
-  plm(formula = formula(pesp()), data = geodata()@data, model = effects)
+  tryCatch({
+    plm(formula = formula(pesp()), data = geodata()@data, model = effects)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_ols_summary <- renderPrint({
