@@ -715,9 +715,25 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    tryCatch({
+      spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    tryCatch({
+      spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   }
 })
 
