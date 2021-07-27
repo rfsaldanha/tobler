@@ -1076,15 +1076,31 @@ model_sdem_gmm <- eventReactive(input$model_estimate_sdem_gmm, {
   }
   
   if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
-    spreg(
-      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "error", listw2 = w_matrix_secondary$listw, Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
-    )
+    tryCatch({
+      spreg(
+        formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+        model = "error", listw2 = w_matrix_secondary$listw, Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+      )
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   } else {
-    spreg(
-      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "error", Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
-    )
+    tryCatch({
+      spreg(
+        formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+        model = "error", Durbin = durbin_var, step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+      )
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   }
 
 })
