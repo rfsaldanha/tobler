@@ -103,7 +103,15 @@ output$model_ols_download <- downloadHandler(
 model_sar_ml <- eventReactive(input$model_estimate_sar_ml, {
   show_modal()
   
-  lagsarlm(formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
+  tryCatch({
+    lagsarlm(formula(esp()), data = geodata_original()@data, listw = w_matrix$listw)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_sar_ml_summary <- renderPrint({
