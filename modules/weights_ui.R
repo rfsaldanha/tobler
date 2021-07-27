@@ -83,7 +83,7 @@ weights_tab <- argonTabItem(
           actionButton(inputId = "weights_baumont_create_secondary", label = "Create and use as secondary matrix")
         ),
         argonTab(
-          tabName = "Stakhovych-Bijmolt (2009) adapted procedure",
+          tabName = "General specification procedure",
           p("This adapted procedure will create several spatial weights matrixes (Queen, Rook, Inverse Distance and K-Nearest Neighbors with k = 1, 5, 10, 15 and 20) and estimate several spatial models (SAR, SEM, SAC, SLX, SDM, SDEM) with those matrixes. The final matrix will be selected observing the minimum AIC obtained among all models."),
           tags$a(href="https://doi.org/10.1111/j.1435-5957.2008.00213.x", target="_blank", "Stakhovych-Bijmolt (2009) paper link."),
           uiOutput("weights_stakhovych_dependent_variable_UI"),
