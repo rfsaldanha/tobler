@@ -145,40 +145,46 @@ output$pmodel_hausman_test_download <- downloadHandler(
 
 # Spatial Hausman Test
 pmodel_hausman_spatial_test <- eventReactive(input$pmodel_hausman_spatial_test_execute, {
-  
-  error_type <- input$pmodel_hausman_spatial_test_error_type
-  
-  sar_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
-                     lag = TRUE, model = "random", effect = "individual", spatial.error = "none")
-  
-  sar_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
-                    lag = TRUE, model = "within", effect = "individual", spatial.error = "none")
-  
-  sem_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
-                     lag = FALSE, model = "random", effect = "individual", spatial.error = error_type)
-  
-  sem_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
-                    lag = FALSE, model = "within", effect = "individual", spatial.error = error_type)
-  
-  sac_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
-                     lag = TRUE, model = "random", effect = "individual", spatial.error = error_type)
-  
-  sac_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
-                    lag = TRUE, model = "within", effect = "individual", spatial.error = error_type)
-  
-  test_sar <- sphtest(sar_random, sar_fixed)
-  test_sem <- sphtest(sem_random, sem_fixed)
-  test_sac <- sphtest(sac_random, sac_fixed)
-  
-  res <- cbind(
-    c(test_sar$statistic, test_sar$p.value),
-    c(test_sem$statistic, test_sem$p.value),
-    c(test_sac$statistic, test_sac$p.value)
-  )
-  
-  dimnames(res) <- list(c("test", "p-value"), c("SAR","SEM","SAC"))
-  round(x = res, digits = 5)
-  
+  tryCatch({
+    error_type <- input$pmodel_hausman_spatial_test_error_type
+    
+    sar_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                       lag = TRUE, model = "random", effect = "individual", spatial.error = "none")
+    
+    sar_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                      lag = TRUE, model = "within", effect = "individual", spatial.error = "none")
+    
+    sem_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                       lag = FALSE, model = "random", effect = "individual", spatial.error = error_type)
+    
+    sem_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                      lag = FALSE, model = "within", effect = "individual", spatial.error = error_type)
+    
+    sac_random <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                       lag = TRUE, model = "random", effect = "individual", spatial.error = error_type)
+    
+    sac_fixed <- spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw,
+                      lag = TRUE, model = "within", effect = "individual", spatial.error = error_type)
+    
+    test_sar <- sphtest(sar_random, sar_fixed)
+    test_sem <- sphtest(sem_random, sem_fixed)
+    test_sac <- sphtest(sac_random, sac_fixed)
+    
+    res <- cbind(
+      c(test_sar$statistic, test_sar$p.value),
+      c(test_sem$statistic, test_sem$p.value),
+      c(test_sac$statistic, test_sac$p.value)
+    )
+    
+    dimnames(res) <- list(c("test", "p-value"), c("SAR","SEM","SAC"))
+    round(x = res, digits = 5)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_hausman_spatial_test_results <- renderPrint({
