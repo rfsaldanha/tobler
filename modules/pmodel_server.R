@@ -291,24 +291,30 @@ output$pmodel_pesaran_test_download <- downloadHandler(
 
 # BSK test
 pmodel_bsk_test <- eventReactive(input$pmodel_bsk_test_execute, {
-
-  res_lmh <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LMH")
-  res_lm1 <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LM1")
-  res_lm2 <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LM2")
-  res_clm_mu <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "CLMmu")
-  res_clm_lambda <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "CLMlambda")
-  
-  res <- cbind(
-    c(res_lmh$statistic, res_lmh$p.value),
-    c(res_lm1$statistic, res_lm1$p.value),
-    c(res_lm2$statistic, res_lm2$p.value),
-    c(res_clm_mu$statistic, res_clm_mu$p.value),
-    c(res_clm_lambda$statistic, res_clm_lambda$p.value)
-  )
-  
-  dimnames(res) <- list(c("test", "p-value"), c("LM joint","LM mu","LM lambda", "CLM mu", "CLM lambda"))
-  round(x = res, digits = 5)
-  
+  tryCatch({
+    res_lmh <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LMH")
+    res_lm1 <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LM1")
+    res_lm2 <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "LM2")
+    res_clm_mu <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "CLMmu")
+    res_clm_lambda <- bsktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "CLMlambda")
+    
+    res <- cbind(
+      c(res_lmh$statistic, res_lmh$p.value),
+      c(res_lm1$statistic, res_lm1$p.value),
+      c(res_lm2$statistic, res_lm2$p.value),
+      c(res_clm_mu$statistic, res_clm_mu$p.value),
+      c(res_clm_lambda$statistic, res_clm_lambda$p.value)
+    )
+    
+    dimnames(res) <- list(c("test", "p-value"), c("LM joint","LM mu","LM lambda", "CLM mu", "CLM lambda"))
+    round(x = res, digits = 5)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_bsk_test_results <- renderPrint({
