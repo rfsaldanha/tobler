@@ -28,10 +28,10 @@ geodata_original <- reactive({
         shape <- readOGR(input$data_file$datapath)
       },
       warning = function(warn){
-        showNotification(paste0(warn), type = 'warning')
+        showNotification(paste0(warn), type = "warning", duration = NULL)
       },
       error = function(err){
-        showNotification(paste0(err), type = 'err')
+        showNotification(paste0(err), type = "err", duration = NULL)
       })
     } else if(input$data_file_type == "Shapefile") {
       # Name of the temporary directory where files are uploaded
@@ -53,10 +53,10 @@ geodata_original <- reactive({
         ))
       },
       warning = function(warn){
-        showNotification(paste0(warn), type = 'warning')
+        showNotification(paste0(warn), type = "warning", duration = NULL)
       },
       error = function(err){
-        showNotification(paste0(err), type = 'err')
+        showNotification(paste0(err), type = "err", duration = NULL)
       })
     }
     incProgress(amount = 0.3, detail = "Data loaded")
