@@ -93,14 +93,22 @@ pesp <- reactive({
 
 # Hausman Test
 pmodel_hausman_test <- eventReactive(input$pmodel_hausman_test_execute, {
-  # Fixed effects panel (non spatial)
-  fe <- plm(formula = formula(pesp()), data = geodata()@data)
-  
-  # Random effects panel (non spatial)
-  re <- plm(formula = formula(pesp()), data = geodata()@data, model="random")
-  
-  # Hausman test
-  phtest(fe, re)
+  tryCatch({
+    # Fixed effects panel (non spatial)
+    fe <- plm(formula = formula(pesp()), data = geodata()@data)
+    
+    # Random effects panel (non spatial)
+    re <- plm(formula = formula(pesp()), data = geodata()@data, model="random")
+    
+    # Hausman test
+    phtest(fe, re)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_hausman_test_results <- renderPrint({
