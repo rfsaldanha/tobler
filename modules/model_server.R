@@ -27,7 +27,15 @@ esp <- reactive({
 model_ols <- eventReactive(input$model_estimate_ols, {
   show_modal()
   
-  lm(formula = formula(esp()), data = geodata_original()@data)
+  tryCatch({
+    lm(formula = formula(esp()), data = geodata_original()@data)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_ols_summary <- renderPrint({
