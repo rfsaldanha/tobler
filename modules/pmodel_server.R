@@ -352,22 +352,28 @@ output$pmodel_bsk_test_download <- downloadHandler(
 
 # BSJK test
 pmodel_bsjk_test <- eventReactive(input$pmodel_bsjk_test_execute, {
-  
-  res_c1 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.1")
-  res_c2 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.2")
-  res_c3 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.3")
-  res_j <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "J")
-  
-  res <- cbind(
-    c(res_c1$statistic, res_c1$p.value),
-    c(res_c2$statistic, res_c2$p.value),
-    c(res_c3$statistic, res_c3$p.value),
-    c(res_j$statistic, res_j$p.value)
-  )
-  
-  dimnames(res) <- list(c("test", "p-value"), c("C.1","C.2","C.3", "J"))
-  round(x = res, digits = 5)
-  
+  tryCatch({
+    res_c1 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.1")
+    res_c2 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.2")
+    res_c3 <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "C.3")
+    res_j <- bsjktest(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, test = "J")
+    
+    res <- cbind(
+      c(res_c1$statistic, res_c1$p.value),
+      c(res_c2$statistic, res_c2$p.value),
+      c(res_c3$statistic, res_c3$p.value),
+      c(res_j$statistic, res_j$p.value)
+    )
+    
+    dimnames(res) <- list(c("test", "p-value"), c("C.1","C.2","C.3", "J"))
+    round(x = res, digits = 5)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_bsjk_test_results <- renderPrint({
