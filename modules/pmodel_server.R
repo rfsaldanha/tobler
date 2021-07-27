@@ -1135,7 +1135,15 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
   
   esp <- paste0(pesp(), " + ", paste0("W_", durbin_variables, collapse = " + "))
   
-  plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+  tryCatch({
+    plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_slx_summary <- renderPrint({
