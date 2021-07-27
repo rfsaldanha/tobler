@@ -1257,9 +1257,25 @@ pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
   }
   
   if(is.null(endog) | is.null(instruments)){
-    plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+    tryCatch({
+      plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   } else {
-    spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    tryCatch({
+      spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   }
   
   
