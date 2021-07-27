@@ -442,9 +442,25 @@ model_sac_ml <- eventReactive(input$model_estimate_sac_ml, {
   show_modal()
   
   if("use_secondary_w_matrix" %in% input$model_estimate_sac_ml_options){
-    sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
+    tryCatch({
+      sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, listw2 = w_matrix_secondary$listw) 
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   } else {
-    sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw) 
+    tryCatch({
+      sacsarlm(formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw) 
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   }
   
   
