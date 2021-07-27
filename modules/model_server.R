@@ -541,15 +541,31 @@ model_sac_gstsls <- eventReactive(input$model_estimate_sac_gstsls, {
   }
   
   if("use_secondary_w_matrix" %in% input$model_sac_gstsls_options){
-    spreg(
-      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "sarar",  listw2 = w_matrix_secondary$listw, step1.c = step1.c_option, het = robust_option, endog = endog, instruments = instruments
-    )
+    tryCatch({
+      spreg(
+        formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+        model = "sarar",  listw2 = w_matrix_secondary$listw, step1.c = step1.c_option, het = robust_option, endog = endog, instruments = instruments
+      )
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   } else {
-    spreg(
-      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-      model = "sarar", step1.c = step1.c_option, het = robust_option, endog = endog, instruments = instruments
-    )
+    tryCatch({
+      spreg(
+        formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+        model = "sarar", step1.c = step1.c_option, het = robust_option, endog = endog, instruments = instruments
+      )
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   }
   
 })
