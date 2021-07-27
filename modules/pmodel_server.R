@@ -223,27 +223,34 @@ output$pmodel_hausman_spatial_test_download <- downloadHandler(
 
 # Pesaran test
 pmodel_pesaran_test <- eventReactive(input$pmodel_pesaran_test_execute, {
-  test_type <- input$pmodel_pesaran_test_type
-  
-  if(test_type == "Global"){
-    res_pooling <- pcdtest(formula(pesp()), data = geodata()@data, test = "cd", model = "pooling")
-    res_within <- pcdtest(formula(pesp()), data = geodata()@data, test = "cd", model = "within")
-    res_random <- pcdtest(formula(pesp()), data = geodata()@data, test = "cd", model = "random")
-  } else if(test_type == "Local"){
-    res_pooling <- pcdtest(formula(pesp()), data = geodata()@data, w = listw2mat(w_matrix$listw), test = "cd", model = "pooling")
-    res_within <- pcdtest(formula(pesp()), data = geodata()@data, w = listw2mat(w_matrix$listw), test = "cd", model = "within")
-    res_random <- pcdtest(formula(pesp()), data = geodata()@data, w = listw2mat(w_matrix$listw), test = "cd", model = "random")
-  }
-  
-  res <- cbind(
-    c(res_pooling$statistic, res_pooling$p.value),
-    c(res_within$statistic, res_within$p.value),
-    c(res_random$statistic, res_random$p.value)
-  )
-  
-  dimnames(res) <- list(c("test", "p-value"), c("Pooled","Fixed","Random"))
-  round(x = res, digits = 5)
-  
+  tryCatch({
+    test_type <- input$pmodel_pesaran_test_type
+    
+    if(test_type == "Global"){
+      res_pooling <- pcdtest(formula(pesp()), data = geodata()@data, test = "cd", model = "pooling")
+      res_within <- pcdtest(formula(pesp()), data = geodata()@data, test = "cd", model = "within")
+      res_random <- pcdtest(formula(pesp()), data = geodata()@data, test = "cd", model = "random")
+    } else if(test_type == "Local"){
+      res_pooling <- pcdtest(formula(pesp()), data = geodata()@data, w = listw2mat(w_matrix$listw), test = "cd", model = "pooling")
+      res_within <- pcdtest(formula(pesp()), data = geodata()@data, w = listw2mat(w_matrix$listw), test = "cd", model = "within")
+      res_random <- pcdtest(formula(pesp()), data = geodata()@data, w = listw2mat(w_matrix$listw), test = "cd", model = "random")
+    }
+    
+    res <- cbind(
+      c(res_pooling$statistic, res_pooling$p.value),
+      c(res_within$statistic, res_within$p.value),
+      c(res_random$statistic, res_random$p.value)
+    )
+    
+    dimnames(res) <- list(c("test", "p-value"), c("Pooled","Fixed","Random"))
+    round(x = res, digits = 5)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_pesaran_test_results <- renderPrint({
