@@ -24,7 +24,15 @@ geodata_original <- reactive({
     # Load data
     if(input$data_file_type == "GML"){
       # Read GML
-      shape <- readOGR(input$data_file$datapath)
+      tryCatch({
+        shape <- readOGR(input$data_file$datapath)
+      },
+      warning = function(warn){
+        showNotification(paste0(warn), type = 'warning')
+      },
+      error = function(err){
+        showNotification(paste0(err), type = 'err')
+      })
     } else if(input$data_file_type == "Shapefile") {
       # Name of the temporary directory where files are uploaded
       tmp_dir_name <- dirname(input$data_file$datapath[1])
@@ -38,10 +46,18 @@ geodata_original <- reactive({
       }
       
       # Read shapefile
-      shape <- readOGR(paste(tmp_dir_name,
-                             input$data_file$name[grep(pattern = "*.shp$", input$data_file$name)],
-                             sep = "/"
-      ))
+      tryCatch({
+        shape <- readOGR(paste(tmp_dir_name,
+                               input$data_file$name[grep(pattern = "*.shp$", input$data_file$name)],
+                               sep = "/"
+        ))
+      },
+      warning = function(warn){
+        showNotification(paste0(warn), type = 'warning')
+      },
+      error = function(err){
+        showNotification(paste0(err), type = 'err')
+      })
     }
     incProgress(amount = 0.3, detail = "Data loaded")
     
