@@ -274,9 +274,9 @@ pmodel_tab <- argonTabItem(
       downloadButton("pmodel_sac_download", "Generate report")
     ),
     argonTab(
-      tabName = "SAC (GM)",
-      h3("SAC (GM)"),
-      p("Spatial Autocorrelation panel Model (SAC) with Generalized Moments (GM) estimator."),
+      tabName = "SAC (GS2SLS)",
+      h3("SAC (GS2SLS)"),
+      p("Spatial Autocorrelation panel Model (SAC) with Generalized Spatial Two Stage Least Squares (GS2SLS) estimator."),
       withMathJax("$$ y_t = \\lambda Wy_t + X_t \\beta + \\xi_t $$"),
       withMathJax("$$ \\xi_t = \\rho W \\xi_t + \\varepsilon_t $$"),
       radioButtons(
