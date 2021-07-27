@@ -490,7 +490,7 @@ output$model_sac_ml_download <- downloadHandler(
       model_specification = esp(),
       model_options = input$model_sac_ml_options,
       model_summary = summary(model_sac_ml()),
-      model_impacts = summary(impacts(model_sac_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
+      model_impacts = summary(spatialreg::impacts(model_sac_ml(), tr=w_matrix$tr, R=1000), zstats=TRUE, short=TRUE)
     )
     
     rmarkdown::render(tempReport, output_file = file,
