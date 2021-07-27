@@ -471,7 +471,15 @@ pmodel_sar <- eventReactive(input$pmodel_sar_estimate, {
   
   effects <- input$pmodel_sar_effects
   
-  spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, effect = "individual", spatial.error = "none")
+  tryCatch({
+    spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, effect = "individual", spatial.error = "none")
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_sar_summary <- renderPrint({
@@ -536,9 +544,25 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
   }
   
   if(effects == "within"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    tryCatch({
+      spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   } else if(effects == "random"){
-    spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    tryCatch({
+      spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
+    },
+    warning = function(warn){
+      showNotification(paste0(warn), type = "warning", duration = NULL)
+    },
+    error = function(err){
+      showNotification(paste0(err), type = "err", duration = NULL)
+    })
   }
 })
 
