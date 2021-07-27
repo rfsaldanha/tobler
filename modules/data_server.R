@@ -28,7 +28,7 @@ geodata_original <- reactive({
         shape <- readOGR(input$data_file$datapath)
       },
       warning = function(warn){
-        showNotification(paste0(warn), type = "warning", duration = NULL)
+        showNotification(paste0(warn), type = "warning")
       },
       error = function(err){
         showNotification(paste0(err), type = "err", duration = NULL)
@@ -53,7 +53,7 @@ geodata_original <- reactive({
         ))
       },
       warning = function(warn){
-        showNotification(paste0(warn), type = "warning", duration = NULL)
+        showNotification(paste0(warn), type = "warning")
       },
       error = function(err){
         showNotification(paste0(err), type = "err", duration = NULL)

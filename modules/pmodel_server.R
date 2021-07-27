@@ -104,7 +104,7 @@ pmodel_hausman_test <- eventReactive(input$pmodel_hausman_test_execute, {
     phtest(fe, re)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -180,7 +180,7 @@ pmodel_hausman_spatial_test <- eventReactive(input$pmodel_hausman_spatial_test_e
     round(x = res, digits = 5)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -246,7 +246,7 @@ pmodel_pesaran_test <- eventReactive(input$pmodel_pesaran_test_execute, {
     round(x = res, digits = 5)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -310,7 +310,7 @@ pmodel_bsk_test <- eventReactive(input$pmodel_bsk_test_execute, {
     round(x = res, digits = 5)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -369,7 +369,7 @@ pmodel_bsjk_test <- eventReactive(input$pmodel_bsjk_test_execute, {
     round(x = res, digits = 5)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -421,7 +421,7 @@ pmodel_ols <- eventReactive(input$pmodel_ols_estimate, {
     plm(formula = formula(pesp()), data = geodata()@data, model = effects)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -475,7 +475,7 @@ pmodel_sar <- eventReactive(input$pmodel_sar_estimate, {
     spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, model = effects, effect = "individual", spatial.error = "none")
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -548,7 +548,7 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
       spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -558,7 +558,7 @@ pmodel_sar_gm <- eventReactive(input$pmodel_sar_gm_estimate, {
       spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = FALSE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -650,7 +650,7 @@ pmodel_sem <- eventReactive(input$pmodel_sem_estimate, {
     spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -719,7 +719,7 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
       spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -729,7 +729,7 @@ pmodel_sem_gm <- eventReactive(input$pmodel_sem_gm_estimate, {
       spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = FALSE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -801,7 +801,7 @@ pmodel_sac <- eventReactive(input$pmodel_sac_estimate, {
     spml(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag=TRUE, model = effects, effect = "individual", spatial.error = error_type)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -876,7 +876,7 @@ pmodel_sac_gm <- eventReactive(input$pmodel_sac_gm_estimate, {
       spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -886,7 +886,7 @@ pmodel_sac_gm <- eventReactive(input$pmodel_sac_gm_estimate, {
       spgm(formula(pesp()), data = geodata()@data, listw = w_matrix$listw, lag = TRUE, spatial.error = TRUE, model = effects, moments = "weights", method = "ec2sls", endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -1030,7 +1030,7 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
     spml(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -1139,7 +1139,7 @@ pmodel_slx <- eventReactive(input$pmodel_slx_estimate, {
     plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
   },
   warning = function(warn){
-    showNotification(paste0(warn), type = "warning", duration = NULL)
+    showNotification(paste0(warn), type = "warning")
   },
   error = function(err){
     showNotification(paste0(err), type = "err", duration = NULL)
@@ -1261,7 +1261,7 @@ pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
       plm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = "none")
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
@@ -1271,7 +1271,7 @@ pmodel_slx_gm <- eventReactive(input$pmodel_slx_gm_estimate, {
       spgm(formula(esp), data = lagged_data, listw = w_matrix$listw, lag = FALSE, spatial.error = FALSE, model = effects, endog = endog, instruments = instruments, lag.instruments = lag_instruments)
     },
     warning = function(warn){
-      showNotification(paste0(warn), type = "warning", duration = NULL)
+      showNotification(paste0(warn), type = "warning")
     },
     error = function(err){
       showNotification(paste0(err), type = "err", duration = NULL)
