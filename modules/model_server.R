@@ -361,10 +361,18 @@ model_sem_gmm <- eventReactive(input$model_estimate_sem_gmm, {
     instruments <- NULL
   }
   
-  spreg(
-    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
-    model = "error", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
-  )
+  tryCatch({
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw,
+      model = "error", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+    )
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_sem_gmm_summary <- renderPrint({
