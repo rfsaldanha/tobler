@@ -1026,7 +1026,15 @@ pmodel_sdem <- eventReactive(input$pmodel_sdem_estimate, {
   
   esp <- paste0(pesp(), " + ", paste0("W_", durbin_variables, collapse = " + "))
   
-  spml(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
+  tryCatch({
+    spml(formula(esp), data = lagged_data, listw = w_matrix$listw, lag=FALSE, model = effects, effect = "individual", spatial.error = error_type)
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$pmodel_sdem_summary <- renderPrint({
