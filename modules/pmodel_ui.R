@@ -54,9 +54,9 @@ pmodel_tab <- argonTabItem(
       downloadButton("pmodel_hausman_test_download", "Generate report")
     ),
     argonTab(
-      tabName = "Hausman Test for spatial panel models", 
+      tabName = "Spatial Hausman Test", 
       active = FALSE,
-      h3("Hausman Test for spatial panel models"), 
+      h3("Spatial Hausman Test"), 
       # withMathJax("$$ H = NT(\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W)^\\top (\\hat{\\Sigma}_W - \\hat{\\Sigma}_\\text{FGLS})^1 (\\hat{\\theta}_\\text{FGLS} - \\hat{\\theta}_W) $$"),
       p("SAC model with random effects and SAC model with fixed effects."),
       withMathJax("$$ H = NT \\left(\\hat{\\theta}^\\text{SAC}_\\text{FGLS} - \\hat{\\theta}^\\text{SAC}_\\text{within} \\right)^\\top \\left( \\hat{\\Sigma}^\\text{SAC}_\\text{within} - \\hat{\\Sigma}^\\text{SAC}_\\text{FGLS} \\right)^{-1} \\left( \\hat{\\theta}^\\text{SAC}_\\text{FGLS} - \\hat{\\theta}^\\text{SAC}_\\text{within} \\right)$$"),

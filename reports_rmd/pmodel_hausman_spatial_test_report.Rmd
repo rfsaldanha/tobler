@@ -1,5 +1,5 @@
 ---
-title: "Hausman Test for spatial panel data models report"
+title: "Spatial Hausman Test report"
 author: "`r format(Sys.time())`"
 output: pdf_document
 header-includes:
