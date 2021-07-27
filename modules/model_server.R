@@ -766,11 +766,18 @@ model_slx_stsls <- eventReactive(input$model_estimate_slx_stsls, {
     durbin_var = TRUE
   }
   
-  spreg(
-    formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, lag.instr = FALSE, Durbin = durbin_var,
-    model = "ols", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
-  )
-  
+  tryCatch({
+    spreg(
+      formula = formula(esp()), data = geodata_original()@data, listw = w_matrix$listw, lag.instr = FALSE, Durbin = durbin_var,
+      model = "ols", step1.c = TRUE, het = robust_option, endog = endog, instruments = instruments
+    )
+  },
+  warning = function(warn){
+    showNotification(paste0(warn), type = "warning", duration = NULL)
+  },
+  error = function(err){
+    showNotification(paste0(err), type = "err", duration = NULL)
+  })
 })
 
 output$model_slx_stsls_summary <- renderPrint({
