@@ -44,7 +44,7 @@ cat(params$model_specification)
 * Effects: `r params$model_effects`
 * Endogenous variables: `r params$model_endog`
 * External instruments variables: `r params$model_instruments`
-* Lag external instrument variables: `r if_else("lag_instruments" %in% params$model_options, "Yes", "No")`
+* Lagged external instrumental variables: `r if_else("lag_instruments" %in% params$model_options, "Yes", "No")`
 
 ## Model summary
 

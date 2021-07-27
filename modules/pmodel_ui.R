@@ -195,7 +195,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
-      checkboxGroupInput(inputId = "pmodel_sar_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
+      checkboxGroupInput(inputId = "pmodel_sar_gm_options", label = "Options", choices = c("Lagged external instrumental variables" = "lag_instruments")),
       actionButton("pmodel_sar_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
@@ -240,7 +240,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
-      checkboxGroupInput(inputId = "pmodel_sem_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
+      checkboxGroupInput(inputId = "pmodel_sem_gm_options", label = "Options", choices = c("Lagged external instrumental variables" = "lag_instruments")),
       actionButton("pmodel_sem_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
@@ -285,7 +285,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
-      checkboxGroupInput(inputId = "pmodel_sac_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
+      checkboxGroupInput(inputId = "pmodel_sac_gm_options", label = "Options", choices = c("Lagged external instrumental variables" = "lag_instruments")),
       actionButton("pmodel_sac_gm_estimate", label = "Estimate"),
       hr(),
       h4("Estimation"),
@@ -350,7 +350,7 @@ pmodel_tab <- argonTabItem(
         choices = list("Fixed (within)" = "within", "Random" = "random"), 
         selected = "within"
       ),
-      checkboxGroupInput(inputId = "pmodel_slx_gm_options", label = "Options", choices = c("Lag external instrument variables" = "lag_instruments")),
+      checkboxGroupInput(inputId = "pmodel_slx_gm_options", label = "Options", choices = c("Lagged external instrumental variables" = "lag_instruments")),
       uiOutput("pmodel_slx_gm_durbin_var_UI"),
       actionButton("pmodel_slx_gm_estimate", label = "Estimate"),
       hr(),
