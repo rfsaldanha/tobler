@@ -124,3 +124,20 @@ observeEvent(geodata(), {
     )
   })
 })
+
+output$data_table_export_UI <- renderUI({
+  if(input$data_type == "Panel"){
+    tagList(
+      downloadButton("data_download_panel_csv", "Download as CSV")
+    )
+  }
+})
+
+output$data_download_panel_csv <- downloadHandler(
+  filename = function() {
+    paste("panel_data.csv", sep = "")
+  },
+  content = function(file) {
+    write_excel_csv(x = geodata()@data, file = file, na = "")
+  }
+)

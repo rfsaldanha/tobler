@@ -16,6 +16,7 @@ data_tab <- argonTabItem(
       uiOutput("data_file_UI"),
       selectInput("data_type", label = "Data type", choices = c("Cross-section", "Panel")),
       uiOutput("data_panel"),
-      uiOutput("data_table_UI")
+      uiOutput("data_table_UI"),
+      uiOutput("data_table_export_UI")
     )
 )
