@@ -7,8 +7,7 @@ RUN apt-get update && \
     apt-get clean  
 
 # system libraries of general use
-RUN apt-get update && apt-get install -y \
-    sudo \
+RUN sudo \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
