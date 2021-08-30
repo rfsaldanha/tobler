@@ -1,14 +1,8 @@
 # get shiny serves plus tidyverse packages image
 FROM rocker/shiny-verse:3.6.3
 
-# update system libraries
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get clean  
-
 # system libraries of general use
-RUN apt-get update && apt-get install -y \
-    sudo \
+RUN sudo \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
