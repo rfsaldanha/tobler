@@ -2,7 +2,8 @@
 FROM rocker/shiny-verse:3.6.3
 
 # system libraries of general use
-RUN sudo \
+RUN apt-get update && apt-get install -y \
+    sudo \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
