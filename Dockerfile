@@ -2,8 +2,7 @@
 FROM rocker/shiny-verse:3.6.3
 
 # system libraries of general use
-RUN sudo apt-get --allow-releaseinfo-change update \
-    sudo apt-get install -y \
+RUN sudo apt-get update && install -y \
     sudo \
     pandoc \
     pandoc-citeproc \
