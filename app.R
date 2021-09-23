@@ -49,6 +49,7 @@ source("modules/about_ui.R")
 shiny::shinyApp(
   ui = argonDashPage(
     tags$head(
+      includeScript("google_analytics.js"),
       tags$style(HTML("
       .navbar-vertical.navbar-expand-md .navbar-brand-img
       {
