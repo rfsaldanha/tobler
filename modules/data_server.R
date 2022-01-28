@@ -1,6 +1,6 @@
 output$data_file_UI <- renderUI({
   if(input$data_file_type == "GML"){
-    fileInput("data_file", label = "", multiple = FALSE, accept = c(".gml", ".geojson", ".json"))
+    fileInput("data_file", label = "", multiple = FALSE, accept = c(".gml", ".geojson", ".json", ".gpkg"))
   } else if(input$data_file_type == "Shapefile") {
     fileInput("data_file", label = "", multiple = TRUE, accept = c('.shp','.dbf','.sbn','.sbx','.shx','.prj'))
   }

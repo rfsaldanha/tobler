@@ -11,7 +11,7 @@ data_tab <- argonTabItem(
       shadow = TRUE,
       hover_shadow = TRUE,
       p("Load here your spatial data file including variables. Up to 30MB total size."),
-      radioButtons("data_file_type", label = "File type", choices = c("GML or Geojson" = "GML", "Shapefile")),
+      radioButtons("data_file_type", label = "File type", choices = c("GML, Geojson or Geopackage" = "GML", "Shapefile")),
       checkboxInput("data_validate", "Validate and clean geometry (recommended).", value = TRUE),
       uiOutput("data_file_UI"),
       selectInput("data_type", label = "Data type", choices = c("Cross-section", "Panel")),
